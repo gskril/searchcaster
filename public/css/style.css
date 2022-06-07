@@ -29,9 +29,19 @@ img {
   max-width: 100%;
 }
 
-a {
+button {
+  background: none;
+  border: none;
+}
+
+a, .link {
   color: #8a63d2;
   text-decoration: none;
+}
+
+a:hover,
+.link:hover {
+  cursor: pointer;
 }
 
 .mb-1 {
@@ -109,11 +119,15 @@ input[type="submit"]:focus {
 .cast {
   position: relative;
   display: block;
-  padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 2rem;
   background: #f3f5f9;
   box-shadow: 0px 0.125rem 0.25rem rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+.cast__body {
+  padding: 1rem;
 }
 
 .cast__author {
@@ -146,10 +160,12 @@ input[type="submit"]:focus {
   font-size: 0.875rem;
 }
 
-.cast__time {
+.cast__date {
   position: absolute;
   top: 1rem;
   right: 1rem;
+  color: #7d8085;
+  font-size: .875rem;
 }
 
 .cast__text {
@@ -168,9 +184,24 @@ input[type="submit"]:focus {
   width: 100%;
 }
 
+.cast__meta {
+  background: #ebe7f4;
+  color: #7d8085;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  font-size: 0.875rem;
+}
+
 @media screen and (max-width: 30em) {
   h1 {
     font-size: 1.8rem;
+  }
+
+  .container {
+    padding: 1.5rem 1.25rem;
   }
 
   .logo {
@@ -190,5 +221,9 @@ input[type="submit"]:focus {
   
   input[type="submit"] {
     border-radius: 0.25rem;
+  }
+
+  .cast {
+    margin-bottom: 1.5rem;
   }
 }

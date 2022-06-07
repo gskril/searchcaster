@@ -32,8 +32,8 @@ app.post('/search', async (req, res) => {
 	const db = client.db('farcaster')
 	const collection = db.collection('casts')
 
-	const query = req.body.query
-	const result = await searchCasts(collection, query)
+	const { query, queryField } = req.body
+	const result = await searchCasts(collection, query, queryField)
 
 	// Exclude recasts and deleted casts
 	const filteredResult = result.filter((cast) => {
@@ -50,6 +50,7 @@ app.post('/search', async (req, res) => {
 
 	// Restructure data
 	const formattedResult = filteredResult.map((cast) => {
+		const isReply = cast.body.data.replyParentMerkleRoot ? true : false
 		const imgurUrl = 'https://i.imgur.com/'
 		let text = cast.body.data.text
 		let attachment = null
@@ -67,7 +68,13 @@ app.post('/search', async (req, res) => {
 			displayName: cast.meta?.displayName,
 			avatar: cast.meta?.avatar,
 			publishedAt: cast.body.publishedAt,
-			isReply: cast.body.data.replyParentMerkleRoot ? true : false,
+			uri: `farcaster://${cast.merkleRoot}/${
+				isReply ? cast.body.data.replyParentMerkleRoot : cast.merkleRoot
+			}`,
+			replyParentUsername: isReply
+				? cast.meta?.replyParentUsername?.username
+				: null,
+			replyParent: isReply ? cast.body.data.replyParentMerkleRoot : null,
 			attachment: attachment,
 		}
 	})
@@ -77,10 +84,17 @@ app.post('/search', async (req, res) => {
 	})
 })
 
-async function searchCasts(collection, query) {
+async function searchCasts(collection, query, queryField) {
+	let field
+	if (queryField === 'replyParent') {
+		field = 'merkleRoot'
+	} else {
+		field = 'body.data.text'
+	}
+
 	return await collection
 		.find({
-			'body.data.text': { $regex: query, $options: 'i' },
+			[`${[field][0]}`]: { $regex: query, $options: 'i' },
 		})
 		.toArray()
 }
