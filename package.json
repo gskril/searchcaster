@@ -2,7 +2,8 @@
   "name": "farcaster-search",
   "main": "index.js",
   "scripts": {
-    "start": "node index"
+    "start": "node index",
+    "dev": "nodemon index"
   },
   "author": "Greg Skriloff",
   "license": "ISC",

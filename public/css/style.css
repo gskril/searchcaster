@@ -13,6 +13,7 @@ body {
 
 h1 {
   font-size: 2rem;
+  line-height: 1;
 }
 
 p {
@@ -78,6 +79,8 @@ input {
 input {
   width: 100%;
   padding: 0.5rem;
+  -webkit-appearance: none;
+  outline-color: #8a63d2;
 }
 
 input[type="text"] {
@@ -101,10 +104,6 @@ input[type="submit"]:focus {
   cursor: pointer;
   background-color: #f8f3ff;
   color: #8a63d2;
-}
-
-input:focus {
-  outline-color: #8a63d2;
 }
 
 .cast {
@@ -169,9 +168,14 @@ input:focus {
   width: 100%;
 }
 
-@media screen and (max-width: 25em) {
+@media screen and (max-width: 30em) {
   h1 {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
+  }
+
+  .logo {
+    width: 2.8rem;
+    height: 2.8rem;
   }
 
   .input-group {
