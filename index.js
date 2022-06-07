@@ -1,4 +1,5 @@
 require('dotenv').config()
+const axios = require('axios')
 const express = require('express')
 const app = express()
 
@@ -28,15 +29,17 @@ app.get('/', (req, res) => {
 	res.render('index')
 })
 
-app.post('/search', async (req, res) => {
+// accept a query and return the results like an API
+app.get('/api/search', async (req, res) => {
+	const { merkleRoot, text, username } = req.query
+	const startTime = Date.now()
+
 	const db = client.db('farcaster')
 	const collection = db.collection('casts')
-
-	const { query, queryField } = req.body
-	const result = await searchCasts(collection, query, queryField)
+	const response = await searchCasts(collection, merkleRoot, text, username)
 
 	// Exclude recasts and deleted casts
-	const filteredResult = result.filter((cast) => {
+	const filteredResponse = response.filter((cast) => {
 		return (
 			!cast.body.data.text.startsWith('recast:farcaster://') &&
 			!cast.body.data.text.startsWith('delete:farcaster://')
@@ -44,16 +47,16 @@ app.post('/search', async (req, res) => {
 	})
 
 	// Sort by date
-	filteredResult.sort((a, b) => {
+	filteredResponse.sort((a, b) => {
 		return new Date(b.body.publishedAt) - new Date(a.body.publishedAt)
 	})
 
 	// Restructure data
-	const formattedResult = filteredResult.map((cast) => {
+	const formattedResponse = filteredResponse.map((cast) => {
 		const isReply = cast.body.data.replyParentMerkleRoot ? true : false
 		const imgurUrl = 'https://i.imgur.com/'
 		let text = cast.body.data.text
-		let attachment = null
+		let attachment
 
 		if (text.includes(imgurUrl)) {
 			attachment = imgurUrl + text.split(imgurUrl)[1]
@@ -61,35 +64,85 @@ app.post('/search', async (req, res) => {
 		}
 
 		return {
-			text: text,
-			reactions: cast.meta?.reactions.count,
-			recasts: cast.meta?.recasts.count,
-			username: cast.body.username,
-			displayName: cast.meta?.displayName,
-			avatar: cast.meta?.avatar,
-			publishedAt: cast.body.publishedAt,
+			body: {
+				publishedAt: cast.body.publishedAt,
+				username: cast.body.username,
+				data: {
+					text: text,
+					image: attachment,
+					replyParentMerkleRoot: cast.body.data.replyParentMerkleRoot,
+				},
+			},
+			meta: {
+				displayName: cast.meta?.displayName,
+				avatar: cast.meta?.avatar,
+				isVerifiedAvatar: cast.meta?.isVerifiedAvatar,
+				reactions: {
+					count: cast.meta?.reactions.count,
+					type: cast.meta?.reactions.type,
+				},
+				recasts: {
+					count: cast.meta?.recasts.count,
+				},
+				watches: {
+					count: cast.meta?.watches.count,
+				},
+				replyParentUsername: {
+					username: cast.meta?.replyParentUsername?.username,
+				},
+			},
+			merkleRoot: cast.merkleRoot,
 			uri: `farcaster://${cast.merkleRoot}/${
 				isReply ? cast.body.data.replyParentMerkleRoot : cast.merkleRoot
 			}`,
-			replyParentUsername: isReply
-				? cast.meta?.replyParentUsername?.username
-				: null,
-			replyParent: isReply ? cast.body.data.replyParentMerkleRoot : null,
-			attachment: attachment,
 		}
 	})
 
-	res.render('search', {
-		casts: formattedResult,
+	const endTime = Date.now()
+	const elapsedTime = endTime - startTime
+
+	res.send({
+		casts: formattedResponse,
+		meta: {
+			count: formattedResponse.length,
+			responseTime: elapsedTime,
+		},
 	})
 })
 
-async function searchCasts(collection, query, queryField) {
-	let field
-	if (queryField === 'replyParent') {
+app.get('/search', async (req, res) => {
+	const { merkleRoot, text } = req.query
+	const casts = await axios
+		.get(
+			`https://${req.headers.host}/api/search?${
+				merkleRoot ? `merkleRoot=${merkleRoot}` : `text=${text}`
+			}`
+		)
+		.then((response) => response.data.casts)
+		.catch((error) => console.error(error))
+
+	res.render('search', {
+		casts: casts,
+	})
+})
+
+app.post('/search', async (req, res) => {
+	const { text } = req.body
+	res.redirect(`/search?text=${text}`)
+})
+
+async function searchCasts(collection, merkleRoot, text, username) {
+	let field, query
+
+	if (merkleRoot) {
 		field = 'merkleRoot'
+		query = merkleRoot
+	} else if (username) {
+		field = 'body.username'
+		query = username
 	} else {
 		field = 'body.data.text'
+		query = text
 	}
 
 	return await collection
@@ -98,7 +151,3 @@ async function searchCasts(collection, query, queryField) {
 		})
 		.toArray()
 }
-
-app.use((req, res, next) => {
-	res.redirect('/')
-})

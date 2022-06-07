@@ -34,8 +34,7 @@
     <p class="mb-3">Search for any cast through June 6, 2022 at 11:20pm EST.</p>
     <form action="/search" method="POST">
       <div class="input-group">
-        <input type="text" name="query" autofocus placeholder="It's time to Farcast">
-        <input type="hidden" name="queryField" value="text">
+        <input type="text" name="text" autofocus placeholder="It's time to Farcast">
         <input type="submit" value="Search">
       </div>
     </form>
@@ -44,7 +43,7 @@
 
   <script>
     const form = document.querySelector('form')
-    const query = document.querySelector('input[name="query"]')
+    const query = document.querySelector('input[name="text"]')
     const error = document.querySelector('.error')
 
     form.addEventListener('submit', (e) => {

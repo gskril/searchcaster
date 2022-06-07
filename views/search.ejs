@@ -38,34 +38,30 @@
           <div class="cast" data-reply="<%= cast.replyParent ? true : false %>">
             <div class="cast__body">
               <div class="cast__author">
-                <% if (cast.avatar) { %>
-                  <img class="cast__avatar" src="<%= cast.avatar %>" alt="<%= cast.displayName %>">
+                <% if (cast.meta.avatar) { %>
+                  <img class="cast__avatar" src="<%= cast.meta.avatar %>" alt="<%= cast.meta.displayName %>">
                 <% } %>
                 <div class="cast__names">
-                  <% if (cast.displayName) { %>
-                    <span class="cast__display-name"><%= cast.displayName %></span>
+                  <% if (cast.meta.displayName) { %>
+                    <span class="cast__display-name"><%= cast.meta.displayName %></span>
                   <% } %>
-                  <span class="cast__username">@<%= cast.username %></span>
+                  <span class="cast__username">@<%= cast.body.username %></span>
                 </div>
               </div>
               <span class="cast__date">
-                <%= new Date(cast.publishedAt).toLocaleDateString() %>
+                <%= new Date(cast.body.publishedAt).toLocaleDateString() %>
               </span>
-              <p class="cast__text"><%= cast.text %></p>
-              <% if (cast.attachment) { %>
-                <a class="cast__attachment-link" href="<%= cast.attachment %>" target="_blank">
-                  <img class="cast__attachment" src="<%= cast.attachment %>" loading="lazy" alt="">
+              <p class="cast__text"><%= cast.body.data.text %></p>
+              <% if (cast.body.data.image) { %>
+                <a class="cast__attachment-link" href="<%= cast.body.data.image %>" target="_blank">
+                  <img class="cast__attachment" src="<%= cast.body.data.image %>" loading="lazy" alt="">
                 </a>
               <% } %>
             </div>
-            <% if (cast.replyParent) { %>
+            <% if (cast.body.data.replyParentMerkleRoot) { %>
               <div class="cast__meta">
                 <!-- <a class="cast__link" href="<%= cast.uri %>">Open in Farcaster</a> -->
-                <form action="/search" method="POST">
-                  <input type="hidden" name="query" value="<%= cast.replyParent %>">
-                  <input type="hidden" name="queryField" value="replyParent">
-                  <span class="cast__reply">In reply to <button class="link" type="submit">@<%= cast.replyParentUsername %></button></span>
-                </form>
+                <span class="cast__reply">In reply to <a href="/search?merkleRoot=<%=cast.body.data.replyParentMerkleRoot%>">@<%= cast.meta.replyParentUsername.username %></a></span>
               </div>
             <% } %>
           </div>
