@@ -168,22 +168,6 @@ input[type="submit"]:focus {
   width: 100%;
 }
 
-.cast__engagement {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  width: fit-content;
-  font-size: .875rem;
-  color: #7d8085;
-  align-items: center;
-  margin-top: 0.75rem;
-  gap: 2rem;
-}
-
-.cast__engagement svg {
-  vertical-align: text-bottom;
-  margin-right: 0.25rem;
-}
-
 @media screen and (max-width: 30em) {
   h1 {
     font-size: 1.8rem;
