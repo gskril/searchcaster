@@ -32,13 +32,16 @@
       </div>
     </div>
     <p class="mb-3">Search for any cast through June 6, 2022 at 11:20pm EST.</p>
-    <form action="/search" method="POST">
+    <form>
       <div class="input-group">
         <input type="text" name="text" autofocus placeholder="It's time to Farcast">
         <input type="submit" value="Search">
       </div>
     </form>
-    <p class="error">Enter at least four characters</p>
+    <p class="error" style="display: none;">Enter at least four characters</p>
+    <noscript>
+      <p class="error">You'll need Javascript to use this app</p>
+    </noscript>
   </div>
 
   <script>
@@ -58,7 +61,7 @@
         })
 
         error.style.display = 'none'
-        e.target.submit()
+        window.location.href = `/search?text=${query.value}`
       }
     })
   </script>

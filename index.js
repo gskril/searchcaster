@@ -126,11 +126,6 @@ app.get('/search', async (req, res) => {
 	})
 })
 
-app.post('/search', async (req, res) => {
-	const { text } = req.body
-	res.redirect(`/search?text=${text}`)
-})
-
 async function searchCasts(collection, merkleRoot, text, username) {
 	let field, query
 

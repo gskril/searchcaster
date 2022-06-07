@@ -117,7 +117,6 @@ input[type="submit"]:focus {
 }
 
 .error {
-  display: none;
   margin-top: 1rem;
   color: #EF4444;
 }
