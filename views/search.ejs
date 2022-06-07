@@ -53,5 +53,13 @@
       <p>No results found.</p>
     <% } %>
   </div>
+
+  <script>
+    // Identify URLs and turn them into links
+    document.querySelectorAll('.cast__text').forEach(function(el) {
+      el.innerHTML = el.innerHTML.replace(/(https?:\/\/[^\s]+)(\s|$)/g, '<a href="$1" target="_blank">$1</a>$2');
+    });
+
+  </script>
 </body>
 </html>
