@@ -21,14 +21,32 @@
         <h1>Farcaster Search</h1>
       </div>
     </div>
-    <p class="mb-3">Search for any cast through June 6, 2022 at 10:45pm EST.</p>
+    <p class="mb-3">Search for any cast through June 6, 2022 at 11:20pm EST.</p>
     <form action="/search" method="POST">
       <div class="input-group">
-        <input type="text" name="query" id="query" placeholder="It's time to Farcast">
+        <input type="text" name="query" autofocus placeholder="It's time to Farcast">
         <input type="hidden" name="queryField" value="text">
         <input type="submit" value="Search">
       </div>
     </form>
+    <p class="error">Enter at least four characters</p>
   </div>
+
+  <script>
+    const form = document.querySelector('form')
+    const query = document.querySelector('input[name="query"]')
+    const error = document.querySelector('.error')
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault()
+
+      if (query.value.length < 4) {
+        return error.style.display = 'block'
+      } else {
+        error.style.display = 'none'
+        e.target.submit()
+      }
+    })
+  </script>
 </body>
 </html>

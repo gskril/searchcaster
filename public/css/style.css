@@ -116,6 +116,12 @@ input[type="submit"]:focus {
   color: #8a63d2;
 }
 
+.error {
+  display: none;
+  margin-top: 1rem;
+  color: #EF4444;
+}
+
 .cast {
   position: relative;
   display: block;
