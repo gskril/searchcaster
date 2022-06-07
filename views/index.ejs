@@ -12,6 +12,16 @@
   <link rel="icon" href="/img/favicon-32.png" sizes="32x32" />
   <link rel="icon" href="/img/favicon-64.png" sizes="64x64" />
   <link rel="icon" href="/img/favicon-96.png" sizes="96x96" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EDX4BE3BNW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-EDX4BE3BNW');
+  </script>
 </head>
 <body>
   <div class="container">
@@ -43,6 +53,11 @@
       if (query.value.length < 4) {
         return error.style.display = 'block'
       } else {
+        gtag('event', 'search_text', {
+          event_category: 'engagement',
+          event_label: query.value,
+        })
+
         error.style.display = 'none'
         e.target.submit()
       }

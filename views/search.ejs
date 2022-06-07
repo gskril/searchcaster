@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Farcaster Search</title>
+  <title>Farcaster Search Results</title>
 
   <link rel="stylesheet" href="/css/style.css">
   <link rel="apple-touch-icon" href="/img/search-logo.png">
@@ -12,6 +12,16 @@
   <link rel="icon" href="/img/favicon-32.png" sizes="32x32" />
   <link rel="icon" href="/img/favicon-64.png" sizes="64x64" />
   <link rel="icon" href="/img/favicon-96.png" sizes="96x96" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EDX4BE3BNW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-EDX4BE3BNW');
+  </script>
 </head>
 <body>
   <div class="container">
@@ -69,9 +79,8 @@
   <script>
     // Identify URLs and turn them into links
     document.querySelectorAll('.cast__text').forEach(function(el) {
-      el.innerHTML = el.innerHTML.replace(/(https?:\/\/[^\s]+)(\s|$)/g, '<a href="$1" target="_blank">$1</a>$2');
-    });
-
+      el.innerHTML = el.innerHTML.replace(/(https?:\/\/[^\s]+)(\s|$)/g, '<a href="$1" target="_blank">$1</a>$2')
+    })
   </script>
 </body>
 </html>
