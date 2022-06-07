@@ -1,6 +1,4 @@
 {
-  "name": "farcaster-search",
-  "main": "index.js",
   "scripts": {
     "start": "node index",
     "dev": "nodemon index"
