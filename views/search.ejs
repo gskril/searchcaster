@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farcaster Search</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-flex mb-2">
+        <img class="logo" src="/img/logo.png" width="48" alt="Farcaster logo">
+        <h1>Search Results</h1>
+      </div>
+      <a href="/">Return home</a>
+    </div>
+    <% if (casts && casts.length > 0) { %>
+      <div class="casts">
+        <% casts.forEach(cast => { %>
+          <div class="cast">
+            <div class="cast__author">
+              <% if (cast.avatar) { %>
+                <img class="cast__avatar" src="<%= cast.avatar %>" alt="<%= cast.displayName %>">
+              <% } %>
+              <div class="cast__names">
+                <% if (cast.displayName) { %>
+                  <span class="cast__display-name"><%= cast.displayName %></span>
+                <% } %>
+                <span class="cast__username">@<%= cast.username %></span>
+              </div>
+            </div>
+            <span class="cast__time">
+              <%= new Date(cast.publishedAt).toLocaleDateString() %>
+            </span>
+            <p class="cast__text"><%= cast.text %></p>
+            <% if (cast.attachment) { %>
+              <a class="cast__attachment-link" href="<%= cast.attachment %>" target="_blank">
+                <img class="cast__attachment" src="<%= cast.attachment %>" alt="">
+              </a>
+            <% } %>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <p>No results found.</p>
+    <% } %>
+  </div>
+</body>
+</html>

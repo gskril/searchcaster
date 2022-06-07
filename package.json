@@ -1,0 +1,15 @@
+{
+  "name": "farcaster-search",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index"
+  },
+  "author": "Greg Skriloff",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.1",
+    "ejs": "^3.1.8",
+    "express": "^4.18.1",
+    "mongodb": "^4.7.0"
+  }
+}
