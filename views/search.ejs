@@ -32,6 +32,27 @@
       </div>
       <a href="/">Return home</a>
     </div>
+    <div class="filters">
+      <details>
+        <summary class="filters__title">Filters</summary>
+        <div class="filters__content">
+          <form class="filters__text">
+            <label for="text">Text:</label>
+            <div class="input-group">
+              <input type="text" name="text" value="<%= searchTerm %>" placeholder="It's time to Farcast">
+              <input type="submit" value="Search">
+            </div>
+          </form>
+          <form class="filters__username">
+            <label for="username">Username:</label>
+            <div class="input-group">
+              <input type="text" name="username" value="<%= searchUsername %>" placeholder="gregskril">
+              <input type="submit" value="Search">
+            </div>
+          </form>
+        </div>
+      </details>
+    </div>
     <% if (casts && casts.length > 0) { %>
       <div class="casts">
         <% casts.forEach(cast => { %>
@@ -45,7 +66,7 @@
                   <% if (cast.meta.displayName) { %>
                     <span class="cast__display-name"><%= cast.meta.displayName %></span>
                   <% } %>
-                  <span class="cast__username">@<%= cast.body.username %></span>
+                  <a href="/search?username=<%= cast.body.username %>" class="cast__username">@<%= cast.body.username %></a>
                 </div>
               </div>
               <span class="cast__date">
@@ -73,9 +94,42 @@
   </div>
 
   <script>
-    // Identify URLs and turn them into links
+    const searchTerm = '<%= searchTerm %>' || null
+    const searchUsername = '<%= searchUsername %>' || null
+
+    // Turn URLs into links and bold the search term matches
     document.querySelectorAll('.cast__text').forEach(function(el) {
       el.innerHTML = el.innerHTML.replace(/(https?:\/\/[^\s]+)(\s|$)/g, '<a href="$1" target="_blank">$1</a>$2')
+      el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
+    })
+
+    // Handle text filter
+    document.querySelector('.filters__text').addEventListener('submit', function(e) {
+      e.preventDefault()
+      console.log('submitted')
+      let queryParam = []
+      if (searchUsername) {
+        queryParam.push('username=' + searchUsername)
+      }
+      if (e.target.text.value) {
+        queryParam.push('text=' + e.target.text.value)
+      }
+
+      window.location.href = '/search?' + queryParam.join('&')
+    })
+
+    // Handle username filter
+    document.querySelector('.filters__username').addEventListener('submit', function(e) {
+      e.preventDefault()
+      let queryParam = []
+      if (searchTerm) {
+        queryParam.push('text=' + searchTerm)
+      }
+      if (e.target.username.value) {
+        queryParam.push('username=' + e.target.username.value)
+      }
+
+      window.location.href = '/search?' + queryParam.join('&')
     })
   </script>
 </body>

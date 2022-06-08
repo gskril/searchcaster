@@ -111,18 +111,22 @@ app.get('/api/search', async (req, res) => {
 })
 
 app.get('/search', async (req, res) => {
-	const { merkleRoot, text } = req.query
+	const { merkleRoot, text, username } = req.query
+
+	const queryParams =
+		`merkleRoot=${merkleRoot || ''}` +
+		`&text=${text || ''}` +
+		`&username=${username || ''}`
+
 	const casts = await axios
-		.get(
-			`https://${req.headers.host}/api/search?${
-				merkleRoot ? `merkleRoot=${merkleRoot}` : `text=${text}`
-			}`
-		)
+		.get(`http://${req.headers.host}/api/search?${queryParams}`)
 		.then((response) => response.data.casts)
 		.catch((error) => console.error(error))
 
 	res.render('search', {
 		casts: casts,
+		searchTerm: text,
+		searchUsername: username,
 	})
 })
 
@@ -130,19 +134,31 @@ async function searchCasts(collection, merkleRoot, text, username) {
 	let field, query
 
 	if (merkleRoot) {
-		field = 'merkleRoot'
-		query = merkleRoot
+		return await collection
+			.find({
+				merkleRoot: { $regex: merkleRoot },
+			})
+			.toArray()
 	} else if (username) {
-		field = 'body.username'
-		query = username
-	} else {
-		field = 'body.data.text'
-		query = text
-	}
+		if (text) {
+			return await collection
+				.find({
+					'body.username': { $regex: username, $options: 'i' },
+					'body.data.text': { $regex: text, $options: 'i' },
+				})
+				.toArray()
+		}
 
-	return await collection
-		.find({
-			[`${[field][0]}`]: { $regex: query, $options: 'i' },
-		})
-		.toArray()
+		return await collection
+			.find({
+				'body.username': { $regex: username, $options: 'i' },
+			})
+			.toArray()
+	} else {
+		return await collection
+			.find({
+				'body.data.text': { $regex: text, $options: 'i' },
+			})
+			.toArray()
+	}
 }
