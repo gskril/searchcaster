@@ -108,6 +108,12 @@
       
       // Bold the search term
       el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
+      
+      // Remove bold tag from links
+      const links = el.querySelectorAll('a')
+      links.forEach(function(link) {
+        link.href = link.href.replace('%3Cb%3E', '').replace('%3C/b%3E', '')
+      })
     })
 
     // Format cast replies
