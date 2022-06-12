@@ -31,7 +31,7 @@
         <h1>Farcaster Search</h1>
       </div>
     </div>
-    <p class="mb-3">Search for any cast through June 7, 2022 at 11pm EST.</p>
+    <p class="mb-3">Search for any cast. Updates every two hours.</p>
     <form>
       <div class="input-group">
         <input type="text" name="text" autofocus placeholder="It's time to Farcast">
@@ -55,10 +55,14 @@
       if (query.value.length < 4) {
         return error.style.display = 'block'
       } else {
-        gtag('event', 'search_text', {
-          event_category: 'engagement',
-          event_label: query.value,
-        })
+        try {
+          gtag('event', 'search_text', {
+            event_category: 'engagement',
+            event_label: query.value,
+          })
+        } catch (err) {
+          console.log('Error logging GA event.', err)
+        }
 
         error.style.display = 'none'
         window.location.href = `/search?text=${query.value}`

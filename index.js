@@ -98,6 +98,11 @@ app.get('/api/search', async (req, res) => {
 		}
 	})
 
+	// When fetching a specific cast, reverse the order to show the replies after the cast
+	if (merkleRoot) {
+		formattedResponse.reverse()
+	}
+
 	const endTime = Date.now()
 	const elapsedTime = endTime - startTime
 
@@ -127,16 +132,18 @@ app.get('/search', async (req, res) => {
 		casts: casts,
 		searchTerm: text,
 		searchUsername: username,
+		searchMerkle: merkleRoot,
 	})
 })
 
 async function searchCasts(collection, merkleRoot, text, username) {
-	let field, query
-
 	if (merkleRoot) {
 		return await collection
 			.find({
-				merkleRoot: { $regex: merkleRoot },
+				$or: [
+					{ merkleRoot: merkleRoot },
+					{ 'body.data.replyParentMerkleRoot': merkleRoot },
+				],
 			})
 			.toArray()
 	} else if (username) {

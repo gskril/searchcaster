@@ -60,7 +60,7 @@
             <div class="cast__body">
               <div class="cast__author">
                 <% if (cast.meta.avatar) { %>
-                  <img class="cast__avatar" src="<%= cast.meta.avatar %>" alt="<%= cast.meta.displayName %>">
+                  <img class="cast__avatar" src="<%= cast.meta.avatar %>" alt="">
                 <% } %>
                 <div class="cast__names">
                   <% if (cast.meta.displayName) { %>
@@ -96,12 +96,29 @@
   <script>
     const searchTerm = '<%= searchTerm %>' || null
     const searchUsername = '<%= searchUsername %>' || null
+    const searchMerkle = '<%= searchMerkle %>' || null
 
-    // Turn URLs into links and bold the search term matches
+    // Format cast text
     document.querySelectorAll('.cast__text').forEach(function(el) {
+      // Turn URLs into links
       el.innerHTML = el.innerHTML.replace(/(https?:\/\/[^\s]+)(\s|$)/g, '<a href="$1" target="_blank">$1</a>$2')
+
+      // Link to @username
+      el.innerHTML = el.innerHTML.replace(/@([a-zA-Z0-9_]+)/g, '<a href="/search?username=$1">@$1</a>')
+      
+      // Bold the search term
       el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
     })
+
+    // Format cast replies
+    if (searchMerkle) {
+      const castParent = document.querySelectorAll('.cast')[0]
+      
+      const repliesMsg = document.createElement('p')
+      repliesMsg.classList.add('cast--replies-msg')
+      repliesMsg.innerHTML = 'Direct replies:'
+      castParent.parentNode.insertBefore(repliesMsg, castParent.nextSibling)
+    }
 
     // Handle text filter
     document.querySelector('.filters__text').addEventListener('submit', function(e) {

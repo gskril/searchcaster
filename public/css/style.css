@@ -159,6 +159,12 @@ input[type="submit"]:focus {
   overflow: hidden;
 }
 
+.cast--replies-msg {
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
 .cast__body {
   padding: 1rem;
 }
