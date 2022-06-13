@@ -14,7 +14,7 @@ body {
 
 h1 {
   font-size: 2rem;
-  line-height: 1;
+  line-height: 1.1;
 }
 
 p {
@@ -31,8 +31,13 @@ img {
 }
 
 button {
+  font-size: inherit;
   background: none;
   border: none;
+}
+
+button:hover {
+  cursor: pointer;
 }
 
 label {
@@ -80,10 +85,24 @@ a:hover {
   align-items: center;
 }
 
+.header--pagination {
+  margin-bottom: 0.75rem;
+}
+
+.header--pagination .logo {
+  margin-right: 0.75rem;
+}
+
 .logo {
   width: 3rem;
   height: 3rem;
   margin-right: 0.5rem;
+}
+
+.title__page-number {
+  display: block;
+  font-size: 45%;
+  color: #7d8085;
 }
 
 .input-group {
@@ -239,6 +258,17 @@ input[type="submit"]:focus {
   padding: 0.5rem 1rem;
   width: 100%;
   font-size: 0.875rem;
+}
+
+.pagination {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: space-around;
+}
+
+.pagination__btn {
+  color: #8a63d2;
 }
 
 @media screen and (max-width: 30em) {

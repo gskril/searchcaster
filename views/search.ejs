@@ -26,9 +26,13 @@
 <body>
   <div class="container">
     <div class="header">
-      <div class="header-flex mb-2">
+      <div class="header-flex mb-2 <%= page > 1 ? 'header--pagination' : null %>">
         <img class="logo" src="/img/logo.png" width="48" alt="Farcaster logo">
-        <h1>Search Results</h1>
+        <h1>Search Results
+          <% if (page > 1) { %>
+            <span class="title__page-number">Page <%= page %></span>
+          <% } %>
+        </h1>
       </div>
       <a href="/">Return home</a>
     </div>
@@ -86,8 +90,19 @@
               </div>
             <% } %>
           </div>
-        <% }); %>
+        <% }) %>
       </div>
+
+      <% if (casts.length === count || (page > 1)) { %>
+        <div class="pagination">
+          <% if (page > 1) { %>
+            <button class="pagination__btn" data-pagination="-1">← Previous page</button>
+          <% } %>
+          <% if (casts.length === count) { %>
+            <button class="pagination__btn" data-pagination="+1">Next page →</button>
+          <% } %>
+        </div>
+      <% } %>
     <% } else { %>
       <p>No results found.</p>
     <% } %>
@@ -97,6 +112,7 @@
     const searchTerm = `<%- searchTerm %>` || null
     const searchUsername = '<%= searchUsername %>' || null
     const searchMerkle = '<%= searchMerkle %>' || null
+    const currentPage = parseInt('<%= page %>')
 
     // Format cast text
     document.querySelectorAll('.cast__text').forEach(function(el) {
@@ -125,6 +141,17 @@
       repliesMsg.innerHTML = 'Direct replies:'
       castParent.parentNode.insertBefore(repliesMsg, castParent.nextSibling)
     }
+
+    // Pagination
+    document.querySelectorAll('.pagination__btn').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        const page = parseInt(e.target.dataset.pagination)
+        const newPage = currentPage + page
+        const currentUrl = new URL(window.location.href)
+        currentUrl.searchParams.set('page', newPage)
+        window.location.href = currentUrl.href
+      })
+    })
 
     // Handle text filter
     document.querySelector('.filters__text').addEventListener('submit', function(e) {
