@@ -165,15 +165,17 @@ async function searchCasts(
 			casts = await collection.find({
 				$and: [
 					{ 'body.username': { $regex: username, $options: 'i' } },
-					{ 'body.data.text': { $regex: text.toString(), $options: 'i' } },
 					{
 						'body.data.text': {
-							$not: { $regex: 'recast:farcaster://' },
+							$regex: text.toString(),
+							$options: 'i',
 						},
 					},
 					{
 						'body.data.text': {
-							$not: { $regex: 'delete:farcaster://' },
+							$not: {
+								$regex: '^(delete:farcaster://|recast:farcaster://)',
+							},
 						},
 					},
 				],
@@ -181,17 +183,14 @@ async function searchCasts(
 		} else {
 			casts = await collection.find({
 				$and: [
-					{
-						'body.data.text': {
-							$not: { $regex: 'recast:farcaster://' },
-						},
-					},
-					{
-						'body.data.text': {
-							$not: { $regex: 'delete:farcaster://' },
-						},
-					},
 					{ 'body.username': { $regex: username, $options: 'i' } },
+					{
+						'body.data.text': {
+							$not: {
+								$regex: '^(delete:farcaster://|recast:farcaster://)',
+							},
+						},
+					},
 				],
 			})
 		}
@@ -200,11 +199,17 @@ async function searchCasts(
 			$and: [
 				{
 					'body.data.text': {
-						$not: { $regex: 'delete:farcaster://' },
+						$regex: text.toString(),
+						$options: 'i',
 					},
 				},
-				{ 'body.username': { $regex: username, $options: 'i' } },
-				{ 'body.data.text': { $regex: text.toString(), $options: 'i' } },
+				{
+					'body.data.text': {
+						$not: {
+							$regex: '^(delete:farcaster://|recast:farcaster://)',
+						},
+					},
+				},
 			],
 		})
 	}
