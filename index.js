@@ -149,6 +149,7 @@ async function searchCasts(
 	count = parseInt(count) || 50
 	page = parseInt(page) || 1
 	const offset = (page - 1) * count
+	const textQuery = text ? text.toString() : ''
 
 	// Limit to 200 results per page for performance
 	count > 200 ? (count = 200) : (count = count)
@@ -167,7 +168,7 @@ async function searchCasts(
 					{ 'body.username': { $regex: username, $options: 'i' } },
 					{
 						'body.data.text': {
-							$regex: text.toString(),
+							$regex: textQuery,
 							$options: 'i',
 						},
 					},
@@ -199,7 +200,7 @@ async function searchCasts(
 			$and: [
 				{
 					'body.data.text': {
-						$regex: text.toString(),
+						$regex: textQuery,
 						$options: 'i',
 					},
 				},
