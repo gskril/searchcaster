@@ -31,28 +31,22 @@ app.get('/', (req, res) => {
 
 // accept a query and return the results like an API
 app.get('/api/search', async (req, res) => {
-	const { merkleRoot, text, username } = req.query
+	const { count, merkleRoot, page, text, username } = req.query
 	const startTime = Date.now()
 
 	const db = client.db('farcaster')
 	const collection = db.collection('casts')
-	const response = await searchCasts(collection, merkleRoot, text, username)
-
-	// Exclude recasts and deleted casts
-	const filteredResponse = response.filter((cast) => {
-		return (
-			!cast.body.data.text.startsWith('recast:farcaster://') &&
-			!cast.body.data.text.startsWith('delete:farcaster://')
-		)
-	})
-
-	// Sort by date
-	filteredResponse.sort((a, b) => {
-		return new Date(b.body.publishedAt) - new Date(a.body.publishedAt)
-	})
+	const response = await searchCasts(
+		collection,
+		count,
+		merkleRoot,
+		page,
+		text,
+		username
+	)
 
 	// Restructure data
-	const formattedResponse = filteredResponse.map((cast) => {
+	const formattedResponse = response.map((cast) => {
 		const isReply = cast.body.data.replyParentMerkleRoot ? true : false
 		const imgurUrl = 'https://i.imgur.com/'
 		let text = cast.body.data.text
@@ -116,12 +110,17 @@ app.get('/api/search', async (req, res) => {
 })
 
 app.get('/search', async (req, res) => {
-	const { merkleRoot, text, username } = req.query
+	let { count, merkleRoot, page, text, username } = req.query
+
+	count = count ? parseInt(count) : 25
+	page = page ? parseInt(page) : 1
 
 	const queryParams =
 		`merkleRoot=${merkleRoot || ''}` +
 		`&text=${text || ''}` +
-		`&username=${username || ''}`
+		`&username=${username || ''}` +
+		`&count=${count}` +
+		`&page=${page}`
 
 	const casts = await axios
 		.get(`http://${req.headers.host}/api/search?${queryParams}`)
@@ -130,42 +129,89 @@ app.get('/search', async (req, res) => {
 
 	res.render('search', {
 		casts: casts,
+		count: count,
+		page: page,
 		searchTerm: text,
 		searchUsername: username,
 		searchMerkle: merkleRoot,
 	})
 })
 
-async function searchCasts(collection, merkleRoot, text, username) {
+async function searchCasts(
+	collection,
+	count,
+	merkleRoot,
+	page,
+	text,
+	username
+) {
+	let casts
+	count = parseInt(count) || 50
+	page = parseInt(page) || 1
+	const offset = (page - 1) * count
+
+	// Limit to 200 results per page for performance
+	count > 200 ? (count = 200) : (count = count)
+
 	if (merkleRoot) {
-		return await collection
-			.find({
-				$or: [
-					{ merkleRoot: merkleRoot },
-					{ 'body.data.replyParentMerkleRoot': merkleRoot },
-				],
-			})
-			.toArray()
+		casts = await collection.find({
+			$or: [
+				{ merkleRoot: merkleRoot },
+				{ 'body.data.replyParentMerkleRoot': merkleRoot },
+			],
+		})
 	} else if (username) {
 		if (text) {
-			return await collection
-				.find({
-					'body.username': { $regex: username, $options: 'i' },
-					'body.data.text': { $regex: text, $options: 'i' },
-				})
-				.toArray()
+			casts = await collection.find({
+				$and: [
+					{ 'body.username': { $regex: username, $options: 'i' } },
+					{ 'body.data.text': { $regex: text, $options: 'i' } },
+					{
+						'body.data.text': {
+							$not: { $regex: 'recast:farcaster://' },
+						},
+					},
+					{
+						'body.data.text': {
+							$not: { $regex: 'delete:farcaster://' },
+						},
+					},
+				],
+			})
+		} else {
+			casts = await collection.find({
+				$and: [
+					{
+						'body.data.text': {
+							$not: { $regex: 'recast:farcaster://' },
+						},
+					},
+					{
+						'body.data.text': {
+							$not: { $regex: 'delete:farcaster://' },
+						},
+					},
+					{ 'body.username': { $regex: username, $options: 'i' } },
+				],
+			})
 		}
-
-		return await collection
-			.find({
-				'body.username': { $regex: username, $options: 'i' },
-			})
-			.toArray()
 	} else {
-		return await collection
-			.find({
-				'body.data.text': { $regex: text, $options: 'i' },
-			})
-			.toArray()
+		casts = await collection.find({
+			$and: [
+				{
+					'body.data.text': {
+						$not: { $regex: 'delete:farcaster://' },
+					},
+				},
+				{ 'body.username': { $regex: username, $options: 'i' } },
+				{ 'body.data.text': { $regex: text, $options: 'i' } },
+			],
+		})
 	}
+
+	return casts
+		.sort({ 'body.publishedAt': -1 })
+		.limit(count)
+		.skip(offset)
+		.toArray()
 }
