@@ -83,12 +83,13 @@
                 </a>
               <% } %>
             </div>
-            <% if (cast.body.data.replyParentMerkleRoot) { %>
-              <div class="cast__meta">
-                <!-- <a class="cast__link" href="<%= cast.uri %>">Open in Farcaster</a> -->
+            <div class="cast__meta">
+              <% if (!cast.body.data.replyParentMerkleRoot) { %>
+                <a class="cast__link" href="<%= cast.uri %>">Open in Farcaster</a>
+              <% } else { %>
                 <span class="cast__reply">In reply to <a href="/search?merkleRoot=<%=cast.body.data.replyParentMerkleRoot%>">@<%= cast.meta.replyParentUsername.username %></a></span>
-              </div>
-            <% } %>
+              <% } %>
+            </div>
           </div>
         <% }) %>
       </div>
