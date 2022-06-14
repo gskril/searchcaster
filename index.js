@@ -141,6 +141,36 @@ app.get('/search', async (req, res) => {
 	})
 })
 
+// Fartcaster results page
+app.get('/fartcaster', async (req, res) => {
+	let { count, merkleRoot, page, username } = req.query
+	const text = '%23fartcaster' // Hardcoded search text for this route
+
+	count = count ? parseInt(count) : 25
+	page = page ? parseInt(page) : 1
+
+	const queryParams =
+		`merkleRoot=${merkleRoot || ''}` +
+		`&text=${text}` +
+		`&username=${username || ''}` +
+		`&count=${count}` +
+		`&page=${page}`
+
+	const casts = await axios
+		.get(`http://${req.headers.host}/api/search?${queryParams}`)
+		.then((response) => response.data.casts)
+		.catch((error) => console.error(error))
+
+	res.render('fartcaster', {
+		casts: casts,
+		count: count,
+		page: page,
+		searchTerm: text,
+		searchUsername: username,
+		searchMerkle: merkleRoot,
+	})
+})
+
 // Search casts in the database
 async function searchCasts(
 	collection,
