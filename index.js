@@ -19,6 +19,7 @@ client.connect(async (err) => {
 	}
 })
 
+// Configure Express
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`Listening on port ${port}`))
 app.use(express.urlencoded({ extended: true }))
@@ -29,7 +30,7 @@ app.get('/', (req, res) => {
 	res.render('index')
 })
 
-// accept a query and return the results like an API
+// API endpoint for searching casts
 app.get('/api/search', async (req, res) => {
 	const { count, merkleRoot, page, text, username } = req.query
 	const startTime = Date.now()
@@ -109,15 +110,18 @@ app.get('/api/search', async (req, res) => {
 	})
 })
 
+// Search results page
 app.get('/search', async (req, res) => {
 	let { count, merkleRoot, page, text, username } = req.query
+
+	const textQuery = text ? text.replace(/#/g, '%23') : ''
 
 	count = count ? parseInt(count) : 25
 	page = page ? parseInt(page) : 1
 
 	const queryParams =
 		`merkleRoot=${merkleRoot || ''}` +
-		`&text=${text || ''}` +
+		`&text=${textQuery}` +
 		`&username=${username || ''}` +
 		`&count=${count}` +
 		`&page=${page}`
@@ -137,6 +141,7 @@ app.get('/search', async (req, res) => {
 	})
 })
 
+// Search casts in the database
 async function searchCasts(
 	collection,
 	count,

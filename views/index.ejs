@@ -46,11 +46,12 @@
 
   <script>
     const form = document.querySelector('form')
-    const query = document.querySelector('input[name="text"]')
     const error = document.querySelector('.error')
 
     form.addEventListener('submit', (e) => {
       e.preventDefault()
+      const query = document.querySelector('input[name="text"]')
+      const searchText = query.value.replace(/#/g, '%23')
 
       if (query.value.length < 4) {
         return error.style.display = 'block'
@@ -65,7 +66,7 @@
         }
 
         error.style.display = 'none'
-        window.location.href = `/search?text=${query.value}`
+        window.location.href = `/search?text=${searchText}`
       }
     })
   </script>

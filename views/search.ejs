@@ -162,7 +162,7 @@
         queryParam.push('username=' + searchUsername)
       }
       if (e.target.text.value) {
-        queryParam.push('text=' + e.target.text.value)
+        queryParam.push('text=' + e.target.text.value.replace(/#/g, '%23'))
       }
 
       window.location.href = '/search?' + queryParam.join('&')
@@ -173,7 +173,7 @@
       e.preventDefault()
       let queryParam = []
       if (searchTerm) {
-        queryParam.push('text=' + searchTerm)
+        queryParam.push('text=' + searchTerm.replace(/#/g, '%23'))
       }
       if (e.target.username.value) {
         queryParam.push('username=' + e.target.username.value)
