@@ -186,7 +186,7 @@ input[type="submit"]:focus {
 }
 
 .cast__body {
-  padding: 1rem;
+  padding: 1rem 1rem 0.5rem;
 }
 
 .cast__author {
@@ -259,6 +259,22 @@ input[type="submit"]:focus {
   padding: 0.5rem 1rem;
   width: 100%;
   font-size: 0.875rem;
+}
+
+.cast__engagement {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: fit-content;
+  font-size: .875rem;
+  color: #7d8085;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 2rem;
+}
+
+.cast__engagement svg {
+  vertical-align: text-bottom;
+  margin-right: 0.25rem;
 }
 
 .pagination {
