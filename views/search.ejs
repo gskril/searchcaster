@@ -89,6 +89,7 @@
               <% } else { %>
                 <span class="cast__reply">In reply to <a href="/search?merkleRoot=<%=cast.body.data.replyParentMerkleRoot%>">@<%= cast.meta.replyParentUsername.username %></a></span>
               <% } %>
+              <a class="cast__reply--children" href="/search?merkleRoot=<%=cast.merkleRoot%>">See replies</a>
             </div>
           </div>
         <% }) %>
@@ -136,11 +137,22 @@
     // Format cast replies
     if (searchMerkle) {
       const castParent = document.querySelectorAll('.cast')[0]
+      const numberOfCasts = document.querySelectorAll('.cast').length
       
       const repliesMsg = document.createElement('p')
       repliesMsg.classList.add('cast--replies-msg')
-      repliesMsg.innerHTML = 'Direct replies:'
+      if (numberOfCasts <=1 ) {
+        repliesMsg.innerHTML = 'No direct replies'
+      } else {
+        repliesMsg.innerHTML = 'Direct replies:'
+      }
       castParent.parentNode.insertBefore(repliesMsg, castParent.nextSibling)
+    }
+
+    // Remove "see replies" link if already on the page
+    if (searchMerkle) {
+      const seeRepliesLink = document.querySelector('.cast:first-child .cast__reply--children')
+      seeRepliesLink.remove()
     }
 
     // Pagination

@@ -31,6 +31,7 @@ img {
 }
 
 button {
+  color: inherit;
   font-size: inherit;
   background: none;
   border: none;
@@ -265,10 +266,6 @@ input[type="submit"]:focus {
   width: 100%;
   margin: 0 auto;
   justify-content: space-around;
-}
-
-.pagination__btn {
-  color: #8a63d2;
 }
 
 @media screen and (max-width: 30em) {
