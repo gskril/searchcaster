@@ -48,10 +48,12 @@ app.get('/api/search', async (req, res) => {
 
 	// Restructure data
 	const formattedResponse = response.map((cast) => {
-		const isReply = cast.body.data.replyParentMerkleRoot ? true : false
+		const replyParentMerkleRoot =
+			cast.body.data.replyParentMerkleRoot || null
+		const isReply = replyParentMerkleRoot ? true : false
 		const imgurUrl = 'https://i.imgur.com/'
 		let text = cast.body.data.text
-		let attachment
+		let attachment = null
 
 		if (text.includes(imgurUrl)) {
 			attachment = imgurUrl + text.split(imgurUrl)[1]
@@ -65,7 +67,7 @@ app.get('/api/search', async (req, res) => {
 				data: {
 					text: text,
 					image: attachment,
-					replyParentMerkleRoot: cast.body.data.replyParentMerkleRoot,
+					replyParentMerkleRoot: replyParentMerkleRoot,
 				},
 			},
 			meta: {
@@ -86,12 +88,12 @@ app.get('/api/search', async (req, res) => {
 					count: cast.meta?.watches.count,
 				},
 				replyParentUsername: {
-					username: cast.meta?.replyParentUsername?.username,
+					username: cast.meta?.replyParentUsername?.username || null,
 				},
 			},
 			merkleRoot: cast.merkleRoot,
 			uri: `farcaster://casts/${cast.merkleRoot}/${
-				isReply ? cast.body.data.replyParentMerkleRoot : cast.merkleRoot
+				isReply ? replyParentMerkleRoot : cast.merkleRoot
 			}`,
 		}
 	})
