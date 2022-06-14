@@ -70,7 +70,10 @@ app.get('/api/search', async (req, res) => {
 			},
 			meta: {
 				displayName: cast.meta?.displayName,
-				avatar: cast.meta?.avatar,
+				avatar: cast.meta?.avatar.replace(
+					'https://storage.opensea.io/',
+					'https://openseauserdata.com/'
+				),
 				isVerifiedAvatar: cast.meta?.isVerifiedAvatar,
 				reactions: {
 					count: cast.meta?.reactions.count,
@@ -87,7 +90,7 @@ app.get('/api/search', async (req, res) => {
 				},
 			},
 			merkleRoot: cast.merkleRoot,
-			uri: `farcaster://${cast.merkleRoot}/${
+			uri: `farcaster://casts/${cast.merkleRoot}/${
 				isReply ? cast.body.data.replyParentMerkleRoot : cast.merkleRoot
 			}`,
 		}
