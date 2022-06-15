@@ -17,12 +17,34 @@ h1 {
   line-height: 1.1;
 }
 
+p + ul {
+  margin-top: 0.5rem;
+}
+
+li + li {
+  margin-top: 0.5rem;
+}
+
+ul + p {
+  margin-top: 1.25rem;
+}
+
 p {
   word-break: break-word;
 }
 
 p:not(:last-of-type) {
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+p:not(:last-of-type) + ul {
+  margin-top: -0.75rem;
+}
+
+code {
+  font-size: 110%;
+  display: inline-block;
+  transform: translateY(-0.0625rem);
 }
 
 img {
@@ -48,6 +70,10 @@ label {
 
 summary:hover {
   cursor: pointer;
+}
+
+ul {
+  padding-left: 2rem;
 }
 
 a {

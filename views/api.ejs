@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farcaster Indexer and Search API</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="apple-touch-icon" href="/img/search-logo.png">
+  <link rel="icon" href="/img/favicon-16.png" sizes="16x16" />
+  <link rel="icon" href="/img/favicon-32.png" sizes="32x32" />
+  <link rel="icon" href="/img/favicon-64.png" sizes="64x64" />
+  <link rel="icon" href="/img/favicon-96.png" sizes="96x96" />
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EDX4BE3BNW"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-EDX4BE3BNW');
+  </script>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-flex mb-2">
+        <img class="logo" src="/img/logo.png" width="48" alt="Farcaster logo">
+        <h1>Farcaster Search API</h1>
+      </div>
+      <a href="/">Return home</a>
+    </div>
+    <p class="mb-3">Unofficial cast indexer and search API for the <a href="https://www.farcaster.xyz/" target="_blank">Farcaster protocol</a>.</p>
+    <p>All casts on the protocol are indexed every 15 minutes, and accessible via the the <a href="/api/search">/api/search</a> endpoint.</p>
+    <p>API parameters:</p>
+    <ul>
+      <li><code>count</code> - the number of casts to be returned (max 200, default 50)</li>
+      <li><code>merkleRoot</code> - the unique identifier of a cast which returns a cast and all of its direct replies (overwrites all other parameters)</li>
+      <li><code>page</code> - the number of casts to offset the response by in relation to <code>count</code></li>
+      <li><code>text</code> - return casts by text matching (case insensitive)</li>
+      <li><code>username</code> - return all casts, including replies, from a certain user</li>
+    </ul>
+    <p>This website follows the same URL structure as the API, so it's easy to switch between HTML and JSON responses.</p>
+    <p>Simply add <code>/api/</code> between the domain and <code>/search</code> from any results page.</p>
+    <p>For example:</p>
+    <ul>
+      <li><a href="/search?text=test">searchcaster.xyz/search?text=test</a> returns a web page</li>
+      <li><a href="/api/search?text=test">searchcaster.xyz/api/search?text=test</a> returns JSON</li>
+    </ul>
+  </div>
+</body>
+</html>

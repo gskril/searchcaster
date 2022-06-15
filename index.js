@@ -30,6 +30,10 @@ app.get('/', (req, res) => {
 	res.render('index')
 })
 
+app.get('/api', (req, res) => {
+	res.render('api')
+})
+
 // API endpoint for searching casts
 app.get('/api/search', async (req, res) => {
 	const { count, merkleRoot, page, text, username } = req.query
