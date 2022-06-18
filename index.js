@@ -209,7 +209,7 @@ async function searchCasts(
 		if (text) {
 			casts = await collection.find({
 				$and: [
-					{ 'body.username': { $regex: username, $options: 'i' } },
+					{ 'body.username': username.toLowerCase() },
 					{
 						'body.data.text': {
 							$regex: textQuery,
@@ -228,7 +228,7 @@ async function searchCasts(
 		} else {
 			casts = await collection.find({
 				$and: [
-					{ 'body.username': { $regex: username, $options: 'i' } },
+					{ 'body.username': username.toLowerCase() },
 					{
 						'body.data.text': {
 							$not: {
