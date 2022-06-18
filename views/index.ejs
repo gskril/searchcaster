@@ -34,7 +34,7 @@
         <h1>Farcaster Search</h1>
       </div>
     </div>
-    <p class="mb-3">Search for any cast. Updates every 15 minutes.</p>
+    <p class="mb-3">Search for any cast. Updates every 30 minutes.</p>
     <form>
       <div class="input-group">
         <input type="text" name="text" autofocus placeholder="It's time to Farcast">
@@ -60,9 +60,8 @@
         return error.style.display = 'block'
       } else {
         try {
-          gtag('event', 'search_text', {
-            event_category: 'engagement',
-            event_label: query.value,
+          gtag('event', 'search', {
+            search_term: query.value,
           })
         } catch (err) {
           console.log('Error logging GA event.', err)

@@ -184,13 +184,20 @@
     // Handle text filter
     document.querySelector('.filters__text').addEventListener('submit', function(e) {
       e.preventDefault()
-      console.log('submitted')
       let queryParam = []
       if (searchUsername) {
         queryParam.push('username=' + searchUsername)
       }
       if (e.target.text.value) {
         queryParam.push('text=' + e.target.text.value.replace(/#/g, '%23'))
+      }
+
+      try {
+        gtag('event', 'search', {
+          search_term: e.target.text.value,
+        })
+      } catch (err) {
+        console.log('Error logging GA event.', err)
       }
 
       window.location.href = '/search?' + queryParam.join('&')
