@@ -36,7 +36,8 @@ app.get('/api', (req, res) => {
 
 // API endpoint for searching casts
 app.get('/api/search', async (req, res) => {
-	const { count, merkleRoot, page, text, username } = req.query
+	const { count, engagement, media, merkleRoot, page, text, username } =
+		req.query
 	const startTime = Date.now()
 
 	const db = client.db('farcaster')
@@ -44,6 +45,8 @@ app.get('/api/search', async (req, res) => {
 	const response = await searchCasts(
 		collection,
 		count,
+		engagement,
+		media,
 		merkleRoot,
 		page,
 		text,
@@ -121,7 +124,8 @@ app.get('/api/search', async (req, res) => {
 
 // Search results page
 app.get('/search', async (req, res) => {
-	let { count, merkleRoot, page, text, username } = req.query
+	let { count, engagement, media, merkleRoot, page, text, username } =
+		req.query
 
 	const textQuery = text ? text.replace(/#/g, '%23') : ''
 
@@ -129,7 +133,9 @@ app.get('/search', async (req, res) => {
 	page = page ? parseInt(page) : 1
 
 	const queryParams =
-		`merkleRoot=${merkleRoot || ''}` +
+		`engagement=${engagement || ''}` +
+		`&merkleRoot=${merkleRoot || ''}` +
+		`&media=${media || ''}` +
 		`&text=${textQuery}` +
 		`&username=${username || ''}` +
 		`&count=${count}` +
@@ -152,13 +158,15 @@ app.get('/search', async (req, res) => {
 
 // Fartcaster results page
 app.get('/fartcaster', async (req, res) => {
-	let { count, merkleRoot, page, username } = req.query
+	let { count, engagement, media, merkleRoot, page, username } = req.query
 	const text = '%23fartcaster' // Hardcoded search text for this route
 
 	count = count ? parseInt(count) : 25
 	page = page ? parseInt(page) : 1
 
 	const queryParams =
+		`engagement=${engagement || ''}` +
+		`media=${media || ''}` +
 		`merkleRoot=${merkleRoot || ''}` +
 		`&text=${text}` +
 		`&username=${username || ''}` +
@@ -184,6 +192,8 @@ app.get('/fartcaster', async (req, res) => {
 async function searchCasts(
 	collection,
 	count,
+	engagement,
+	media,
 	merkleRoot,
 	page,
 	text,
@@ -195,8 +205,10 @@ async function searchCasts(
 	const offset = (page - 1) * count
 	const textQuery = text ? text.toString() : ''
 
-	// Limit to 200 results per page for performance
-	count > 200 ? (count = 200) : (count = count)
+	// regex that identifies all cats with '
+	const mediaImg =
+		// Limit to 200 results per page for performance
+		count > 200 ? (count = 200) : (count = count)
 
 	if (merkleRoot) {
 		casts = await collection.find({
@@ -205,6 +217,32 @@ async function searchCasts(
 				{ 'body.data.replyParentMerkleRoot': merkleRoot },
 			],
 		})
+	} else if (media) {
+		if (media === 'image') {
+			casts = await collection.find({
+				'body.data.text': { $regex: /i.imgur.com/ },
+			})
+		} else if (media === 'music') {
+			casts = await collection.find({
+				'body.data.text': {
+					$regex: /(open.spotify.com|soundcloud.com|music.apple.com|tidal.com)/,
+				},
+			})
+		} else if (media === 'youtube') {
+			casts = await collection.find({
+				'body.data.text': {
+					$regex: /(youtube.com|youtu.be)/,
+				},
+			})
+		} else if (media === 'url') {
+			casts = await collection.find({
+				$and: [
+					{ 'body.data.text': { $regex: /(http:\/\/|https:\/\/)/ } },
+					{ 'body.data.text': { $regex: /(.com|.xyz)/ } },
+					{ 'body.data.text': { $not: /i.imgur.com/ } },
+				],
+			})
+		}
 	} else if (username) {
 		if (text) {
 			casts = await collection.find({
@@ -259,8 +297,12 @@ async function searchCasts(
 		})
 	}
 
+	const filterMethod = engagement
+		? `meta.${engagement}.count`
+		: 'body.publishedAt'
+
 	return casts
-		.sort({ 'body.publishedAt': -1 })
+		.sort({ [filterMethod]: -1 })
 		.limit(count)
 		.skip(offset)
 		.toArray()

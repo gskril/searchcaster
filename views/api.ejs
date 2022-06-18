@@ -40,6 +40,8 @@
     <p>API parameters:</p>
     <ul>
       <li><code>count</code> - the number of casts to be returned (max 200, default 50)</li>
+      <li><code>engagement</code> - changes the sorting of any search query to engagement metrics. Options are "reactions", "recasts", "watches"</li>
+      <li><code>media</code> - the type of media to be returned. Options are "image", "music", "youtube", "url". (overwrites all other parameters)</li>
       <li><code>merkleRoot</code> - the unique identifier of a cast which returns a cast and all of its direct replies (overwrites all other parameters)</li>
       <li><code>page</code> - the number of casts to offset the response by in relation to <code>count</code></li>
       <li><code>text</code> - return casts by text matching (case insensitive)</li>
