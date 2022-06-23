@@ -41,7 +41,6 @@
         <input type="submit" value="Search">
       </div>
     </form>
-    <p class="error" style="display: none;">Enter at least four characters</p>
     <noscript>
       <p class="error">You'll need Javascript to use this app</p>
     </noscript>
@@ -80,27 +79,21 @@
 
   <script>
     const form = document.querySelector('form')
-    const error = document.querySelector('.error')
 
     form.addEventListener('submit', (e) => {
       e.preventDefault()
       const query = document.querySelector('input[name="text"]')
       const searchText = query.value.replace(/#/g, '%23')
 
-      if (query.value.length < 4) {
-        return error.style.display = 'block'
-      } else {
-        try {
-          gtag('event', 'search', {
-            search_term: query.value,
-          })
-        } catch (err) {
-          console.log('Error logging GA event.', err)
-        }
-
-        error.style.display = 'none'
-        window.location.href = `/search?text=${searchText}`
+      try {
+        gtag('event', 'search', {
+          search_term: query.value,
+        })
+      } catch (err) {
+        console.log('Error logging GA event.', err)
       }
+
+      window.location.href = `/search?text=${searchText}`
     })
   </script>
 </body>
