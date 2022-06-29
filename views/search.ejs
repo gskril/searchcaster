@@ -159,7 +159,12 @@
       
       // Bold the search term
       if (searchTerm) {
-        el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
+        const match = el.innerHTML.match(new RegExp(searchTerm, 'gi'))
+        if (match) {
+          match.forEach(function(match) {
+            el.innerHTML = el.innerHTML.replace(match, `<strong>${match}</strong>`)
+          })
+        }
 
         // Remove bold tag from links
         const links = el.querySelectorAll('a')
