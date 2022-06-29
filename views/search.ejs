@@ -130,9 +130,9 @@
   </div>
 
   <script>
-    const searchTerm = `<%- searchTerm %>` || null
-    const searchUsername = '<%= searchUsername %>' || null
-    const searchMerkle = '<%= searchMerkle %>' || null
+    const searchTerm = `<%- searchTerm %>`
+    const searchUsername = '<%= searchUsername %>'
+    const searchMerkle = '<%= searchMerkle %>'
     const currentPage = parseInt('<%= page %>')
 
     // Format cast text
@@ -142,15 +142,20 @@
 
       // Link to @username
       el.innerHTML = el.innerHTML.replace(/@([a-zA-Z0-9_]+)/g, '<a href="/search?username=$1">@$1</a>')
+
+      // Link to farcaster://casts/ URI
+      el.innerHTML = el.innerHTML.replace(/farcaster:\/\/casts\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9_]+)/g, '<a href="/search?merkleRoot=$1">farcaster://casts/$1/$2</a>')
       
       // Bold the search term
-      el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
-      
-      // Remove bold tag from links
-      const links = el.querySelectorAll('a')
-      links.forEach(function(link) {
-        link.href = link.href.replace('%3Cb%3E', '').replace('%3C/b%3E', '')
-      })
+      if (searchTerm) {
+        el.innerHTML = el.innerHTML.replace(new RegExp(searchTerm, 'gi'), '<b>' + searchTerm + '</b>')
+
+        // Remove bold tag from links
+        const links = el.querySelectorAll('a')
+        links.forEach(function(link) {
+          link.href = link.href.replace('%3Cb%3E', '').replace('%3C/b%3E', '')
+        })
+      }
     })
 
     // Format cast replies
