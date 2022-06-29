@@ -175,6 +175,17 @@
 
       // Link to @username
       el.innerHTML = el.innerHTML.replace(/@([a-zA-Z0-9_]+)/g, '<a href="/search?username=$1">@$1</a>')
+
+      // Embed media
+      if (el.innerText.includes('https://open.spotify.com/track/')) {
+        // Spotify song
+        const trackId = el.innerHTML.match(/https:\/\/open.spotify.com\/track\/([a-zA-Z0-9]+)/)[1]
+        el.innerHTML += `<iframe style="border-radius:12px; margin-top: 1rem;" src="https://open.spotify.com/embed/track/${trackId}" loading="lazy" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`
+      } else if (el.innerText.includes('https://open.spotify.com/album/')) {
+        // Spotify album
+        const albumId = el.innerHTML.match(/https:\/\/open.spotify.com\/album\/([a-zA-Z0-9]+)/)[1]
+        el.innerHTML += `<iframe style="border-radius:12px; margin-top: 1rem;" src="https://open.spotify.com/embed/album/${albumId}" loading="lazy" width="100%" height="80" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>`
+      }
     })
 
     // Format cast replies
