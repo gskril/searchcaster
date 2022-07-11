@@ -166,6 +166,27 @@ app.get('/api/ens', async (req, res) => {
 	)
 })
 
+app.get('/api/profiles', async (req, res) => {
+	const { connected_address } = req.query
+	const db = client.db('farcaster')
+	const collection = db.collection('profiles')
+
+	if (!connected_address) {
+		return res.send({
+			error: 'No address specified',
+		})
+	}
+
+	// Find profiles where the connectedAddress = connect_address
+	const profiles = await collection
+		.find({
+			connectedAddress: connected_address,
+		})
+		.toArray()
+
+	res.send(profiles)
+})
+
 // Search results page
 app.get('/search', async (req, res) => {
 	let { count, engagement, media, merkleRoot, page, text, username } =
