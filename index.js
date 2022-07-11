@@ -166,23 +166,34 @@ app.get('/api/ens', async (req, res) => {
 	)
 })
 
+// API endpoint for finding profiles
 app.get('/api/profiles', async (req, res) => {
-	const { connected_address } = req.query
+	const { connected_address, username } = req.query
 	const db = client.db('farcaster')
 	const collection = db.collection('profiles')
+	let profiles
 
-	if (!connected_address) {
+	if (connected_address) {
+		// Find profiles where the connectedAddress = connect_address
+		profiles = collection.find({
+			connectedAddress: connected_address,
+		})
+	} else if (username) {
+		profiles = collection.find({
+			username: username,
+		})
+	} else {
 		return res.send({
-			error: 'No address specified',
+			error: 'No username or address specified',
 		})
 	}
 
-	// Find profiles where the connectedAddress = connect_address
-	const profiles = await collection
-		.find({
-			connectedAddress: connected_address,
-		})
-		.toArray()
+	// Remove the MongoDB _id field
+	profiles = await profiles.toArray()
+	profiles = profiles.map((profile) => {
+		delete profile._id
+		return profile
+	})
 
 	res.send(profiles)
 })
