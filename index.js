@@ -122,6 +122,50 @@ app.get('/api/search', async (req, res) => {
 	})
 })
 
+// API endpoint for 'drop your ENS'
+app.get('/api/ens', async (req, res) => {
+	let { page, parent } = req.query
+
+	count = 50
+	page = parseInt(page) || 1
+	const offset = (page - 1) * count
+
+	const db = client.db('farcaster')
+	const collection = db.collection('casts')
+	let casts
+	if (parent) {
+		casts = collection.find({
+			$and: [
+				{ 'body.data.text': { $regex: /[^\s]\.+eth/ } },
+				{ 'body.data.replyParentMerkleRoot': parent },
+			],
+		})
+	} else {
+		return res.send({
+			error: 'No parent specified',
+		})
+	}
+
+	const json = await casts
+		.sort({ 'body.publishedAt': -1 })
+		.limit(count)
+		.skip(offset)
+		.toArray()
+
+	res.send(
+		json.map((cast) => {
+			return {
+				text: cast.body.data.text,
+				username: cast.body.username,
+				displayName: cast.meta.displayName || null,
+				merkleRoot: cast.merkleRoot,
+				replyParentMerkleRoot:
+					cast.body.data.replyParentMerkleRoot || null,
+			}
+		})
+	)
+})
+
 // Search results page
 app.get('/search', async (req, res) => {
 	let { count, engagement, media, merkleRoot, page, text, username } =
