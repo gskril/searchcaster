@@ -36,8 +36,8 @@
       <a href="/">Return home</a>
     </div>
     <p class="mb-3">Unofficial cast indexer and search API for the <a href="https://www.farcaster.xyz/" target="_blank">Farcaster protocol</a>.</p>
-    <p>All casts on the protocol are indexed every 15 minutes, and accessible via the the <a href="/api/search">/api/search</a> endpoint.</p>
-    <p>API parameters:</p>
+    <p>All casts on the protocol are indexed every 30 minutes, and accessible via the the <a href="/api/search">/api/search</a> endpoint.</p>
+    <p>Cast endpoint parameters:</p>
     <ul>
       <li><code>count</code> - the number of casts to be returned (max 200, default 50)</li>
       <li><code>engagement</code> - changes the sorting of any search query to engagement metrics. Options are "reactions", "recasts", "watches"</li>
@@ -53,6 +53,12 @@
     <ul>
       <li><a href="/search?text=test">searchcaster.xyz/search?text=test</a> returns a web page</li>
       <li><a href="/api/search?text=test">searchcaster.xyz/api/search?text=test</a> returns JSON</li>
+    </ul>
+    <p>There is also <a href="/api/profiles">/api/profiles</a> to fetch Farcaster profiles by username or connected address.</p>
+    <p>Profiles endpoint parameters:</p>
+    <ul>
+      <li><code>connect_address</code> - the Ethereum address the user has connected to their Farcaster profile</li>
+      <li><code>username</code> - the username associated with the profile</li>
     </ul>
   </div>
 </body>
