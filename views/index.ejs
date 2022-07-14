@@ -34,6 +34,10 @@
         <h1>Farcaster Search</h1>
       </div>
     </div>
+    <% if (denied) { %>
+      <p>gm, you need to have an ethereum wallet to use searchcaster ;)</p>
+    <% } else { %>
+
     <p class="mb-3">Search for any cast. Updates every 30 minutes.</p>
     <form>
       <div class="input-group">
@@ -77,7 +81,19 @@
     </div>
   </div>
 
+  <% } %>
+
   <script>
+    if (window.innerWidth > 500) {
+      if (!window.location.href.includes('?nope') && !window.ethereum) {
+        window.location.href = '/?nope'
+      } else if (window.location.href.includes('?nope') && window.ethereum) {
+        window.location.href = '/'
+      }
+    } else if (window.location.href.includes('?nope')) {
+      window.location.href = '/'
+    }
+
     const form = document.querySelector('form')
 
     form.addEventListener('submit', (e) => {

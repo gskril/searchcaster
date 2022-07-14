@@ -29,7 +29,9 @@ app.set('view engine', 'ejs')
 app.use(cors())
 
 app.get('/', (req, res) => {
-	res.render('index')
+	res.render('index', {
+		denied: req.query.nope !== undefined,
+	})
 })
 
 app.get('/api', (req, res) => {

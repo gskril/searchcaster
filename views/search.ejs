@@ -144,6 +144,14 @@
   </div>
 
   <script>
+    if (window.innerWidth > 500) {
+      if (!window.location.href.includes('?nope') && !window.ethereum) {
+        window.location.href = '/?nope'
+      } else if (window.location.href.includes('?nope') && window.ethereum) {
+        window.location.href = '/'
+      }
+    }
+
     const searchTerm = `<%- searchTerm %>`
     const searchUsername = '<%= searchUsername %>'
     const searchMerkle = '<%= searchMerkle %>'
