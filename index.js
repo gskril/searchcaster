@@ -38,6 +38,13 @@ app.get('/', (req, res) => {
 	})
 })
 
+app.get('/trending', (req, res) => {
+	const timeLastWeek = new Date()
+	timeLastWeek.setDate(timeLastWeek.getDate() - 7)
+
+	res.redirect(`/search?engagement=reactions&after=${timeLastWeek.getTime()}`)
+})
+
 app.get('/api', (req, res) => {
 	res.render('api')
 })
