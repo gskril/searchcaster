@@ -29,8 +29,12 @@ app.set('view engine', 'ejs')
 app.use(cors())
 
 app.get('/', (req, res) => {
+	const timeLastWeek = new Date()
+	timeLastWeek.setDate(timeLastWeek.getDate() - 7)
+
 	res.render('index', {
 		denied: req.query.nope !== undefined,
+		timeLastWeek: timeLastWeek.getTime(),
 	})
 })
 
@@ -40,14 +44,25 @@ app.get('/api', (req, res) => {
 
 // API endpoint for searching casts
 app.get('/api/search', async (req, res) => {
-	const { count, engagement, media, merkleRoot, page, text, username } =
-		req.query
+	const {
+		after,
+		before,
+		count,
+		engagement,
+		media,
+		merkleRoot,
+		page,
+		text,
+		username,
+	} = req.query
 	const startTime = Date.now()
 
 	const db = client.db('farcaster')
 	const collection = db.collection('casts')
 	const response = await searchCasts(
 		collection,
+		after,
+		before,
 		count,
 		engagement,
 		media,
@@ -204,8 +219,17 @@ app.get('/api/profiles', async (req, res) => {
 
 // Search results page
 app.get('/search', async (req, res) => {
-	let { count, engagement, media, merkleRoot, page, text, username } =
-		req.query
+	let {
+		after,
+		before,
+		count,
+		engagement,
+		media,
+		merkleRoot,
+		page,
+		text,
+		username,
+	} = req.query
 
 	const textQuery = text ? text.replace(/#/g, '%23') : ''
 
@@ -218,6 +242,8 @@ app.get('/search', async (req, res) => {
 		`&media=${media || ''}` +
 		`&text=${textQuery}` +
 		`&username=${username || ''}` +
+		`&after=${after || ''}` +
+		`&before=${before || ''}` +
 		`&count=${count}` +
 		`&page=${page}`
 
@@ -239,6 +265,8 @@ app.get('/search', async (req, res) => {
 // Search casts in the database
 async function searchCasts(
 	collection,
+	after,
+	before,
 	count,
 	engagement,
 	media,
@@ -252,6 +280,8 @@ async function searchCasts(
 	page = parseInt(page) || 1
 	const offset = (page - 1) * count
 	const textQuery = text ? text.toString() : ''
+	after = after ? Number(after) : 0
+	before = before ? Number(before) : new Date().getTime()
 
 	// regex that identifies all cats with '
 	const mediaImg =
@@ -309,6 +339,13 @@ async function searchCasts(
 							},
 						},
 					},
+					// make sure that cast.body.publishedAt is after 'after' and before 'before'
+					{
+						'body.publishedAt': {
+							$gte: after,
+							$lte: before,
+						},
+					},
 				],
 			})
 		} else {
@@ -320,6 +357,13 @@ async function searchCasts(
 							$not: {
 								$regex: '^(delete:farcaster://|recast:farcaster://)',
 							},
+						},
+					},
+					// make sure that cast.body.publishedAt is after 'after' and before 'before'
+					{
+						'body.publishedAt': {
+							$gte: after,
+							$lte: before,
 						},
 					},
 				],
@@ -339,6 +383,13 @@ async function searchCasts(
 						$not: {
 							$regex: '^(delete:farcaster://|recast:farcaster://)',
 						},
+					},
+				},
+				// make sure that cast.body.publishedAt is after 'after' and before 'before'
+				{
+					'body.publishedAt': {
+						$gt: after,
+						$lt: before,
 					},
 				},
 			],

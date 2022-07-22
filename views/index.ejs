@@ -52,7 +52,7 @@
 
     <div class="suggestions">
       <div class="suggestion">
-        <h2 class="h3">Common Searches</h2>
+        <h2 class="h3">Popular Topics</h2>
         <div class="suggestion__wrapper">
           <a class="suggestion__item" href="/search">All casts</a>
           <a class="suggestion__item" href="/search?text=startup">Startup</a>
@@ -72,11 +72,20 @@
       </div>
   
       <div class="suggestion">
-        <h2 class="h3">Popular</h2>
+        <h2 class="h3">Popular (all time)</h2>
         <div class="suggestion__wrapper">
           <a class="suggestion__item" href="/search?engagement=reactions">Most reactions</a>
           <a class="suggestion__item" href="/search?engagement=recasts">Most recasts</a>
           <a class="suggestion__item" href="/search?engagement=watches">Most watches</a>
+        </div>
+      </div>
+
+      <div class="suggestion">
+        <h2 class="h3">Trending (Last 7 Days)</h2>
+        <div class="suggestion__wrapper">
+          <a class="suggestion__item" href="/search?engagement=reactions&after=<%= timeLastWeek %>">Most reactions</a>
+          <a class="suggestion__item" href="/search?engagement=recasts&after=<%= timeLastWeek %>">Most recasts</a>
+          <a class="suggestion__item" href="/search?engagement=watches&after=<%= timeLastWeek %>">Most watches</a>
         </div>
       </div>
     </div>
