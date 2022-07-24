@@ -1,7 +1,7 @@
 import clientPromise from '../../lib/db'
 import formatCasts from '../../utils/cast'
 
-export default async function search(req, res) {
+export async function searchCasts(query) {
 	const startTime = Date.now()
 	const client = await clientPromise
 	const db = client.db('farcaster')
@@ -17,7 +17,7 @@ export default async function search(req, res) {
 		page,
 		text,
 		username,
-	} = req.query
+	} = query
 
 	let casts = []
 	count = Math.min(parseInt(count), 50) || 50
@@ -151,11 +151,20 @@ export default async function search(req, res) {
 	const endTime = Date.now()
 	const elapsedTime = endTime - startTime
 
-	res.json({
+	return {
 		casts: formattedResponse,
 		meta: {
 			count: formattedResponse.length,
 			responseTime: elapsedTime,
 		},
-	})
+	}
+}
+
+export default async function handler(req, res) {
+	try {
+		res.json(await searchCasts(req.query))
+	} catch (err) {
+		console.error(err)
+		res.status(500).json({ error: err.message })
+	}
 }
