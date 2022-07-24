@@ -1,7 +1,9 @@
 import Image from 'next/image'
+import { useRouter } from 'next/router'
 import Suggestion from '../components/suggestion'
 
 export default function Home() {
+	const router = useRouter()
 	const timeLastWeek = new Date().setDate(new Date().getDate() - 7)
 
 	return (
@@ -23,7 +25,13 @@ export default function Home() {
 			<p className="mb-3">
 				Search for any cast. Updates every 30 minutes.
 			</p>
-			<form>
+			<form
+				onSubmit={(e) => {
+					e.preventDefault()
+					const query = e.target.text.value
+					router.push(`/search?text=${query}`)
+				}}
+			>
 				<div className="input-group">
 					<input
 						type="text"
