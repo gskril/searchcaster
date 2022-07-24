@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 import { likeIcon, recastIcon, watchIcon } from '../assets/icons'
+import { getRelativeDate } from '../utils/date'
 import { searchCasts } from './api/search'
 
 export default function Search({ data, query }) {
@@ -66,9 +67,7 @@ export default function Search({ data, query }) {
 									</div>
 
 									<span className="cast__date">
-										{new Date(
-											cast.body.publishedAt
-										).toLocaleString()}
+										{getRelativeDate(cast.body.publishedAt)}
 									</span>
 
 									<p>{cast.body.data.text}</p>
