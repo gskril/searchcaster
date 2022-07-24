@@ -1,5 +1,5 @@
-import formatCasts from '../../lib/cast'
 import clientPromise from '../../lib/db'
+import formatCasts from '../../utils/cast'
 
 export default async function search(req, res) {
 	const startTime = Date.now()
