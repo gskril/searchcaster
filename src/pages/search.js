@@ -63,6 +63,55 @@ export default function Search({ data, query }) {
 				</Link>
 			</div>
 
+			<div className="filters">
+				<details>
+					<summary className="filters__title">Filters</summary>
+					<form
+						className="filters__content"
+						onSubmit={(e) => {
+							e.preventDefault()
+							const text = e.target.text.value || null
+							const username = e.target.username.value || null
+							let url = new URLSearchParams()
+
+							if (text) {
+								url.set('text', text)
+							}
+							if (username) {
+								url.set('username', username)
+							}
+
+							router.push(`/search?${url.toString()}`)
+						}}
+					>
+						<div>
+							<label htmlFor="text">Text:</label>
+							<div className="input-group">
+								<input
+									type="text"
+									name="text"
+									defaultValue={query.text}
+									placeholder="It's time to Farcast"
+								/>
+								<input type="submit" value="Search" />
+							</div>
+						</div>
+						<div>
+							<label htmlFor="username">Username:</label>
+							<div className="input-group">
+								<input
+									type="text"
+									name="username"
+									defaultValue={query.username}
+									placeholder="gregskril"
+								/>
+								<input type="submit" value="Search" />
+							</div>
+						</div>
+					</form>
+				</details>
+			</div>
+
 			{casts.length > 0 ? (
 				<div className="casts">
 					{casts.map((cast, i) => (
