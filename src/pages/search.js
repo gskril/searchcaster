@@ -13,17 +13,16 @@ export default function Search({ data, query }) {
 	const router = useRouter()
 	const url = router.asPath
 	const itemsPerPage = query.count || 25
+	const page = parseInt(query.page) || 1
 
 	const urlToNextPage = query.page
-		? url.replace(
-				'page=' + query.page,
-				'page=' + (parseInt(query.page) + 1)
-		  )
+		? url.replace(/page=\d+/, `page=${page + 1}`)
+		: url.includes('?')
+		? `${url}&page=2`
 		: `${url}?page=2`
 
 	const urlToPrevPage =
-		query.page &&
-		url.replace('page=' + query.page, 'page=' + (parseInt(query.page) - 1))
+		query.page && url.replace(/page=\d+/, `page=${page - 1}`)
 
 	// Redirect home if the user is on desktop and doesn't have an ETH wallet
 	useEffect(() => {
