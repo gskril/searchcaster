@@ -11,6 +11,19 @@ import { searchCasts } from './api/search'
 export default function Search({ data, query }) {
 	const casts = data.casts
 	const router = useRouter()
+	const url = router.asPath
+	const itemsPerPage = query.count || 25
+
+	const urlToNextPage = query.page
+		? url.replace(
+				'page=' + query.page,
+				'page=' + (parseInt(query.page) + 1)
+		  )
+		: `${url}?page=2`
+
+	const urlToPrevPage =
+		query.page &&
+		url.replace('page=' + query.page, 'page=' + (parseInt(query.page) - 1))
 
 	// Redirect home if the user is on desktop and doesn't have an ETH wallet
 	useEffect(() => {
@@ -22,7 +35,13 @@ export default function Search({ data, query }) {
 	return (
 		<div className="container">
 			<div className="header">
-				<div className="header-flex mb-2">
+				<div
+					className={[
+						'header-flex',
+						'mb-2',
+						query.page > 1 ? 'header--pagination' : null,
+					].join(' ')}
+				>
 					<div className="logo">
 						<Image
 							src="/img/logo.png"
@@ -31,7 +50,14 @@ export default function Search({ data, query }) {
 							alt="Farcaster logo"
 						/>
 					</div>
-					<h1>Search Results</h1>
+					<h1>
+						Search Results
+						{query.page > 1 && (
+							<span className="title__page-number">
+								Page {query.page}
+							</span>
+						)}
+					</h1>
 				</div>
 				<Link href="/">
 					<a>Return home</a>
@@ -163,6 +189,21 @@ export default function Search({ data, query }) {
 							)}
 						</div>
 					))}
+
+					{casts.length === itemsPerPage && (
+						<div className="pagination">
+							{query.page > 1 && (
+								<Link href={urlToPrevPage}>
+									<a className="pagination__btn">
+										← Previous page
+									</a>
+								</Link>
+							)}
+							<Link href={urlToNextPage}>
+								<a className="pagination__btn">Next page →</a>
+							</Link>
+						</div>
+					)}
 				</div>
 			) : (
 				<p>No results found.</p>

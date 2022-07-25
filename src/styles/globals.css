@@ -363,6 +363,10 @@ input[type="submit"]:focus {
   justify-content: space-around;
 }
 
+.pagination__btn {
+  color: inherit;
+}
+
 @media screen and (max-width: 30em) {
   h1 {
     font-size: 1.8rem;

@@ -20,7 +20,7 @@ export async function searchCasts(query) {
 	} = query
 
 	let casts = []
-	count = Math.min(parseInt(count), 50) || 50
+	count = Math.min(parseInt(count), 50) || 25
 	page = parseInt(page) || 1
 	const offset = (page - 1) * count
 	const textQuery = text ? text.toString() : ''
