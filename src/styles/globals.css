@@ -27,6 +27,12 @@ h1 {
   font-size: 2rem;
 }
 
+h2,
+.h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
 h3,
 .h3 {
   font-size: 1.125rem;
