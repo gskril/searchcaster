@@ -353,7 +353,7 @@ input[type="submit"]:focus {
 
 .cast__engagement svg {
   vertical-align: text-bottom;
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
 }
 
 .pagination {
