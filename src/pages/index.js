@@ -7,7 +7,7 @@ import Suggestion from '../components/suggestion'
 
 export default function Home() {
 	const router = useRouter()
-	const [hasEthereum, setHasEthereum] = useState()
+	const [hasEthereum, setHasEthereum] = useState(true)
 	const timeLastWeek = new Date().setDate(new Date().getDate() - 7)
 
 	// Block searching if the user is on desktop and doesn't have an ETH wallet

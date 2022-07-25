@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 
 import { likeIcon, recastIcon, watchIcon } from '../assets/icons'
 import { getRelativeDate } from '../utils/date'
+import { formatCastText } from '../utils/cast'
 import { searchCasts } from './api/search'
 
 export default function Search({ data, query }) {
@@ -70,7 +71,9 @@ export default function Search({ data, query }) {
 										{getRelativeDate(cast.body.publishedAt)}
 									</span>
 
-									<p>{cast.body.data.text}</p>
+									<p className="cast__text">
+										{formatCastText(cast.body.data.text)}
+									</p>
 
 									{cast.body.data.image && (
 										<a
