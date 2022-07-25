@@ -116,21 +116,24 @@ export default function Search({ data, query }) {
 
 								<div className="cast__meta">
 									{cast.body.data.replyParentMerkleRoot ? (
-										<span className="cast__reply">
-											In reply to{' '}
-											<Link
-												href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
-											>
-												<a>
-													@
-													{
-														cast.meta
-															.replyParentUsername
-															.username
-													}
-												</a>
-											</Link>
-										</span>
+										cast.body.data.replyParentMerkleRoot !==
+											query.merkleRoot && (
+											<span className="cast__reply">
+												In reply to{' '}
+												<Link
+													href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
+												>
+													<a>
+														@
+														{
+															cast.meta
+																.replyParentUsername
+																.username
+														}
+													</a>
+												</Link>
+											</span>
+										)
 									) : (
 										<a
 											href={cast.uri}
@@ -139,13 +142,15 @@ export default function Search({ data, query }) {
 											Open in Farcaster
 										</a>
 									)}
-									<Link
-										href={`/search?merkleRoot=${cast.merkleRoot}`}
-									>
-										<a className="cast__reply--children">
-											See replies
-										</a>
-									</Link>
+									{query.merkleRoot && i === 0 ? null : (
+										<Link
+											href={`/search?merkleRoot=${cast.merkleRoot}`}
+										>
+											<a className="cast__reply--children">
+												See replies
+											</a>
+										</Link>
+									)}
 								</div>
 							</div>
 
