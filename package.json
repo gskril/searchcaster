@@ -16,7 +16,9 @@
     "react-hot-toast": "^2.3.0"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^12.2.3",
     "eslint": "8.20.0",
-    "eslint-config-next": "12.2.3"
+    "eslint-config-next": "12.2.3",
+    "eslint-plugin-react": "^7.30.1"
   }
 }
