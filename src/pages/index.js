@@ -34,9 +34,7 @@ export default function Home() {
           </div>
         </div>
 
-        <p className="mb-3">
-					Search for any cast. Updates every 30 minutes.
-        </p>
+        <p className="mb-3">Search for any cast. Updates every 30 minutes.</p>
         <form
           onSubmit={(e) => {
             e.preventDefault()
@@ -48,11 +46,7 @@ export default function Home() {
           }}
         >
           <div className="input-group">
-            <input
-              type="text"
-              name="text"
-              placeholder="It's time to Farcast"
-            />
+            <input type="text" name="text" placeholder="It's time to Farcast" />
             <input type="submit" value="Search" />
           </div>
         </form>
