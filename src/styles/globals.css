@@ -27,6 +27,12 @@ h1 {
   font-size: 2rem;
 }
 
+h2,
+.h2 {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
 h3,
 .h3 {
   font-size: 1.125rem;
@@ -353,7 +359,7 @@ input[type="submit"]:focus {
 
 .cast__engagement svg {
   vertical-align: text-bottom;
-  margin-right: 0.25rem;
+  margin-right: 0.5rem;
 }
 
 .pagination {
@@ -361,6 +367,10 @@ input[type="submit"]:focus {
   width: 100%;
   margin: 0 auto;
   justify-content: space-around;
+}
+
+.pagination__btn {
+  color: inherit;
 }
 
 @media screen and (max-width: 30em) {
