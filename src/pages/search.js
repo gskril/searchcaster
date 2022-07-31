@@ -22,7 +22,7 @@ export default function Search({ data, query }) {
       : `${url}?page=2`
 
   const urlToPrevPage =
-		query.page && url.replace(/page=\d+/, `page=${page - 1}`)
+    query.page && url.replace(/page=\d+/, `page=${page - 1}`)
 
   // Redirect home if the user is on desktop and doesn't have an ETH wallet
   useEffect(() => {
@@ -50,11 +50,9 @@ export default function Search({ data, query }) {
             />
           </div>
           <h1>
-						Search Results
+            Search Results
             {query.page > 1 && (
-              <span className="title__page-number">
-								Page {query.page}
-              </span>
+              <span className="title__page-number">Page {query.page}</span>
             )}
           </h1>
         </div>
@@ -120,7 +118,7 @@ export default function Search({ data, query }) {
                 <div className="cast__body">
                   <div className="cast__author">
                     {cast.meta.avatar && (
-                    // eslint-disable-next-line @next/next/no-img-element
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={cast.meta.avatar}
                         className="cast__avatar"
@@ -134,9 +132,7 @@ export default function Search({ data, query }) {
                         {cast.meta.displayName}
                       </span>
                       <Link href={cast.body.username}>
-                        <a className="cast__username">
-													@{cast.body.username}
-                        </a>
+                        <a className="cast__username">@{cast.body.username}</a>
                       </Link>
                     </div>
                   </div>
@@ -146,7 +142,7 @@ export default function Search({ data, query }) {
                   </span>
 
                   <p className="cast__text">
-                    {formatCastText(cast.body.data.text)}
+                    {formatCastText(cast.body.data.text, query.text)}
                   </p>
 
                   {cast.body.data.image && (
@@ -169,21 +165,15 @@ export default function Search({ data, query }) {
                   <div className="cast__engagement">
                     <div>
                       {likeIcon}
-                      <span>
-                        {cast.meta.reactions.count}
-                      </span>
+                      <span>{cast.meta.reactions.count}</span>
                     </div>
                     <div>
                       {recastIcon}
-                      <span>
-                        {cast.meta.recasts.count}
-                      </span>
+                      <span>{cast.meta.recasts.count}</span>
                     </div>
                     <div>
                       {watchIcon}
-                      <span>
-                        {cast.meta.watches.count}
-                      </span>
+                      <span>{cast.meta.watches.count}</span>
                     </div>
                   </div>
                 </div>
@@ -191,38 +181,24 @@ export default function Search({ data, query }) {
                 <div className="cast__meta">
                   {cast.body.data.replyParentMerkleRoot ? (
                     cast.body.data.replyParentMerkleRoot !==
-											query.merkleRoot && (
+                      query.merkleRoot && (
                       <span className="cast__reply">
-												In reply to{' '}
+                        In reply to{' '}
                         <Link
                           href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
                         >
-                          <a>
-														@
-                            {
-                              cast.meta
-                                .replyParentUsername
-                                .username
-                            }
-                          </a>
+                          <a>@{cast.meta.replyParentUsername.username}</a>
                         </Link>
                       </span>
                     )
                   ) : (
-                    <a
-                      href={cast.uri}
-                      className="cast__link"
-                    >
-											Open in Farcaster
+                    <a href={cast.uri} className="cast__link">
+                      Open in Farcaster
                     </a>
                   )}
                   {query.merkleRoot && i === 0 ? null : (
-                    <Link
-                      href={`/search?merkleRoot=${cast.merkleRoot}`}
-                    >
-                      <a className="cast__reply--children">
-												See replies
-                      </a>
+                    <Link href={`/search?merkleRoot=${cast.merkleRoot}`}>
+                      <a className="cast__reply--children">See replies</a>
                     </Link>
                   )}
                 </div>
@@ -230,9 +206,7 @@ export default function Search({ data, query }) {
 
               {query.merkleRoot && i === 0 && (
                 <p className="cast--replies-msg">
-                  {casts.length > 1
-                    ? 'Direct replies:'
-                    : 'No direct replies'}
+                  {casts.length > 1 ? 'Direct replies:' : 'No direct replies'}
                 </p>
               )}
             </div>
@@ -242,9 +216,7 @@ export default function Search({ data, query }) {
             <div className="pagination">
               {query.page > 1 && (
                 <Link href={urlToPrevPage}>
-                  <a className="pagination__btn">
-										← Previous page
-                  </a>
+                  <a className="pagination__btn">← Previous page</a>
                 </Link>
               )}
               <Link href={urlToNextPage}>

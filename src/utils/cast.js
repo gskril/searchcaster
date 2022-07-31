@@ -52,17 +52,27 @@ export function formatCasts(casts) {
   })
 }
 
-export function formatCastText(text) {
+export function formatCastText(text, searchQuery) {
   const links = text.match(
     // Regex to identify URLS with .com, .xyz, .net, or .org extension (it doesn't have to start with http:// or https://)
-    /\b(?:https?:\/\/)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/g
+    /\b(?:https?:\/\/)?[-a-zA-Z0-9@:%._+~#=][-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/g
   )
 
   if (links) {
     links.forEach((link) => {
       text = text.replace(
         link,
-        `<a href="${link}" target="_blank" rel="noopener">${link}</a>`
+        // If a link doesn't already start with http:// or https://, add it
+        `<a href="${
+          link.match(
+            // Regex to identify an ENS name
+            /^(?!(http|https))(.*)\.eth$/
+          )
+            ? `https://rainbow.me/${link}`
+            : link.startsWith('http')
+              ? link
+              : `https://${link}`
+        }" target="_blank" rel="noopener">${link}</a>`
       )
     })
   }
@@ -93,12 +103,23 @@ export function formatCastText(text) {
       if (text.startsWith(mention) || text.split(mention)[0].endsWith(' ')) {
         text = text.replace(
           mention,
-          `<a href="https://farcaster.com/@${mention.slice(
-            1
-          )}" rel="noopener">${mention}</a>`
+          `<a href="/search?username=${mention.slice(1)}">${mention}</a>`
         )
       }
     })
+  }
+
+  if (searchQuery) {
+    const matches = new RegExp(searchQuery, 'gi')
+    text = text.replace(matches, `<b>${searchQuery}</b>`)
+
+    // remove <b> tags from hrefs
+    const hrefs = text.match(/href="([^"]*)"/g)
+    if (hrefs) {
+      hrefs.forEach((href) => {
+        text = text.replace(href, href.replace(/<\/?b>/g, ''))
+      })
+    }
   }
 
   return (
