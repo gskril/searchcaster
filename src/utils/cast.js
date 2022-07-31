@@ -100,7 +100,11 @@ export function formatCastText(text, searchQuery) {
   if (mention) {
     mention.forEach((mention) => {
       // If the mention is at the beginning of the text, or it has a space before it, it's a valid mention
-      if (text.startsWith(mention) || text.split(mention)[0].endsWith(' ')) {
+      if (
+        text.startsWith(mention) ||
+        text.split(mention)[0].endsWith(' ') ||
+        text.split(mention)[1].startsWith(' ')
+      ) {
         text = text.replace(
           mention,
           `<a href="/search?username=${mention.slice(1)}">${mention}</a>`
