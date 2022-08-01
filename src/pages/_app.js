@@ -5,6 +5,7 @@ import Head from 'next/head'
 import NProgress from 'nprogress'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import PlausibleProvider from 'next-plausible'
 
 NProgress.configure({
   showSpinner: false,
@@ -20,7 +21,7 @@ function App({ Component, pageProps }) {
   }, [router.events])
 
   return (
-    <>
+    <PlausibleProvider domain="searchcaster.xyz" trackOutboundLinks>
       <Head>
         <title>Farcaster Search | Searchcaster</title>
         <link rel="apple-touch-icon" href="/img/search-logo.png" />
@@ -44,7 +45,7 @@ function App({ Component, pageProps }) {
         />
       </Head>
       <Component {...pageProps} />
-    </>
+    </PlausibleProvider>
   )
 }
 

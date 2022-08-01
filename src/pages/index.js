@@ -1,11 +1,14 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import { usePlausible } from 'next-plausible'
 import toast, { Toaster } from 'react-hot-toast'
 
 import Suggestion from '../components/suggestion'
 
 export default function Home() {
+  const plausible = usePlausible()
+
   const router = useRouter()
   const [hasEthereum, setHasEthereum] = useState(true)
   const timeLastWeek = new Date().setDate(new Date().getDate() - 7)
@@ -39,9 +42,20 @@ export default function Home() {
           onSubmit={(e) => {
             e.preventDefault()
             if (!hasEthereum) {
+              // Plausible Analytics
+              plausible('Denied')
+
               return toast.error('You need an Ethereum wallet :)')
             }
             const query = e.target.text.value
+
+            // Plausible Analytics
+            plausible('Search', {
+              props: {
+                query,
+              },
+            })
+
             router.push(`/search?text=${query}`)
           }}
         >

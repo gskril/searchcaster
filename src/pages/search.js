@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { usePlausible } from 'next-plausible'
 
 import { likeIcon, recastIcon, watchIcon } from '../assets/icons'
 import { getRelativeDate } from '../utils/date'
@@ -9,6 +10,8 @@ import { formatCastText } from '../utils/cast'
 import { searchCasts } from './api/search'
 
 export default function Search({ data, query }) {
+  const plausible = usePlausible()
+
   const casts = data.casts
   const router = useRouter()
   const url = router.asPath
@@ -78,6 +81,13 @@ export default function Search({ data, query }) {
               if (username) {
                 url.set('username', username)
               }
+
+              // Plausible Analytics
+              plausible('Search', {
+                props: {
+                  query: text,
+                },
+              })
 
               router.push(`/search?${url.toString()}`)
             }}
