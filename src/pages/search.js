@@ -131,7 +131,7 @@ export default function Search({ data, query }) {
                       <span className="cast__display-name">
                         {cast.meta.displayName}
                       </span>
-                      <Link href={cast.body.username}>
+                      <Link href={`/search?username=${cast.body.username}`}>
                         <a className="cast__username">@{cast.body.username}</a>
                       </Link>
                     </div>
