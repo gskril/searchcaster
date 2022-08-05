@@ -5,10 +5,29 @@ export default async function search(req, res) {
   const db = client.db('farcaster')
   const collection = db.collection('profiles')
 
-  const { connected_address, username } = req.query
+  let { connected_address, username } = req.query
   let profiles = []
 
   if (connected_address) {
+    // If param isn't an ETH address, check if it's an ENS name
+    if (
+      connected_address.length !== 42 ||
+      connected_address.substring(0, 2) !== '0x'
+    ) {
+      console.log('checking ensideas')
+      connected_address = await fetch(
+        `https://api.ensideas.com/ens/resolve/${connected_address}`
+      )
+        .then((r) => r.json())
+        .then((r) => r.address)
+    }
+
+    if (!connected_address) {
+      return res.status(400).json({
+        error: 'Invalid connected_address',
+      })
+    }
+
     profiles = collection.find({
       connectedAddress: connected_address,
     })
