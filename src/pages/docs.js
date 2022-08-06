@@ -27,7 +27,9 @@ export default function Docs() {
         </a>
         .
       </p>
-      <h2>Search casts</h2>
+      <Link href="#casts">
+        <h2 id="casts">Search casts</h2>
+      </Link>
       <p>
         All casts on the protocol are indexed every 30 minutes, and accessible
         via the the <Link href="/api/search">/api/search</Link> endpoint.
@@ -89,7 +91,9 @@ export default function Docs() {
         </li>
       </ul>
 
-      <h2>Search profiles</h2>
+      <Link href="#profiles">
+        <h2 id="profiles">Search profiles</h2>
+      </Link>
       <p>
         Fetch Farcaster profiles by username or connected address via{' '}
         <Link href="/api/profiles">/api/profiles</Link>.
@@ -105,7 +109,9 @@ export default function Docs() {
         </li>
       </ul>
 
-      <h2>&quot;Drop your ENS&quot;</h2>
+      <Link href="#ens">
+        <h2 id="ens">&quot;Drop your ENS&quot;</h2>
+      </Link>
       <p>
         Easily scrape the replies of a cast for .eth names using the{' '}
         <Link href="/api/ens">/api/ens</Link> endpoint.
