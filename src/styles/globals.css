@@ -158,6 +158,27 @@ a:hover {
   grid-template-columns: 4fr 1fr;
 }
 
+.input-group--radio {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+.input-group__radio-option {
+  border-radius: 0.25rem;
+  padding: 0.25rem 0.5rem;
+  background-color: #d8ceec;
+}
+
+.input-group__radio-option > input {
+  width: 0;
+  position: absolute;
+}
+
+.input-group__radio-option > input:checked + label {
+  font-weight: 600;
+}
+
 input {
   font-size: inherit;
 }

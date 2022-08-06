@@ -116,6 +116,31 @@ export default function Search({ data, query }) {
                 <input type="submit" value="Search" />
               </div>
             </div>
+            <div>
+              <label htmlFor="type">Type:</label>
+              <div className="input-group--radio">
+                <div className="input-group__radio-option">
+                  <input
+                    type="radio"
+                    name="type"
+                    id="replies"
+                    value="replies"
+                    defaultChecked={query.type === 'replies' || !query.type}
+                  />
+                  <label htmlFor="replies">Casts &amp; Replies</label>
+                </div>
+                <div className="input-group__radio-option">
+                  <input
+                    type="radio"
+                    name="type"
+                    id="casts"
+                    value="casts"
+                    defaultChecked={query.type === 'casts'}
+                  />
+                  <label htmlFor="casts">Casts</label>
+                </div>
+              </div>
+            </div>
           </form>
         </details>
       </div>
