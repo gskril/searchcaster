@@ -17,6 +17,7 @@ export async function searchCasts(query) {
     page,
     text,
     username,
+    regex,
   } = query
 
   let casts = []
@@ -108,6 +109,24 @@ export async function searchCasts(query) {
         ],
       })
     }
+  } else if (regex) {
+    casts = collection.find({
+      // regex for a string that starts with gm or gn
+      $and: [
+        {
+          'body.data.text': {
+            $regex: regex,
+          },
+        },
+        {
+          'body.data.text': {
+            $not: {
+              $regex: '^(delete:farcaster://|recast:farcaster://)',
+            },
+          },
+        },
+      ]
+    })
   } else {
     casts = collection.find({
       $and: [
