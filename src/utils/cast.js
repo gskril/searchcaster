@@ -115,7 +115,7 @@ export function formatCastText(text, searchQuery) {
 
   if (searchQuery) {
     const matches = new RegExp(searchQuery, 'gi')
-    text = text.replace(matches, (match) => `<b>${match}</b>`);
+    text = text.replace(matches, (match) => `<b>${match}</b>`)
 
     // remove <b> tags from hrefs
     const hrefs = text.match(/href="([^"]*)"/g)
