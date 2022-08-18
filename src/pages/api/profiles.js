@@ -29,7 +29,7 @@ export default async function search(req, res) {
     }
 
     profiles = collection.find({
-      connectedAddress: connected_address,
+      connectedAddress: { $regex: new RegExp(connected_address, 'i') },
     })
   } else if (username) {
     profiles = collection.find({
