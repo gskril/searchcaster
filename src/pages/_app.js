@@ -43,6 +43,7 @@ function App({ Component, pageProps }) {
           name="description"
           content="Search for any cast on the Farcaster protocol."
         />
+        <meta name="twitter:card" content="summary_large_image" />
       </Head>
       <Component {...pageProps} />
     </PlausibleProvider>
