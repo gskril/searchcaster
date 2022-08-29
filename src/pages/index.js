@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { usePlausible } from 'next-plausible'
-import toast, { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast'
 
 import Suggestion from '../components/suggestion'
 
@@ -32,12 +32,6 @@ export default function Home() {
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            if (!hasEthereum) {
-              // Plausible Analytics
-              plausible('Denied')
-
-              return toast.error('You need an Ethereum wallet :)')
-            }
             const query = e.target.text.value
 
             // Plausible Analytics
