@@ -95,6 +95,20 @@ export async function searchCasts(query) {
           { ascending: false }
         )
     }
+  } else if (regex) {
+    casts = await supabase
+      .rpc('casts_regex', { regex })
+      .gt('published_at', after)
+      .lt('published_at', before)
+      .range(offset, upperRange)
+      .order(
+        engagement
+          ? engagement === 'reactions'
+            ? 'reaction_count'
+            : engagement
+          : 'published_at',
+        { ascending: false }
+      )
   } else {
     casts = await supabase
       .from('casts')
