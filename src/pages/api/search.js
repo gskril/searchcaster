@@ -26,7 +26,24 @@ export async function searchCasts(query) {
   after = Number(after) || 0
   before = Number(before) || new Date().getTime()
 
-  if (media) {
+  if (merkleRoot) {
+    casts = await supabase
+      .from('casts')
+      .select()
+      .or(
+        `merkle_root.ilike.${merkleRoot},reply_parent_merkle_root.ilike.${merkleRoot}`
+      )
+      .gt('published_at', after)
+      .lt('published_at', before)
+      .order(
+        engagement
+          ? engagement === 'reactions'
+            ? 'reaction_count'
+            : engagement
+          : 'published_at',
+        { ascending: false }
+      )
+  } else if (media) {
     if (media === 'image') {
       casts = await supabase
         .from('casts')
@@ -113,7 +130,6 @@ export async function searchCasts(query) {
     casts = await supabase
       .from('casts')
       .select()
-      .ilike('merkle_root', merkleRoot ? merkleRoot : '%')
       .ilike('username', username ? username : '%')
       .ilike('text', textQuery ? `%${textQuery}%` : '%')
       .gt('published_at', after)
