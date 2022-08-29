@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import clientPromise from '../../lib/db'
+import supabase from '../../lib/db'
 
 const provider = new ethers.providers.InfuraProvider(
   'homestead',
@@ -7,20 +7,15 @@ const provider = new ethers.providers.InfuraProvider(
 )
 
 export default async function handler(req, res) {
-  const client = await clientPromise
-  const db = client.db('farcaster')
-  const collection = db.collection('casts')
-
   const { parent, resolve } = req.query
   let casts = []
 
   if (parent) {
-    casts = collection.find({
-      $and: [
-        { 'body.data.text': { $regex: /[^\s]\.+eth/gi } },
-        { 'body.data.replyParentMerkleRoot': parent },
-      ],
-    })
+    casts = await supabase
+      .from('casts')
+      .select('*')
+      .ilike('reply_parent_merkle_root', parent)
+      .like('text', '%.eth%')
   } else {
     return res.status(400).json({
       error: 'Missing parent',
@@ -30,27 +25,32 @@ export default async function handler(req, res) {
   const shouldResolve =
     resolve !== undefined && resolve !== 'false' && resolve !== '0'
 
-  const json = await casts.sort({ 'body.publishedAt': -1 }).toArray()
+  const replies = []
+  for (let i = 0; i < casts.data.length; i++) {
+    const cast = casts.data[i]
 
-  const replies = json.map(async (cast) => {
     const regex = /[^\s]+\.+eth/i
-    const ens = cast.body.data.text.match(regex)[0].toLowerCase()
+    const ens = cast.text.match(regex)
+      ? cast.text.match(regex)[0].toLowerCase()
+      : null
     let ensAddress
+
+    if (!ens) continue
 
     if (shouldResolve) {
       ensAddress = await provider.resolveName(ens)
     }
 
-    return {
+    replies.push({
       ens_name: ens,
       ens_address: ensAddress,
-      text: cast.body.data.text,
-      username: cast.body.username,
-      displayName: cast.meta.displayName || null,
-      merkleRoot: cast.merkleRoot,
-      replyParentMerkleRoot: cast.body.data.replyParentMerkleRoot || null,
-    }
-  })
+      text: cast.text,
+      username: cast.username,
+      displayName: cast.display_name || null,
+      merkleRoot: cast.merkle_root,
+      replyParentMerkleRoot: cast.reply_parent_merkle_root || null,
+    })
+  }
 
-  return res.json(await Promise.all(replies))
+  return res.json(replies)
 }

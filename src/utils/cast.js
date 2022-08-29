@@ -1,9 +1,7 @@
 export function formatCasts(casts) {
   return casts.map((cast) => {
-    const replyParentMerkleRoot = cast.body.data.replyParentMerkleRoot || null
-    const isReply = replyParentMerkleRoot ? true : false
     const imgurUrl = 'https://i.imgur.com/'
-    let text = cast.body.data.text
+    let text = cast.text
     let attachment = null
 
     if (text.includes(imgurUrl)) {
@@ -13,41 +11,38 @@ export function formatCasts(casts) {
 
     return {
       body: {
-        publishedAt: cast.body.publishedAt,
-        username: cast.body.username,
+        publishedAt: cast.published_at,
+        username: cast.username,
         data: {
           text: text,
           image: attachment,
-          replyParentMerkleRoot: replyParentMerkleRoot,
+          replyParentMerkleRoot: cast.reply_parent_merkle_root,
         },
       },
       meta: {
-        displayName: cast.meta?.displayName,
-        avatar: cast.meta?.avatar.replace(
+        displayName: cast.display_name,
+        avatar: cast.avatar?.replace(
           'https://storage.opensea.io/',
           'https://openseauserdata.com/'
         ),
-        isVerifiedAvatar: cast.meta?.isVerifiedAvatar,
+        isVerifiedAvatar: cast.is_verified_avatar,
         reactions: {
-          count: cast.meta?.reactions.count,
-          type: cast.meta?.reactions.type,
+          count: cast.reaction_count || 0,
+          type: cast.reaction_type,
         },
         recasts: {
-          count: cast.meta?.recasts.count,
+          count: cast.recasts || 0,
         },
         watches: {
-          count: cast.meta?.watches.count,
+          count: cast.watches || 0,
         },
         replyParentUsername: {
-          username: cast.meta?.replyParentUsername?.username || null,
+          username: cast.reply_parent_username,
         },
+        mentions: cast.mentions,
       },
-      merkleRoot: cast.merkleRoot,
-      uri:
-        !isReply &&
-        `farcaster://casts/${cast.merkleRoot}/${
-          isReply ? replyParentMerkleRoot : cast.merkleRoot
-        }`,
+      merkleRoot: cast.merkle_root,
+      uri: cast.uri,
     }
   })
 }

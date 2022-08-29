@@ -1,10 +1,12 @@
-import clientPromise from '../../lib/db'
+import { ethers } from 'ethers'
+import supabase from '../../lib/db'
+
+const provider = new ethers.providers.InfuraProvider(
+  'homestead',
+  process.env.INFURA_API_KEY
+)
 
 export default async function search(req, res) {
-  const client = await clientPromise
-  const db = client.db('farcaster')
-  const collection = db.collection('profiles')
-
   let { connected_address, username } = req.query
   let profiles = []
 
@@ -14,12 +16,7 @@ export default async function search(req, res) {
       connected_address.length !== 42 ||
       connected_address.substring(0, 2) !== '0x'
     ) {
-      console.log('checking ensideas')
-      connected_address = await fetch(
-        `https://api.ensideas.com/ens/resolve/${connected_address}`
-      )
-        .then((r) => r.json())
-        .then((r) => r.address)
+      connected_address = await provider.resolveName(connected_address)
     }
 
     if (!connected_address) {
@@ -28,24 +25,36 @@ export default async function search(req, res) {
       })
     }
 
-    profiles = collection.find({
-      connectedAddress: { $regex: new RegExp(connected_address, 'i') },
+    profiles = await supabase.from('profiles').select('*').match({
+      connected_address,
     })
   } else if (username) {
-    profiles = collection.find({
-      username: username,
-    })
+    profiles = await supabase.from('profiles').select('*').match({ username })
   } else {
     return res.status(400).json({
       error: 'Missing connected_address or username',
     })
   }
 
-  profiles = await profiles.toArray()
-  profiles = profiles.map((profile) => {
-    delete profile._id
-    return profile
+  const formattedProfiles = profiles.data.map((p) => {
+    return {
+      body: {
+        addressActivityUrl: p.address_activity,
+        avatarUrl: p.avatar,
+        displayName: p.display_name,
+        bio: p.bio,
+        proofUrl: p.proof,
+        timestamp: p.timestamp,
+        registeredAt: p.registered_at,
+        version: p.version,
+      },
+      merkleRoot: p.merkle_root,
+      signature: p.signature,
+      index: p.index,
+      username: p.username,
+      connectedAddress: p.connected_address,
+    }
   })
 
-  return res.json(profiles)
+  return res.json(formattedProfiles)
 }
