@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { usePlausible } from 'next-plausible'
 
@@ -26,13 +25,6 @@ export default function Search({ data, query }) {
 
   const urlToPrevPage =
     query.page && url.replace(/page=\d+/, `page=${page - 1}`)
-
-  // Redirect home if the user is on desktop and doesn't have an ETH wallet
-  useEffect(() => {
-    if (window.innerWidth > 500 && !window.ethereum) {
-      router.push('/')
-    }
-  }, [router])
 
   return (
     <div className="container">
