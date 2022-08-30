@@ -43,6 +43,8 @@ export default async function search(req, res) {
       body: {
         addressActivityUrl: p.address_activity,
         avatarUrl: p.avatar,
+        address: p.address,
+        username: p.username,
         displayName: p.display_name,
         bio: p.bio,
         proofUrl: p.proof,
@@ -53,7 +55,6 @@ export default async function search(req, res) {
       merkleRoot: p.merkle_root,
       signature: p.signature,
       index: p.index,
-      username: p.username,
       connectedAddress: p.connected_address,
     }
   })
