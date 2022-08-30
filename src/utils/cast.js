@@ -26,6 +26,7 @@ export function formatCasts(casts) {
           'https://openseauserdata.com/'
         ),
         isVerifiedAvatar: cast.is_verified_avatar,
+        numReplyChildren: cast.num_reply_children || 0,
         reactions: {
           count: cast.reaction_count || 0,
           type: cast.reaction_type,
