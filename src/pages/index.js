@@ -110,6 +110,10 @@ export default function Home() {
                 text: 'Most watches',
                 href: '/search?engagement=watches',
               },
+              {
+                text: 'Most replies',
+                href: '/search?engagement=replies',
+              },
             ]}
           />
 
@@ -127,6 +131,10 @@ export default function Home() {
               {
                 text: 'Most watches',
                 href: `/search?engagement=watches&after=${timeLastWeek}`,
+              },
+              {
+                text: 'Most replies',
+                href: `/search?engagement=replies&after=${timeLastWeek}`,
               },
             ]}
           />

@@ -35,14 +35,7 @@ export async function searchCasts(query) {
       )
       .gt('published_at', after)
       .lt('published_at', before)
-      .order(
-        engagement
-          ? engagement === 'reactions'
-            ? 'reaction_count'
-            : engagement
-          : 'published_at',
-        { ascending: false }
-      )
+      .order('published_at', { ascending: false })
   } else if (media) {
     if (media === 'image') {
       casts = await supabase
@@ -56,7 +49,9 @@ export async function searchCasts(query) {
           engagement
             ? engagement === 'reactions'
               ? 'reaction_count'
-              : engagement
+              : engagement === 'replies'
+                ? 'num_reply_children'
+                : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -74,7 +69,9 @@ export async function searchCasts(query) {
           engagement
             ? engagement === 'reactions'
               ? 'reaction_count'
-              : engagement
+              : engagement === 'replies'
+                ? 'num_reply_children'
+                : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -90,7 +87,9 @@ export async function searchCasts(query) {
           engagement
             ? engagement === 'reactions'
               ? 'reaction_count'
-              : engagement
+              : engagement === 'replies'
+                ? 'num_reply_children'
+                : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -107,7 +106,9 @@ export async function searchCasts(query) {
           engagement
             ? engagement === 'reactions'
               ? 'reaction_count'
-              : engagement
+              : engagement === 'replies'
+                ? 'num_reply_children'
+                : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -122,7 +123,9 @@ export async function searchCasts(query) {
         engagement
           ? engagement === 'reactions'
             ? 'reaction_count'
-            : engagement
+            : engagement === 'replies'
+              ? 'num_reply_children'
+              : engagement
           : 'published_at',
         { ascending: false }
       )
@@ -139,7 +142,9 @@ export async function searchCasts(query) {
         engagement
           ? engagement === 'reactions'
             ? 'reaction_count'
-            : engagement
+            : engagement === 'replies'
+              ? 'num_reply_children'
+              : engagement
           : 'published_at',
         { ascending: false }
       )
