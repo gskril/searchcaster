@@ -27,9 +27,10 @@ export default async function search(req, res) {
       })
     }
 
-    profiles = await supabase.from('profiles').select('*').match({
-      connected_address,
-    })
+    profiles = await supabase
+      .from('profiles')
+      .select('*')
+      .ilike('connected_address', connected_address)
   } else if (username) {
     profiles = await supabase.from('profiles').select('*').match({ username })
   } else {
