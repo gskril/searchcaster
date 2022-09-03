@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import { usePlausible } from 'next-plausible'
 import { Toaster } from 'react-hot-toast'
 
@@ -9,7 +10,15 @@ export default function Home() {
   const plausible = usePlausible()
 
   const router = useRouter()
+  const [hasEthereum, setHasEthereum] = useState(true)
   const timeLastWeek = new Date().setDate(new Date().getDate() - 7)
+
+  // Block searching if the user is on desktop and doesn't have an ETH wallet
+  useEffect(() => {
+    if (window.innerWidth > 500 && !window.ethereum) {
+      setHasEthereum(false)
+    }
+  }, [])
 
   return (
     <>
