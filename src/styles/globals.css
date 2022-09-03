@@ -9,7 +9,8 @@
 body {
   color: #1c1e21;
   line-height: 1.4;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 h1,
@@ -54,7 +55,7 @@ p {
   word-break: break-word;
 }
 
-p:not(:last-of-type) {
+p:not(:last-child) {
   margin-bottom: 1.25rem;
 }
 
@@ -86,7 +87,7 @@ button:hover {
 
 label {
   display: block;
-  margin-bottom: .125rem;
+  margin-bottom: 0.125rem;
 }
 
 summary:hover {
@@ -158,35 +159,44 @@ a:hover {
   grid-template-columns: 4fr 1fr;
 }
 
-input {
+input,
+button {
   font-size: inherit;
 }
 
-input {
+input,
+button {
   width: 100%;
   padding: 0.5rem;
   -webkit-appearance: none;
   outline-color: #8a63d2;
 }
 
-input[type="text"] {
-  border-width: .0625rem 0 .0625rem .0625rem;
+input[type='text'] {
+  border-width: 0.0625rem 0 0.0625rem 0.0625rem;
   border-style: solid;
   border-color: #ccc;
   border-radius: 0.25rem 0 0 0.25rem;
   font-size: 1rem;
 }
 
-input[type="submit"] {
+button,
+input[type='submit'] {
   background-color: #8a63d2;
   color: #fff;
-  border: .0625rem solid #8360c4;
-  border-radius: 0 0.25rem 0.25rem 0;
-  transition: all .2s ease-in-out;
+  border: 0.0625rem solid #8360c4;
+  border-radius: 0.25rem;
+  transition: all 0.2s ease-in-out;
 }
 
-input[type="submit"]:hover,
-input[type="submit"]:focus {
+input[type='submit'] {
+  border-radius: 0 0.25rem 0.25rem 0;
+}
+
+input[type='submit']:hover,
+input[type='submit']:focus,
+button:hover,
+button:focus {
   cursor: pointer;
   background-color: #f8f3ff;
   color: #8a63d2;
@@ -194,7 +204,7 @@ input[type="submit"]:focus {
 
 .error {
   margin-top: 1rem;
-  color: #EF4444;
+  color: #ef4444;
 }
 
 .suggestions {
@@ -216,12 +226,12 @@ input[type="submit"]:focus {
 
 .suggestion__item {
   margin: 0;
-  padding: .125rem 0.75rem;
+  padding: 0.125rem 0.75rem;
   color: #8360c4;
   background-color: #fff;
   border: 1px solid #8360c4;
   border-radius: 0.25rem;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .suggestion__item:hover,
@@ -316,7 +326,7 @@ input[type="submit"]:focus {
   top: 1rem;
   right: 1rem;
   color: #7d8085;
-  font-size: .875rem;
+  font-size: 0.875rem;
 }
 
 .cast__text {
@@ -350,7 +360,7 @@ input[type="submit"]:focus {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: fit-content;
-  font-size: .875rem;
+  font-size: 0.875rem;
   color: #7d8085;
   align-items: center;
   margin-top: 1rem;
@@ -396,12 +406,12 @@ input[type="submit"]:focus {
     gap: 0.5rem;
   }
 
-  input[type="text"] {
-    border-width: .0625rem;
+  input[type='text'] {
+    border-width: 0.0625rem;
     border-radius: 0.25rem;
   }
-  
-  input[type="submit"] {
+
+  input[type='submit'] {
     border-radius: 0.25rem;
   }
 
