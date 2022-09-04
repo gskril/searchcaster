@@ -38,7 +38,7 @@ function Body() {
   const [banned, setBanned] = useState(false)
 
   useEffect(() => {
-    setBanned(!isConnected)
+    setBanned(window.ethereum ? false : !isConnected)
   }, [isConnected])
 
   function handleFormSubmit(e) {

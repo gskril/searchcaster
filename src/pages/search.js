@@ -16,7 +16,7 @@ export default function Search({ data, query }) {
   const [banned, setBanned] = useState(false)
 
   useEffect(() => {
-    setBanned(!isConnected)
+    setBanned(window.ethereum ? false : !isConnected)
   }, [isConnected])
 
   const casts = data.casts

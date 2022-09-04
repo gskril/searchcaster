@@ -5,11 +5,9 @@ export default function ConnectMessage() {
 
   return (
     <>
-      <p>Connect a wallet to use this website.</p>
       <p>
-        It doesn&apos;t matter what&apos;s in the wallet. We just don&apos;t
-        care to have crypto haters here. So either install a crypto wallet or
-        carry on with your day :&#41;
+        Connect a wallet to use this website. It doesn&apos;t matter what&apos;s
+        inside.
       </p>
       <button onClick={openConnectModal}>Connect Wallet</button>
     </>
