@@ -1,24 +1,14 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import { usePlausible } from 'next-plausible'
 
 import { likeIcon, recastIcon, watchIcon } from '../assets/icons'
-import ConnectMessage from '../components/connect-message'
 import { getRelativeDate } from '../utils/date'
 import { formatCastText } from '../utils/cast'
 import { searchCasts } from './api/search'
 
 export default function Search({ data, query }) {
-  const { isConnected } = useAccount()
-  const [banned, setBanned] = useState(false)
-
-  useEffect(() => {
-    setBanned(window.ethereum ? false : !isConnected)
-  }, [isConnected])
-
   const casts = data.casts
 
   return (
@@ -51,14 +41,8 @@ export default function Search({ data, query }) {
         </Link>
       </div>
 
-      {banned ? (
-        <ConnectMessage />
-      ) : (
-        <>
-          <Filters query={query} />{' '}
-          <Casts casts={casts} query={query} />
-        </>
-      )}
+      <Filters query={query} />
+      <Casts casts={casts} query={query} />
     </div>
   )
 }
