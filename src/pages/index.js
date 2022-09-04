@@ -1,11 +1,8 @@
 import Image from 'next/image'
-import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
 import { usePlausible } from 'next-plausible'
 
 import Suggestion from '../components/suggestion'
-import ConnectMessage from '../components/connect-message'
 
 export default function Home() {
   return (
@@ -34,12 +31,6 @@ export default function Home() {
 function Body() {
   const router = useRouter()
   const plausible = usePlausible()
-  const { isConnected } = useAccount()
-  const [banned, setBanned] = useState(false)
-
-  useEffect(() => {
-    setBanned(window.ethereum ? false : !isConnected)
-  }, [isConnected])
 
   function handleFormSubmit(e) {
     e.preventDefault()
@@ -55,9 +46,7 @@ function Body() {
     router.push(`/search?text=${query}`)
   }
 
-  return banned ? (
-    <ConnectMessage />
-  ) : (
+  return (
     <>
       <p className="mb-3">Search for any cast. Updates every 30 minutes.</p>
       <form onSubmit={(e) => handleFormSubmit(e)}>
