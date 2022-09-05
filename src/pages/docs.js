@@ -95,17 +95,20 @@ export default function Docs() {
         <h2 id="profiles">Search profiles</h2>
       </Link>
       <p>
-        Fetch Farcaster profiles by username or connected address via{' '}
+        Fetch Farcaster profiles by username, connected address or bio via{' '}
         <Link href="/api/profiles">/api/profiles</Link>.
       </p>
       <p>Profiles endpoint parameters:</p>
       <ul>
         <li>
-          <code>connect_address</code> - the Ethereum address the user has
-          connected to their Farcaster profile
+          <code>connect_address</code> - the Ethereum address or ENS name the
+          user has connected to their Farcaster profile
         </li>
         <li>
           <code>username</code> - the username associated with the profile
+        </li>
+        <li>
+          <code>bio</code> - substring of a user&apos;s bio
         </li>
       </ul>
 
