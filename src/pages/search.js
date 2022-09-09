@@ -126,24 +126,24 @@ function Casts({ casts, query }) {
     query.page && url.replace(/page=\d+/, `page=${page - 1}`)
 
   return casts.length > 0 ? (
-    <div className="casts">
+    <div className="casts h-feed">
       {casts.map((cast, i) => (
         <div key={cast.merkleRoot}>
-          <div className="cast">
+          <div className="cast h-entry">
             <div className="cast__body">
-              <div className="cast__author">
+              <div className="cast__author h-card">
                 {cast.meta.avatar && (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={cast.meta.avatar}
-                    className="cast__avatar"
+                    className="cast__avatar u-photo"
                     alt=""
                     width={44}
                     height={44}
                   />
                 )}
                 <div className="cast__names">
-                  <span className="cast__display-name">
+                  <span className="cast__display-name p-name p-nickname">
                     {cast.meta.displayName}
                   </span>
                   <Link href={`/search?username=${cast.body.username}`}>
@@ -152,18 +152,18 @@ function Casts({ casts, query }) {
                 </div>
               </div>
 
-              <span className="cast__date">
+              <span className="cast__date dt-published">
                 {getRelativeDate(cast.body.publishedAt)}
               </span>
 
-              <p className="cast__text">
+              <p className="cast__text e-content">
                 {formatCastText(cast.body.data.text, query.text)}
               </p>
 
               {cast.body.data.image && (
                 <a
                   href={cast.body.data.image}
-                  className="cast__attachment-link"
+                  className="cast__attachment-link u-photo u-featured"
                   target="_blank"
                   rel="noreferrer"
                 >
