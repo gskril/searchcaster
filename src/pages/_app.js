@@ -29,6 +29,10 @@ function App({ Component, pageProps }) {
         <link rel="icon" href="/img/favicon-32.png" sizes="32x32" />
         <link rel="icon" href="/img/favicon-64.png" sizes="64x64" />
         <link rel="icon" href="/img/favicon-96.png" sizes="96x96" />
+        
+        <link rel="search" type="application/opensearchdescription+xml" title="Farcaster Search" href="https://searchcaster.xyz/search.xml" />
+
+        {router.asPath ? <link rel="alternate" type="application/rss+xml" title="Farcaster Search" href={`https://granary.io/url?input=html&output=rss&url=https%3A%2F%2Fsearchcaster.xyz${router.asPath}`} /> : ''}
 
         <meta
           property="og:image"

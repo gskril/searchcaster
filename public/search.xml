@@ -1,0 +1,11 @@
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/"
+                       xmlns:moz="http://www.mozilla.org/2006/browser/search/">
+  <ShortName>Farcaster Search</ShortName>
+  <Description>Search casts in the Farcaster community</Description>
+  <InputEncoding>[UTF-8]</InputEncoding>
+  <Image width="16" height="16" type="image/x-icon">[https://searchcaster.xyz]</Image>
+  <Url type="text/html" template="https://searchcaster.xyz/search">
+    <Param name="text" value="{searchTerms}"/>
+  </Url>
+  <moz:SearchForm>https://searchcaster.xyz</moz:SearchForm>
+</OpenSearchDescription>
