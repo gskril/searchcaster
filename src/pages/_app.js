@@ -32,7 +32,7 @@ function App({ Component, pageProps }) {
         
         <link rel="search" type="application/opensearchdescription+xml" title="Farcaster Search" href="https://searchcaster.xyz/search.xml" />
 
-        {router.asPath ? <link rel="alternate" type="application/rss+xml" title="Farcaster Search" href={`https://granary.io/url?input=html&output=rss&url=https%3A%2F%2Fsearchcaster.xyz${router.asPath}`} /> : ""}
+        {router.asPath ? <link rel="alternate" type="application/rss+xml" title="Farcaster Search" href={`https://granary.io/url?input=html&output=rss&url=https%3A%2F%2Fsearchcaster.xyz${router.asPath}`} /> : ''}
 
         <meta
           property="og:image"
