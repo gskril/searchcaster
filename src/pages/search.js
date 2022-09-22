@@ -163,7 +163,7 @@ function Casts({ casts, query }) {
               {cast.body.data.image && (
                 <a
                   href={cast.body.data.image}
-                  className="cast__attachment-link"
+                  className="cast__attachment-link u-photo u-featured"
                   target="_blank"
                   rel="noreferrer"
                 >
