@@ -147,7 +147,7 @@ function Casts({ casts, query }) {
                     {cast.meta.displayName}
                   </span>
                   <Link href={`/search?username=${cast.body.username}`}>
-                    <a className="cast__username">@{cast.body.username}</a>
+                    <a className="cast__username u-url u-uid">@{cast.body.username}</a>
                   </Link>
                 </div>
               </div>
@@ -163,14 +163,14 @@ function Casts({ casts, query }) {
               {cast.body.data.image && (
                 <a
                   href={cast.body.data.image}
-                  className="cast__attachment-link u-photo u-featured"
+                  className="cast__attachment-link"
                   target="_blank"
                   rel="noreferrer"
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={cast.body.data.image}
-                    className="cast__attachment"
+                    className="cast__attachment u-photo u-featured"
                     loading="lazy"
                     alt=""
                   />
@@ -206,7 +206,7 @@ function Casts({ casts, query }) {
                   </span>
                 )
               ) : (
-                <a href={cast.uri} className="cast__link">
+                <a href={cast.uri} className="cast__link u-url u-uid">
                   Open in Farcaster
                 </a>
               )}
@@ -230,11 +230,11 @@ function Casts({ casts, query }) {
         <div className="pagination">
           {query.page > 1 && (
             <Link href={urlToPrevPage}>
-              <a className="pagination__btn">← Previous page</a>
+              <a className="pagination__btn" rel="prev">← Previous page</a>
             </Link>
           )}
           <Link href={urlToNextPage}>
-            <a className="pagination__btn">Next page →</a>
+            <a className="pagination__btn" rel="next">Next page →</a>
           </Link>
         </div>
       )}
