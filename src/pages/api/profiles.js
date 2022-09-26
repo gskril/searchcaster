@@ -42,20 +42,19 @@ export default async function search(req, res) {
   const formattedProfiles = profiles.data.map((p) => {
     return {
       body: {
-        addressActivityUrl: p.address_activity,
-        avatarUrl: p.avatar,
+        id: p.id,
         address: p.address,
         username: p.username,
         displayName: p.display_name,
         bio: p.bio,
-        proofUrl: p.proof,
-        timestamp: p.timestamp,
-        registeredAt: p.registered_at,
+        followers: p.followers,
+        following: p.following,
+        avatarUrl: p.avatar_url,
+        isVerifiedAvatar: p.avatar_verified,
+        proofUrl: `https://api.farcaster.xyz/v1/verified_addresses/${p.address}`,
+        registeredAt: new Date(p.registered_at).getTime(),
         version: p.version,
       },
-      merkleRoot: p.merkle_root,
-      signature: p.signature,
-      index: p.index,
       connectedAddress: p.connected_address,
     }
   })

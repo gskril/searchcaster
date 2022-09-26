@@ -33,8 +33,8 @@ export async function searchCasts(query) {
       .or(
         `merkle_root.ilike.${merkleRoot},reply_parent_merkle_root.ilike.${merkleRoot}`
       )
-      .gt('published_at', after)
-      .lt('published_at', before)
+      .gt('published_at', new Date(after).toISOString())
+      .lt('published_at', new Date(before).toISOString())
       .order('published_at', { ascending: false })
   } else if (media) {
     if (media === 'image') {
@@ -42,13 +42,13 @@ export async function searchCasts(query) {
         .from('casts')
         .select()
         .ilike('text', '%https://i.imgur.com/%')
-        .gt('published_at', after)
-        .lt('published_at', before)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reaction_count'
+              ? 'reactions'
               : engagement === 'replies'
                 ? 'num_reply_children'
                 : engagement
@@ -62,13 +62,13 @@ export async function searchCasts(query) {
         .or(
           'text.ilike.%open.spotify.com%,text.ilike.%soundcloud.com%,text.ilike.%music.apple.com%,text.ilike.%tidal.com%'
         )
-        .gt('published_at', after)
-        .lt('published_at', before)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reaction_count'
+              ? 'reactions'
               : engagement === 'replies'
                 ? 'num_reply_children'
                 : engagement
@@ -80,13 +80,13 @@ export async function searchCasts(query) {
         .from('casts')
         .select()
         .or('text.ilike.%youtube.com%,text.ilike.%youtu.be%')
-        .gt('published_at', after)
-        .lt('published_at', before)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reaction_count'
+              ? 'reactions'
               : engagement === 'replies'
                 ? 'num_reply_children'
                 : engagement
@@ -99,13 +99,13 @@ export async function searchCasts(query) {
         .select()
         .or('text.ilike.%http://%,text.ilike.%https://%')
         .not('text', 'ilike', '%https://i.imgur.com/%')
-        .gt('published_at', after)
-        .lt('published_at', before)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reaction_count'
+              ? 'reactions'
               : engagement === 'replies'
                 ? 'num_reply_children'
                 : engagement
@@ -116,13 +116,13 @@ export async function searchCasts(query) {
   } else if (regex) {
     casts = await supabase
       .rpc('casts_regex', { regex })
-      .gt('published_at', after)
-      .lt('published_at', before)
+      .gt('published_at', new Date(after).toISOString())
+      .lt('published_at', new Date(before).toISOString())
       .range(offset, upperRange)
       .order(
         engagement
           ? engagement === 'reactions'
-            ? 'reaction_count'
+            ? 'reactions'
             : engagement === 'replies'
               ? 'num_reply_children'
               : engagement
@@ -135,13 +135,13 @@ export async function searchCasts(query) {
       .select()
       .ilike('username', username ? username : '%')
       .ilike('text', textQuery ? `%${textQuery}%` : '%')
-      .gt('published_at', after)
-      .lt('published_at', before)
+      .gt('published_at', new Date(after).toISOString())
+      .lt('published_at', new Date(before).toISOString())
       .range(offset, upperRange)
       .order(
         engagement
           ? engagement === 'reactions'
-            ? 'reaction_count'
+            ? 'reactions'
             : engagement === 'replies'
               ? 'num_reply_children'
               : engagement

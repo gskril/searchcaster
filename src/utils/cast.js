@@ -11,25 +11,26 @@ export function formatCasts(casts) {
 
     return {
       body: {
-        publishedAt: cast.published_at,
+        publishedAt: new Date(cast.published_at).getTime(),
         username: cast.username,
         data: {
           text: text,
           image: attachment,
           replyParentMerkleRoot: cast.reply_parent_merkle_root,
+          threadMerkleRoot: cast.thread_merkle_root,
         },
       },
       meta: {
         displayName: cast.display_name,
-        avatar: cast.avatar?.replace(
+        avatar: cast.avatar_url?.replace(
           'https://storage.opensea.io/',
           'https://openseauserdata.com/'
         ),
-        isVerifiedAvatar: cast.is_verified_avatar,
+        isVerifiedAvatar: cast.avatar_verified,
         numReplyChildren: cast.num_reply_children || 0,
         reactions: {
-          count: cast.reaction_count || 0,
-          type: cast.reaction_type,
+          count: cast.reactions || 0,
+          type: 'Like',
         },
         recasts: {
           count: cast.recasts || 0,
@@ -43,7 +44,7 @@ export function formatCasts(casts) {
         mentions: cast.mentions,
       },
       merkleRoot: cast.merkle_root,
-      uri: cast.uri,
+      uri: `farcaster://casts/${cast.merkle_root}/${cast.thread_merkle_root}`,
     }
   })
 }
