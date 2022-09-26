@@ -33,6 +33,7 @@ export async function searchCasts(query) {
       .or(
         `merkle_root.ilike.${merkleRoot},reply_parent_merkle_root.ilike.${merkleRoot}`
       )
+      .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
       .order('published_at', { ascending: false })
@@ -42,6 +43,7 @@ export async function searchCasts(query) {
         .from('casts')
         .select()
         .ilike('text', '%https://i.imgur.com/%')
+        .eq('deleted', false)
         .gt('published_at', new Date(after).toISOString())
         .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
@@ -62,6 +64,7 @@ export async function searchCasts(query) {
         .or(
           'text.ilike.%open.spotify.com%,text.ilike.%soundcloud.com%,text.ilike.%music.apple.com%,text.ilike.%tidal.com%'
         )
+        .eq('deleted', false)
         .gt('published_at', new Date(after).toISOString())
         .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
@@ -80,6 +83,7 @@ export async function searchCasts(query) {
         .from('casts')
         .select()
         .or('text.ilike.%youtube.com%,text.ilike.%youtu.be%')
+        .eq('deleted', false)
         .gt('published_at', new Date(after).toISOString())
         .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
@@ -99,6 +103,7 @@ export async function searchCasts(query) {
         .select()
         .or('text.ilike.%http://%,text.ilike.%https://%')
         .not('text', 'ilike', '%https://i.imgur.com/%')
+        .eq('deleted', false)
         .gt('published_at', new Date(after).toISOString())
         .lt('published_at', new Date(before).toISOString())
         .range(offset, upperRange)
@@ -116,8 +121,6 @@ export async function searchCasts(query) {
   } else if (regex) {
     casts = await supabase
       .rpc('casts_regex', { regex })
-      .gt('published_at', new Date(after).toISOString())
-      .lt('published_at', new Date(before).toISOString())
       .range(offset, upperRange)
       .order(
         engagement
@@ -135,6 +138,7 @@ export async function searchCasts(query) {
       .select()
       .ilike('username', username ? username : '%')
       .ilike('text', textQuery ? `%${textQuery}%` : '%')
+      .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
       .range(offset, upperRange)
@@ -149,8 +153,6 @@ export async function searchCasts(query) {
         { ascending: false }
       )
   }
-
-  // TODO: support regex search param
 
   // Restructure data
   const formattedResponse = formatCasts(casts.data)
