@@ -1,5 +1,6 @@
 :root {
   --bg-color: #ffffff;
+  --bg-gradient: #ffffff;
   --text-color: #1c1e21;
   --text-color-light: #7d8085;
   --border-color: #cccccc;
@@ -16,6 +17,11 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --bg-color: #0c080f;
+    --bg-gradient: radial-gradient(
+      50% 50% at 50% 50%,
+      #2c233d 0%,
+      #1c1626 100%
+    );
     --text-color: #e3e1de;
     --text-color-light: #827f7a;
     --border-color: rgb(119, 119, 119);
@@ -39,6 +45,8 @@
 
 body {
   background-color: var(--bg-color);
+  background: var(--bg-gradient);
+  min-height: 100vh;
   color: var(--text-color);
   line-height: 1.4;
   color-scheme: var(--color-scheme);
@@ -149,36 +157,19 @@ a:hover {
 }
 
 .mb-3 {
-  margin-bottom: 1rem;
-}
-
-.container {
-  max-width: 40rem;
-  padding: 2rem;
-  margin: 0 auto;
-}
-
-.header {
-  margin-bottom: 1.5rem;
-}
-
-.header-flex {
-  display: flex;
-  align-items: center;
-}
-
-.header--pagination {
   margin-bottom: 0.75rem;
 }
 
-.header--pagination .logo {
-  margin-right: 0.75rem;
+.mb-4 {
+  margin-bottom: 1rem;
 }
 
-.logo {
-  width: 3rem;
-  height: 3rem;
-  margin-right: 0.5rem;
+.mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
 }
 
 .title__page-number {
