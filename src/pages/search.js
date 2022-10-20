@@ -158,6 +158,25 @@ function Casts({ casts, query }) {
                 {getRelativeDate(cast.body.publishedAt)}
               </span>
 
+              {cast.body.data.replyParentMerkleRoot &&
+                cast.body.data.replyParentMerkleRoot !== query.merkleRoot && (
+                  <span
+                    className="cast__reply"
+                    style={{
+                      fontSize: '85%',
+                      display: 'block',
+                      marginBottom: '1rem',
+                    }}
+                  >
+                    <span style={{ opacity: 0.65 }}>In reply to</span>{' '}
+                    <Link
+                      href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
+                    >
+                      <a>@{cast.meta.replyParentUsername.username}</a>
+                    </Link>
+                  </span>
+                )}
+
               <p className="cast__text e-content">
                 {formatCastText(cast.body.data.text, query.text)}
               </p>
@@ -196,22 +215,9 @@ function Casts({ casts, query }) {
             </div>
 
             <div className="cast__meta">
-              {cast.body.data.replyParentMerkleRoot ? (
-                cast.body.data.replyParentMerkleRoot !== query.merkleRoot && (
-                  <span className="cast__reply">
-                    In reply to{' '}
-                    <Link
-                      href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
-                    >
-                      <a>@{cast.meta.replyParentUsername.username}</a>
-                    </Link>
-                  </span>
-                )
-              ) : (
-                <a href={cast.uri} className="cast__link u-url u-uid">
-                  Open in Farcaster
-                </a>
-              )}
+              <a href={cast.uri} className="cast__link u-url u-uid">
+                Open in Farcaster
+              </a>
               {query.merkleRoot && i === 0 ? null : (
                 <Link href={`/search?merkleRoot=${cast.merkleRoot}`}>
                   <a className="cast__reply--children">See replies</a>
