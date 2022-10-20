@@ -119,8 +119,8 @@ function Casts({ casts, query }) {
   const urlToNextPage = query.page
     ? url.replace(/page=\d+/, `page=${page + 1}`)
     : url.includes('?')
-      ? `${url}&page=2`
-      : `${url}?page=2`
+    ? `${url}&page=2`
+    : `${url}?page=2`
 
   const urlToPrevPage =
     query.page && url.replace(/page=\d+/, `page=${page - 1}`)
@@ -147,7 +147,9 @@ function Casts({ casts, query }) {
                     {cast.meta.displayName}
                   </span>
                   <Link href={`/search?username=${cast.body.username}`}>
-                    <a className="cast__username u-url u-uid">@{cast.body.username}</a>
+                    <a className="cast__username u-url u-uid">
+                      @{cast.body.username}
+                    </a>
                   </Link>
                 </div>
               </div>
@@ -230,11 +232,15 @@ function Casts({ casts, query }) {
         <div className="pagination">
           {query.page > 1 && (
             <Link href={urlToPrevPage}>
-              <a className="pagination__btn" rel="prev">← Previous page</a>
+              <a className="pagination__btn" rel="prev">
+                ← Previous page
+              </a>
             </Link>
           )}
           <Link href={urlToNextPage}>
-            <a className="pagination__btn" rel="next">Next page →</a>
+            <a className="pagination__btn" rel="next">
+              Next page →
+            </a>
           </Link>
         </div>
       )}

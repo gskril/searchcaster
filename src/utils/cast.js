@@ -67,8 +67,8 @@ export function formatCastText(text, searchQuery) {
           )
             ? `https://rainbow.me/${link}`
             : link.startsWith('http')
-              ? link
-              : `https://${link}`
+            ? link
+            : `https://${link}`
         }" target="_blank" rel="noopener">${link}</a>`
       )
     })
