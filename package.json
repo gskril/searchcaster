@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^12.2.3",
+    "@styled-jsx/plugin-sass": "^4.0.2",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
     "eslint-config-prettier": "^8.5.0",
