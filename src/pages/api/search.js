@@ -52,8 +52,8 @@ export async function searchCasts(query) {
             ? engagement === 'reactions'
               ? 'reactions'
               : engagement === 'replies'
-                ? 'num_reply_children'
-                : engagement
+              ? 'num_reply_children'
+              : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -73,8 +73,8 @@ export async function searchCasts(query) {
             ? engagement === 'reactions'
               ? 'reactions'
               : engagement === 'replies'
-                ? 'num_reply_children'
-                : engagement
+              ? 'num_reply_children'
+              : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -92,8 +92,8 @@ export async function searchCasts(query) {
             ? engagement === 'reactions'
               ? 'reactions'
               : engagement === 'replies'
-                ? 'num_reply_children'
-                : engagement
+              ? 'num_reply_children'
+              : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -112,8 +112,8 @@ export async function searchCasts(query) {
             ? engagement === 'reactions'
               ? 'reactions'
               : engagement === 'replies'
-                ? 'num_reply_children'
-                : engagement
+              ? 'num_reply_children'
+              : engagement
             : 'published_at',
           { ascending: false }
         )
@@ -127,8 +127,8 @@ export async function searchCasts(query) {
           ? engagement === 'reactions'
             ? 'reactions'
             : engagement === 'replies'
-              ? 'num_reply_children'
-              : engagement
+            ? 'num_reply_children'
+            : engagement
           : 'published_at',
         { ascending: false }
       )
@@ -147,8 +147,8 @@ export async function searchCasts(query) {
           ? engagement === 'reactions'
             ? 'reactions'
             : engagement === 'replies'
-              ? 'num_reply_children'
-              : engagement
+            ? 'num_reply_children'
+            : engagement
           : 'published_at',
         { ascending: false }
       )
