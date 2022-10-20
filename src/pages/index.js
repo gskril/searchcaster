@@ -1,9 +1,7 @@
-import { useRouter } from 'next/router'
-import { usePlausible } from 'next-plausible'
-
-import Logo from '../components/Logo'
 import Container from '../components/Container'
 import Footer from '../components/Footer'
+import Logo from '../components/Logo'
+import SearchInput from '../components/SearchInput'
 
 export default function Home() {
   return (
@@ -11,7 +9,8 @@ export default function Home() {
       <div className="home">
         <div />
         <Container>
-          <Logo align="center" />
+          <Logo align="center" className="mb-5" />
+          <SearchInput size="lg" />
         </Container>
         <Footer />
       </div>

@@ -7,9 +7,7 @@ export default function Footer() {
       <Container size="full">
         <div className="footer">
           <div className="footer-links footer__left">
-            <Link href="/search?username=greg">
-              <a className="footer-link">@greg</a>
-            </Link>
+            <p>Updates every 30 minutes</p>
           </div>
           <div className="footer-links footer__right">
             <Link href="/docs">
@@ -34,6 +32,7 @@ export default function Footer() {
           width: 100%;
           padding: 1.25rem 1rem;
           justify-content: space-between;
+          color: #9584a7;
 
           &-links {
             display: flex;
@@ -41,7 +40,7 @@ export default function Footer() {
           }
 
           a {
-            color: #9584a7;
+            color: inherit;
 
             &:hover,
             &:focus-visible {
