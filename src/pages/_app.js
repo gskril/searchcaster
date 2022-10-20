@@ -1,5 +1,5 @@
-import '../styles/globals.css'
-import '../styles/nprogress.css'
+import '../styles/globals.scss'
+import '../styles/nprogress.scss'
 
 import Head from 'next/head'
 import NProgress from 'nprogress'
