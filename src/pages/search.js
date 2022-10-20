@@ -3,7 +3,7 @@ import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { usePlausible } from 'next-plausible'
 
-import { likeIcon, recastIcon, watchIcon } from '../assets/icons'
+import { likeIcon, recastIcon, commentIcon } from '../assets/icons'
 import { getRelativeDate } from '../utils/date'
 import { formatCastText } from '../utils/cast'
 import { searchCasts } from './api/search'
@@ -179,16 +179,16 @@ function Casts({ casts, query }) {
 
               <div className="cast__engagement">
                 <div>
+                  {commentIcon}
+                  <span>{cast.meta.numReplyChildren}</span>
+                </div>
+                <div>
                   {likeIcon}
                   <span>{cast.meta.reactions.count}</span>
                 </div>
                 <div>
                   {recastIcon}
                   <span>{cast.meta.recasts.count}</span>
-                </div>
-                <div>
-                  {watchIcon}
-                  <span>{cast.meta.watches.count}</span>
                 </div>
               </div>
             </div>
