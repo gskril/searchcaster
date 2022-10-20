@@ -1,3 +1,4 @@
+import '../styles/fonts.scss'
 import '../styles/globals.scss'
 import '../styles/nprogress.scss'
 
