@@ -8,8 +8,8 @@ export default function Home() {
     <>
       <div className="home">
         <div />
-        <Container>
-          <Logo align="center" className="mb-5" />
+        <Container size="sm">
+          <Logo size="lg" align="center" className="mb-5" />
           <SearchInput size="lg" />
         </Container>
         <Footer />
