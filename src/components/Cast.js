@@ -11,7 +11,7 @@ export default function Cast({ cast, query }) {
   return (
     <>
       <div
-        className="cast unstyled-link h-entry"
+        className="cast h-entry"
         role="button"
         onClick={(e) => {
           // if the user selected text, or clicked on a link, don't navigate
@@ -68,19 +68,25 @@ export default function Cast({ cast, query }) {
           </a>
         )}
 
-        <div className="cast__engagement">
-          <div>
-            {commentIcon}
-            <span>{cast.meta.numReplyChildren}</span>
+        <div className="cast__bottom">
+          <div className="cast__engagement">
+            <div>
+              {commentIcon}
+              <span>{cast.meta.numReplyChildren}</span>
+            </div>
+            <div>
+              {recastIcon}
+              <span>{cast.meta.recasts.count}</span>
+            </div>
+            <div>
+              {likeIcon}
+              <span>{cast.meta.reactions.count}</span>
+            </div>
           </div>
-          <div>
-            {recastIcon}
-            <span>{cast.meta.recasts.count}</span>
-          </div>
-          <div>
-            {likeIcon}
-            <span>{cast.meta.reactions.count}</span>
-          </div>
+
+          <a href={cast.uri} className="cast__link u-url u-uid">
+            Open in Farcaster
+          </a>
         </div>
       </div>
 
@@ -96,11 +102,6 @@ export default function Cast({ cast, query }) {
             background-color: #291f3c;
             cursor: pointer;
           }
-        }
-
-        .unstyled-link {
-          text-decoration: none;
-          color: unset;
         }
 
         .cast--replies-msg {
@@ -171,20 +172,36 @@ export default function Cast({ cast, query }) {
           width: 100%;
         }
 
+        .cast__bottom {
+          display: flex;
+          margin-top: 1rem;
+          align-items: center;
+          justify-content: space-between;
+        }
+
         .cast__engagement {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           width: fit-content;
-          font-size: 0.875rem;
           color: #8c7bab;
           align-items: center;
-          margin-top: 1rem;
+          font-size: 0.875rem;
           gap: 2rem;
 
           & > div {
             display: flex;
             align-items: center;
             gap: 0.375rem;
+          }
+        }
+
+        .cast__link {
+          color: #997bd0;
+          font-size: 0.9375rem;
+          transition: color 0.1s ease-in-out;
+
+          &:hover {
+            color: #8257d1;
           }
         }
       `}</style>
