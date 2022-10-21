@@ -10,14 +10,39 @@ export default function SearchInput({ size, ...props }) {
     e.preventDefault()
     const query = e.target.text.value
 
-    // Plausible Analytics
-    plausible('Search', {
-      props: {
-        query,
-      },
-    })
+    // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
+    // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
+    const justFrom = query.match(/^from:\s?@?(\w+)$/i)
+    const fromAndText =
+      query.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
+      query.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
 
-    router.push(`/search?text=${query}`)
+    if (justFrom) {
+      const username = justFrom[1]
+      router.push(`/search?username=${username}`)
+      plausible('Search', {
+        props: {
+          username,
+        },
+      })
+    } else if (fromAndText) {
+      const text = fromAndText[1]
+      const username = fromAndText[3]
+      router.push(`/search?username=${username}&text=${text}`)
+      plausible('Search', {
+        props: {
+          query: text,
+          username,
+        },
+      })
+    } else {
+      router.push(`/search?text=${query}`)
+      plausible('Search', {
+        props: {
+          query,
+        },
+      })
+    }
   }
 
   return (
