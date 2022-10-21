@@ -30,7 +30,9 @@ export default function CastFeed({ casts, query }) {
             <Cast cast={cast} query={query} />
           </div>
         ))}
+      </div>
 
+      <div>
         {casts.length === itemsPerPage && (
           <div className="pagination">
             {query.page > 1 && (
@@ -50,16 +52,21 @@ export default function CastFeed({ casts, query }) {
       </div>
 
       <style jsx>{`
+        .casts {
+          border-radius: 1rem;
+          overflow: hidden;
+        }
+
         .pagination {
           display: flex;
           width: 100%;
           margin: 0 auto;
-          padding-bottom: 2rem;
-          justify-content: space-between;
+          padding: 2rem 0;
+          justify-content: ${query.page > 1 ? 'space-between' : 'center'};
         }
 
         .pagination__btn {
-          color: inherit;
+          color: #b0a2cb;
         }
       `}</style>
     </>

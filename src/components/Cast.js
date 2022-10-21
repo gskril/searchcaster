@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import Link from 'next/link'
 
 import { formatCastText } from '../utils/cast'
@@ -5,126 +6,107 @@ import { getRelativeDate } from '../utils/date'
 import { likeIcon, recastIcon, commentIcon } from '../assets/icons'
 
 export default function Cast({ cast, query }) {
+  const router = useRouter()
+
   return (
     <>
-      <div key={cast.merkleRoot}>
-        <div className="cast h-entry">
-          <div className="cast__body">
-            <div className="cast__author h-card">
-              {cast.meta.avatar && (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={cast.meta.avatar}
-                  className="cast__avatar u-photo"
-                  alt=""
-                  width={44}
-                  height={44}
-                />
-              )}
-              <div className="cast__names">
-                <span className="cast__display-name p-name p-nickname">
-                  {cast.meta.displayName}
-                </span>
-                <Link href={`/search?username=${cast.body.username}`}>
-                  <a className="cast__username u-url u-uid">
-                    @{cast.body.username}
-                  </a>
-                </Link>
-              </div>
-            </div>
-
-            <span className="cast__date dt-published">
-              {getRelativeDate(cast.body.publishedAt)}
+      <div
+        className="cast unstyled-link h-entry"
+        role="button"
+        onClick={(e) => {
+          // if the user selected text, or clicked on a link, don't navigate
+          if (!window.getSelection().toString() && e.target.tagName !== 'A') {
+            router.push(`/search?merkleRoot=${cast.merkleRoot}`)
+          }
+        }}
+      >
+        <div className="cast__author h-card">
+          {cast.meta.avatar && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={cast.meta.avatar}
+              className="cast__avatar u-photo"
+              alt=""
+              width={44}
+              height={44}
+            />
+          )}
+          <div className="cast__names">
+            <span className="cast__display-name p-name p-nickname">
+              {cast.meta.displayName}
             </span>
-
-            <p className="cast__text e-content">
-              {formatCastText(cast.body.data.text, query.text)}
-            </p>
-
-            {cast.body.data.image && (
-              <a
-                href={cast.body.data.image}
-                className="cast__attachment-link u-photo u-featured"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={cast.body.data.image}
-                  className="cast__attachment u-photo u-featured"
-                  loading="lazy"
-                  alt=""
-                />
+            <Link href={`/search?username=${cast.body.username}`}>
+              <a className="cast__username u-url u-uid">
+                @{cast.body.username}
               </a>
-            )}
-
-            <div className="cast__engagement">
-              <div>
-                {commentIcon}
-                <span>{cast.meta.numReplyChildren}</span>
-              </div>
-              <div>
-                {likeIcon}
-                <span>{cast.meta.reactions.count}</span>
-              </div>
-              <div>
-                {recastIcon}
-                <span>{cast.meta.recasts.count}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="cast__meta">
-            {cast.body.data.replyParentMerkleRoot ? (
-              cast.body.data.replyParentMerkleRoot !== query.merkleRoot && (
-                <span className="cast__reply">
-                  In reply to{' '}
-                  <Link
-                    href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
-                  >
-                    <a>@{cast.meta.replyParentUsername.username}</a>
-                  </Link>
-                </span>
-              )
-            ) : (
-              <a href={cast.uri} className="cast__link u-url u-uid">
-                Open in Farcaster
-              </a>
-            )}
-            {query.merkleRoot && i === 0 ? null : (
-              <Link href={`/search?merkleRoot=${cast.merkleRoot}`}>
-                <a className="cast__reply--children">See replies</a>
-              </Link>
-            )}
+            </Link>
           </div>
         </div>
 
-        {query.merkleRoot && i === 0 && (
-          <p className="cast--replies-msg">
-            {casts.length > 1 ? 'Direct replies:' : 'No direct replies'}
-          </p>
+        <span className="cast__date dt-published">
+          {cast.body.publishedAt && getRelativeDate(cast.body.publishedAt)}
+        </span>
+
+        <p className="cast__text e-content">
+          {formatCastText(cast.body.data.text, query.text)}
+        </p>
+
+        {cast.body.data.image && (
+          <a
+            href={cast.body.data.image}
+            className="cast__attachment-link u-photo u-featured"
+            target="_blank"
+            rel="noreferrer"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={cast.body.data.image}
+              className="cast__attachment u-photo u-featured"
+              loading="lazy"
+              alt=""
+            />
+          </a>
         )}
+
+        <div className="cast__engagement">
+          <div>
+            {commentIcon}
+            <span>{cast.meta.numReplyChildren}</span>
+          </div>
+          <div>
+            {recastIcon}
+            <span>{cast.meta.recasts.count}</span>
+          </div>
+          <div>
+            {likeIcon}
+            <span>{cast.meta.reactions.count}</span>
+          </div>
+        </div>
       </div>
 
       <style jsx>{`
         .cast {
           position: relative;
           display: block;
-          border-radius: 0.5rem;
-          margin-bottom: 2rem;
-          background: var(--gray-100);
-          box-shadow: 0px 0.125rem 0.25rem rgba(var(--shadow-rgb), 0.15);
           overflow: hidden;
+          padding: 1.25rem 1rem;
+          border-bottom: 2px solid #35294d;
+
+          &:hover {
+            background-color: #291f3c;
+            cursor: pointer;
+          }
+        }
+
+        .unstyled-link {
+          text-decoration: none;
+          color: unset;
         }
 
         .cast--replies-msg {
           margin-bottom: 1rem;
           font-weight: 600;
           text-align: center;
-        }
-
-        .cast__body {
-          padding: 1rem 1rem 0.5rem;
         }
 
         .cast__author {
@@ -154,7 +136,7 @@ export default function Cast({ cast, query }) {
         }
 
         .cast__username {
-          color: var(--text-color);
+          color: #8c7bab;
           opacity: 0.95;
           font-size: 0.875rem;
 
@@ -169,7 +151,7 @@ export default function Cast({ cast, query }) {
           position: absolute;
           top: 1rem;
           right: 1rem;
-          color: var(--text-color-light);
+          color: #8c7bab;
           font-size: 0.875rem;
         }
 
@@ -189,23 +171,12 @@ export default function Cast({ cast, query }) {
           width: 100%;
         }
 
-        .cast__meta {
-          background: var(--primary-color-light);
-          color: var(--text-color-light);
-          display: flex;
-          justify-content: space-between;
-          gap: 1rem;
-          padding: 0.5rem 1rem;
-          width: 100%;
-          font-size: 0.875rem;
-        }
-
         .cast__engagement {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           width: fit-content;
           font-size: 0.875rem;
-          color: var(--text-color-light);
+          color: #8c7bab;
           align-items: center;
           margin-top: 1rem;
           gap: 2rem;

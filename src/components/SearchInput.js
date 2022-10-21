@@ -24,7 +24,7 @@ export default function SearchInput({ size, ...props }) {
     <>
       <form onSubmit={(e) => handleFormSubmit(e)} {...props}>
         <div className="input-wrapper">
-          <input type="text" name="text" placeholder="It's time to Farcaster" />
+          <input type="text" name="text" placeholder="It's time to Farcast" />
           <button>{arrowIcon}</button>
         </div>
       </form>
