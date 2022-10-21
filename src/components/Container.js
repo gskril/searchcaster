@@ -1,5 +1,5 @@
 export default function Container({ size, children }) {
-  const maxWidth = size === 'sm' ? '28rem' : size === 'full' ? '100%' : '36rem'
+  const maxWidth = size === 'sm' ? '28rem' : size === 'full' ? '100%' : '38rem'
 
   return (
     <>

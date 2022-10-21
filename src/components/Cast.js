@@ -20,32 +20,43 @@ export default function Cast({ cast, query }) {
           }
         }}
       >
-        <div className="cast__author h-card">
-          {cast.meta.avatar && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={cast.meta.avatar}
-              className="cast__avatar u-photo"
-              alt=""
-              width={44}
-              height={44}
-            />
-          )}
-          <div className="cast__names">
-            <span className="cast__display-name p-name p-nickname">
-              {cast.meta.displayName}
-            </span>
-            <Link href={`/search?username=${cast.body.username}`}>
-              <a className="cast__username u-url u-uid">
-                @{cast.body.username}
-              </a>
-            </Link>
-          </div>
-        </div>
+        {cast.body.data.replyParentMerkleRoot && (
+          <Link
+            href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
+          >
+            <a className="reply-indicator">
+              In reply to <span>@{cast.meta.replyParentUsername.username}</span>
+            </a>
+          </Link>
+        )}
 
-        <span className="cast__date dt-published">
-          {cast.body.publishedAt && getRelativeDate(cast.body.publishedAt)}
-        </span>
+        <div className="cast__header">
+          <div className="cast__author h-card">
+            {cast.meta.avatar && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={cast.meta.avatar}
+                className="cast__avatar u-photo"
+                alt=""
+                width={44}
+                height={44}
+              />
+            )}
+            <div className="cast__names">
+              <span className="cast__display-name p-name p-nickname">
+                {cast.meta.displayName}
+              </span>
+              <Link href={`/search?username=${cast.body.username}`}>
+                <a className="cast__username u-url u-uid">
+                  @{cast.body.username}
+                </a>
+              </Link>
+            </div>
+          </div>
+          <span className="cast__date dt-published">
+            {cast.body.publishedAt && getRelativeDate(cast.body.publishedAt)}
+          </span>
+        </div>
 
         <p className="cast__text e-content">
           {formatCastText(cast.body.data.text, query.text)}
@@ -148,12 +159,27 @@ export default function Cast({ cast, query }) {
           }
         }
 
+        .cast__header {
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+          justify-content: space-between;
+        }
+
         .cast__date {
-          position: absolute;
-          top: 1rem;
-          right: 1rem;
           color: #8c7bab;
           font-size: 0.875rem;
+        }
+
+        .reply-indicator {
+          display: block;
+          margin-bottom: 1rem;
+          color: #a08fbf;
+          font-size: 0.875rem;
+
+          & > span {
+            color: #997bd0;
+          }
         }
 
         .cast__text {
@@ -174,6 +200,8 @@ export default function Cast({ cast, query }) {
 
         .cast__bottom {
           display: flex;
+          gap: 0.5rem 1rem;
+          flex-wrap: wrap;
           margin-top: 1rem;
           align-items: center;
           justify-content: space-between;
@@ -187,6 +215,10 @@ export default function Cast({ cast, query }) {
           align-items: center;
           font-size: 0.875rem;
           gap: 2rem;
+
+          @media screen and (max-width: 768px) {
+            gap: 1rem;
+          }
 
           & > div {
             display: flex;
