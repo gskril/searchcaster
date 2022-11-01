@@ -1,14 +1,17 @@
+import { arrowIcon } from '../assets/icons'
 import { usePlausible } from 'next-plausible'
 import { useRouter } from 'next/router'
-import { arrowIcon } from '../assets/icons'
+import { useStorage } from '../hooks/useLocalStorage'
 
 export default function SearchInput({ size, ...props }) {
   const router = useRouter()
   const plausible = usePlausible()
+  const { getItem, setItem } = useStorage()
 
   function handleFormSubmit(e) {
     e.preventDefault()
     const query = e.target.text.value
+    setItem('search-query', query, 'session')
 
     // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
     // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
@@ -49,7 +52,12 @@ export default function SearchInput({ size, ...props }) {
     <>
       <form onSubmit={(e) => handleFormSubmit(e)} {...props}>
         <div className="input-wrapper">
-          <input type="text" name="text" placeholder="It's time to Farcast" />
+          <input
+            type="text"
+            name="text"
+            placeholder="Search for any term"
+            defaultValue={getItem('search-query', 'session')}
+          />
           <button>{arrowIcon}</button>
         </div>
       </form>
