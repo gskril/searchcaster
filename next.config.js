@@ -11,6 +11,14 @@ module.exports = withPlausibleProxy()({
       },
     ]
   },
+  async rewrites() {
+    return [
+      {
+        source: '/u/:path*',
+        destination: '/search?username=:path*',
+      },
+    ]
+  },
   reactStrictMode: true,
   swcMinify: true,
 })
