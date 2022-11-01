@@ -1,9 +1,16 @@
+import { useStorage } from '../hooks/useLocalStorage'
+
 import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 import SearchInput from '../components/SearchInput'
 
 export default function Home() {
+  const { setItem } = useStorage()
+
+  // Reset search session when user navigates back to home page
+  setItem('search-query', '', 'session')
+
   return (
     <>
       <div className="home">
