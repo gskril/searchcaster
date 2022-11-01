@@ -35,13 +35,19 @@ export default function Footer({ includeTime = true }) {
           display: flex;
           gap: 2rem;
           width: 100%;
-          padding: 1.25rem 1rem;
+          padding-top: 1.25rem;
+          padding-bottom: 1.25rem;
           justify-content: space-between;
           color: #9584a7;
 
           &-links {
             display: flex;
             gap: 1.5rem;
+          }
+
+          @media (min-width: 768px) {
+            padding-left: 1rem;
+            padding-right: 1rem;
           }
 
           a {

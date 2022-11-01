@@ -1,4 +1,5 @@
 import { searchCasts } from './api/search'
+import Footer from '../components/Footer'
 import CastFeed from '../components/CastFeed'
 import Container from '../components/Container'
 import Logo from '../components/Logo'
@@ -26,6 +27,8 @@ export default function Search({ data, query }) {
         {!query.merkleRoot && <SearchFilters query={query} />}
         <CastFeed casts={casts} query={query} />
       </Container>
+
+      {casts.length > 5 && <Footer />}
 
       <style jsx>{`
         .header {
