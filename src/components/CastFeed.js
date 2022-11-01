@@ -53,15 +53,17 @@ export default function CastFeed({ casts, query }) {
 
       <style jsx>{`
         .casts {
-          border-radius: 1rem;
-          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          padding-bottom: 2rem;
         }
 
         .pagination {
           display: flex;
           width: 100%;
           margin: 0 auto;
-          padding: 2rem 0;
+          padding-bottom: 2rem;
           justify-content: ${query.page > 1 ? 'space-between' : 'center'};
         }
 

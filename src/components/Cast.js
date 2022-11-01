@@ -106,8 +106,10 @@ export default function Cast({ cast, query }) {
           position: relative;
           display: block;
           overflow: hidden;
-          padding: 1.25rem 1rem;
-          border-bottom: 2px solid #35294d;
+          padding: 1rem;
+          border-radius: 0.5rem;
+          background: rgba(53, 41, 77, 0.2);
+          border: 1px solid rgba(90, 70, 128, 0.5);
 
           &:hover {
             background-color: #291f3c;
@@ -174,6 +176,7 @@ export default function Cast({ cast, query }) {
         .reply-indicator {
           display: block;
           margin-bottom: 1rem;
+          margin-top: -0.25rem;
           color: #a08fbf;
           font-size: 0.875rem;
 

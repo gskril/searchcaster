@@ -3,6 +3,7 @@ import CastFeed from '../components/CastFeed'
 import Container from '../components/Container'
 import Logo from '../components/Logo'
 import SearchInput from '../components/SearchInput'
+import SearchFilters from '../components/SearchFilters'
 
 export default function Search({ data, query }) {
   const casts = data.casts
@@ -22,6 +23,7 @@ export default function Search({ data, query }) {
           <SearchInput />
         </div>
 
+        {!query.merkleRoot && <SearchFilters query={query} />}
         <CastFeed casts={casts} query={query} />
       </Container>
 
