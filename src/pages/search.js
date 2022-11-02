@@ -1,16 +1,27 @@
+import Head from 'next/head'
+
 import { searchCasts } from './api/search'
-import Footer from '../components/Footer'
 import CastFeed from '../components/CastFeed'
 import Container from '../components/Container'
+import Footer from '../components/Footer'
 import Logo from '../components/Logo'
-import SearchInput from '../components/SearchInput'
 import SearchFilters from '../components/SearchFilters'
+import SearchInput from '../components/SearchInput'
 
 export default function Search({ data, query }) {
   const casts = data.casts
 
   return (
     <>
+      <Head>
+        {query.merkleRoot && (
+          <meta
+            property="og:image"
+            content={`https://og.farcase.xyz/cast/${query.merkleRoot}`}
+          />
+        )}
+      </Head>
+
       <Container>
         <div className="header">
           <div className="header__row mb-3">
