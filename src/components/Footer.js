@@ -33,11 +33,12 @@ export default function Footer({ includeTime = true }) {
       <style jsx>{`
         .footer {
           display: flex;
-          gap: 2rem;
+          flex-direction: column;
+          gap: 0.75rem;
           width: 100%;
           padding-top: 1.25rem;
           padding-bottom: 1.25rem;
-          justify-content: space-between;
+          align-items: center;
           color: #9584a7;
 
           &-links {
@@ -45,9 +46,20 @@ export default function Footer({ includeTime = true }) {
             gap: 1.5rem;
           }
 
+          &__left {
+            opacity: 0.5;
+          }
+
           @media (min-width: 768px) {
+            gap: 2rem;
             padding-left: 1rem;
             padding-right: 1rem;
+            flex-direction: row;
+            justify-content: space-between;
+
+            &__left {
+              opacity: 1;
+            }
           }
 
           a {
