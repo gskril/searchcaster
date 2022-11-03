@@ -46,20 +46,22 @@ export default function SearchFilters({ query }) {
           justify-content: space-between;
           position: relative;
 
-          &::after {
-            content: '';
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 4rem;
-            height: calc(100% - 0.75rem);
-            background: linear-gradient(
-              to right,
-              rgba(28, 22, 38, 0),
-              rgb(28, 22, 38)
-            );
+          @media (max-width: 500px) {
+            &::after {
+              content: '';
+              position: absolute;
+              pointer-events: none;
+              top: 0;
+              right: 0;
+              bottom: 0;
+              width: 4rem;
+              height: calc(100% - 0.75rem);
+              background: linear-gradient(
+                to right,
+                rgba(28, 22, 38, 0),
+                rgb(28, 22, 38)
+              );
+            }
           }
         }
 
