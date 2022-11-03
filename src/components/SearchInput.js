@@ -93,7 +93,7 @@ export default function SearchInput({ size, ...props }) {
                 type="text"
                 name="text"
                 className="advanced-search__group"
-                placeholder="It's time to Farcast"
+                placeholder="Farcaster"
               />
             </div>
             <div className="advanced-search__group">
@@ -119,7 +119,9 @@ export default function SearchInput({ size, ...props }) {
           onClick={() => setIsAdvanced(!isAdvanced)}
         >
           <span>Advanced search</span>
-          <span className="checkbox">{isAdvanced && '✓'}</span>
+          <span className="checkbox">
+            <span className="checkbox__check">{isAdvanced && '✓'}</span>
+          </span>
         </div>
       )}
 
@@ -194,6 +196,10 @@ export default function SearchInput({ size, ...props }) {
           font-size: 0.875rem;
           border-radius: 0.25rem;
           background-color: #5e5278;
+
+          &__check {
+            transform: translateY(-1px);
+          }
         }
 
         .advanced-search {
