@@ -5,67 +5,70 @@ import { useStorage } from '../hooks/useLocalStorage'
 
 import { arrowIcon } from '../assets/icons'
 
-export default function SearchInput({ size, ...props }) {
+type SearchInputProps = {
+  size: 'lg' | undefined
+}
+
+export type SearchQuery = {
+  text: string
+  username: string
+  advanced: boolean
+}
+
+export default function SearchInput({ size, ...props }: SearchInputProps) {
   const router = useRouter()
   const plausible = usePlausible()
   const { getItem, setItem } = useStorage()
+  const [mounted, setMounted] = useState<boolean>(false)
+  const [isAdvanced, setIsAdvanced] = useState<boolean>(false)
+  const [sessionQuery, setSessionQuery] = useState<SearchQuery | undefined>()
 
-  const [isAdvanced, setIsAdvanced] = useState(false)
+  useEffect(() => {
+    const _sessionQuery = JSON.parse(getItem('search-query', 'session'))
+    setIsAdvanced(_sessionQuery.advanced)
+    setSessionQuery(_sessionQuery)
+    setMounted(true)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-  function handleFormSubmit(e) {
+  function handleFormSubmit(e: any) {
     e.preventDefault()
-    const target = e.target
-    const query = target.text.value
-    setItem('search-query', query, 'session')
+    let query: SearchQuery = {
+      text: e.target!.text?.value,
+      username: e.target!.username?.value,
+      advanced: isAdvanced,
+    }
 
-    const searchParams = new URLSearchParams()
-
-    if (isAdvanced && target.username.value) {
-      searchParams.set('text', query)
-      searchParams.set('username', e.target.username.value)
-
-      plausible('Search', {
-        props: {
-          query,
-          username: target.username.value,
-        },
-      })
-    } else {
+    if (!query.username && query.text) {
       // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
       // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
-      const justFrom = query.match(/^from:\s?@?(\w+)$/i)
+      const justFrom = query.text.match(/^from:\s?@?(\w+)$/i)
       const fromAndText =
-        query.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
-        query.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
+        query.text.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
+        query.text.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
 
       if (justFrom) {
-        const username = justFrom[1]
-        searchParams.set('username', username)
-        plausible('Search', {
-          props: {
-            username,
-          },
-        })
+        query.text = ''
+        query.username = justFrom[1]
       } else if (fromAndText) {
-        const text = fromAndText[1]
-        const username = fromAndText[3]
-        searchParams.set('text', text)
-        searchParams.set('username', username)
-        plausible('Search', {
-          props: {
-            query: text,
-            username,
-          },
-        })
-      } else {
-        searchParams.set('text', query)
-        plausible('Search', {
-          props: {
-            query,
-          },
-        })
+        query.text = fromAndText[1]
+        query.username = fromAndText[3]
       }
     }
+
+    const searchParams = new URLSearchParams()
+    if (query.text) searchParams.set('text', query.text)
+    if (query.username) searchParams.set('username', query.username)
+
+    // Save query to session storage
+    setItem('search-query', JSON.stringify(query), 'session')
+
+    plausible('Search', {
+      props: {
+        text: query.text === '' ? null : query.text,
+        username: query.username === '' ? null : query.username,
+      },
+    })
 
     router.push(`/search?${searchParams.toString()}`)
   }
@@ -78,9 +81,10 @@ export default function SearchInput({ size, ...props }) {
             <input
               type="text"
               name="text"
-              placeholder="Search for any term"
-              defaultValue={getItem('search-query', 'session')}
+              placeholder={mounted ? 'Search for any term' : ''}
+              defaultValue={sessionQuery?.text || ''}
             />
+            <input type="hidden" name="username" />
             <button type="submit">{arrowIcon}</button>
           </div>
         )}
@@ -94,6 +98,7 @@ export default function SearchInput({ size, ...props }) {
                 name="text"
                 className="advanced-search__group"
                 placeholder="Farcaster"
+                defaultValue={sessionQuery?.text || ''}
               />
             </div>
             <div className="advanced-search__group">
@@ -103,6 +108,7 @@ export default function SearchInput({ size, ...props }) {
                 name="username"
                 className="advanced-search__group"
                 placeholder="dwr"
+                defaultValue={sessionQuery?.username}
               />
             </div>
 

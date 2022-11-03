@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useStorage } from '../hooks/useLocalStorage'
 
 import Container from '../components/Container'
@@ -6,10 +7,26 @@ import Logo from '../components/Logo'
 import SearchInput from '../components/SearchInput'
 
 export default function Home() {
-  const { setItem } = useStorage()
+  const { getItem, setItem } = useStorage()
 
   // Reset search session when user navigates back to home page
-  setItem('search-query', '', 'session')
+  useEffect(() => {
+    let isAdvanced = false
+    let searchSession = getItem('search-query', 'session')
+
+    if (searchSession) {
+      isAdvanced = JSON.parse(searchSession).advanced
+    }
+
+    const defaultSearchQuery = {
+      text: '',
+      username: '',
+      advanced: isAdvanced,
+    }
+
+    setItem('search-query', JSON.stringify(defaultSearchQuery), 'session')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
