@@ -24,9 +24,12 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
   const [sessionQuery, setSessionQuery] = useState<SearchQuery | undefined>()
 
   useEffect(() => {
-    const _sessionQuery = JSON.parse(getItem('search-query', 'session'))
-    setIsAdvanced(_sessionQuery.advanced)
-    setSessionQuery(_sessionQuery)
+    const searchSession = getItem('search-query', 'session')
+    if (searchSession) {
+      const _sessionQuery = JSON.parse(searchSession)
+      setIsAdvanced(_sessionQuery.advanced)
+      setSessionQuery(_sessionQuery)
+    }
     setMounted(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
