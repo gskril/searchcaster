@@ -46,7 +46,7 @@ export default function SearchFilters({ query }) {
           justify-content: space-between;
           position: relative;
 
-          @media (max-width: 500px) {
+          @media (max-width: 600px) {
             &::after {
               content: '';
               position: absolute;
@@ -69,7 +69,7 @@ export default function SearchFilters({ query }) {
           padding-bottom: 0.75rem;
           font-weight: 500;
 
-          @media (min-width: 500px) {
+          @media (min-width: 600px) {
             display: none;
           }
         }
@@ -128,6 +128,12 @@ const filters = [
     label: 'Most watched',
     queryChanges: {
       engagement: 'watches',
+    },
+  },
+  {
+    label: 'Most replied',
+    queryChanges: {
+      engagement: 'replies',
     },
   },
 ]

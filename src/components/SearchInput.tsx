@@ -42,21 +42,21 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
       advanced: isAdvanced,
     }
 
-    if (!query.username && query.text) {
-      // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
-      // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
-      const justFrom = query.text.match(/^from:\s?@?(\w+)$/i)
-      const fromAndText =
-        query.text.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
-        query.text.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
+    // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
+    // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
+    const justFrom = query.text.match(/^from:\s?@?(\w+)$/i)
+    const fromAndText =
+      query.text.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
+      query.text.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
 
-      if (justFrom) {
-        query.text = ''
-        query.username = justFrom[1]
-      } else if (fromAndText) {
-        query.text = fromAndText[1]
-        query.username = fromAndText[3]
-      }
+    if (justFrom) {
+      query.text = ''
+      query.username = justFrom[1]
+      query.advanced = true
+    } else if (fromAndText) {
+      query.text = fromAndText[1]
+      query.username = fromAndText[3]
+      query.advanced = true
     }
 
     const searchParams = new URLSearchParams()
@@ -95,7 +95,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         {isAdvanced && (
           <div className="advanced-search">
             <div className="advanced-search__group">
-              <span className="advanced-search__label">Text to match:</span>
+              <span className="advanced-search__label">Text:</span>
               <input
                 type="text"
                 name="text"
@@ -105,7 +105,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
               />
             </div>
             <div className="advanced-search__group">
-              <span className="advanced-search__label">From this account:</span>
+              <span className="advanced-search__label">From:</span>
               <input
                 type="text"
                 name="username"
@@ -122,17 +122,17 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         )}
       </form>
 
-      {size === 'lg' && (
-        <div
-          className="advanced-toggle"
-          onClick={() => setIsAdvanced(!isAdvanced)}
-        >
-          <span>Advanced search</span>
-          <span className="checkbox">
-            <span className="checkbox__check">{isAdvanced && '✓'}</span>
-          </span>
-        </div>
-      )}
+      <div
+        className={`advanced-toggle ${
+          size !== 'lg' && 'advanced-toggle--inner'
+        }`}
+        onClick={() => setIsAdvanced(!isAdvanced)}
+      >
+        <span>Advanced {size === 'lg' && 'search'}</span>
+        <span className="checkbox">
+          <span className="checkbox__check">{isAdvanced && '✓'}</span>
+        </span>
+      </div>
 
       <style jsx>{`
         .input-wrapper {
@@ -163,7 +163,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
 
             position: absolute;
             width: fit-content;
-            right: 0.25rem;
+            right: 0;
             top: 50%;
             transform: translateY(-50%);
             width: var(--size);
@@ -190,6 +190,20 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           padding-top: 0.75rem;
           color: #9285ab;
 
+          &--inner {
+            padding-top: 0.5rem;
+            width: fit-content;
+            justify-content: flex-end;
+            position: absolute;
+            top: 2.75rem;
+            right: 1.5rem;
+
+            @media (max-width: 400px) {
+              transform: scale(0.8);
+              transform-origin: bottom right;
+            }
+          }
+
           &:hover {
             cursor: pointer;
           }
@@ -215,14 +229,18 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
-          padding: 1rem;
+          padding: 0.75rem;
           border-radius: 0.5rem;
           background-color: #413656;
+
+          @media (max-width: 768px) {
+            gap: 0.5rem;
+          }
 
           &__group {
             width: 100%;
             display: grid;
-            grid-template-columns: 2fr 3fr;
+            grid-template-columns: 1fr 4fr;
             gap: 1rem;
             align-items: center;
             justify-content: space-between;

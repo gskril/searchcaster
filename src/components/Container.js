@@ -8,6 +8,7 @@ export default function Container({ size, children }) {
       <style jsx>{`
         .container {
           display: flex;
+          position: relative;
           flex-direction: column;
           width: 100%;
           max-width: ${maxWidth};
