@@ -123,6 +123,23 @@ export function formatCastText(text, searchQuery) {
     }
   }
 
+  // If text includes a link like https://open.spotify.com/track/xxxx, append an iframe to the end of the text
+  const spotifyLink = text.match(
+    // Regex to identify a Spotify link
+    /https:\/\/open\.spotify\.com\/track\/([a-zA-Z0-9_]+)/g
+  )
+
+  if (spotifyLink) {
+    spotifyLink.forEach((link) => {
+      const iframe = `<iframe style="border-radius: 12px; margin-top: 0.75rem" src="${link.replace(
+        'https://open.spotify.com/track/',
+        'https://open.spotify.com/embed/track/'
+      )}" width="100%" height="80" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
+
+      text = text + iframe
+    })
+  }
+
   return (
     <span
       dangerouslySetInnerHTML={{
