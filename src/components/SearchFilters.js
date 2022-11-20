@@ -21,13 +21,22 @@ export default function SearchFilters({ query }) {
                 key={filter.label}
                 className={`filter ${isActive ? 'filter--active' : ''}`}
                 onClick={() => {
+                  let newQuery = { ...query }
+
+                  // If the filter is already active, remove it from the query
+                  if (isActive) {
+                    const paramsToRemove = Object.keys(filter.queryChanges)
+                    paramsToRemove.forEach((param) => delete newQuery[param])
+                  } else {
+                    newQuery = { ...newQuery, ...filter.queryChanges }
+                  }
+
+                  // Remove page from query (in effect, resetting to page 1)
+                  delete newQuery.page
+
                   router.push({
                     pathname: '/search',
-                    query: {
-                      ...query,
-                      ...filter.queryChanges,
-                      page: 1,
-                    },
+                    query: newQuery,
                   })
                 }}
               >
