@@ -128,10 +128,13 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         }`}
         onClick={() => setIsAdvanced(!isAdvanced)}
       >
+        <input
+          type="checkbox"
+          className="checkbox"
+          checked={isAdvanced}
+          onChange={() => setIsAdvanced(!isAdvanced)}
+        />
         <span>Advanced {size === 'lg' && 'search'}</span>
-        <span className="checkbox">
-          <span className="checkbox__check">{isAdvanced && '✓'}</span>
-        </span>
       </div>
 
       <style jsx>{`
@@ -220,8 +223,10 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           border-radius: 0.25rem;
           background-color: #5e5278;
 
-          &__check {
-            transform: translateY(-1px);
+          :checked::after {
+            content: '✓';
+            color: #fff;
+            transform: translate(0.03125rem, -0.0625rem);
           }
         }
 
