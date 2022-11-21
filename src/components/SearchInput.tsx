@@ -226,6 +226,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           font-size: 0.875rem;
           border-radius: 0.25rem;
           background-color: #5e5278;
+          overflow: hidden;
 
           :checked::after {
             content: '✓';
@@ -272,7 +273,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
               max-width: 100%;
 
               &:focus-visible {
-                outline: none;
+                outline: solid var(--primary-color);
               }
             }
           }
@@ -288,6 +289,11 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
 
             &:hover {
               background-color: var(--primary-color-hover);
+            }
+
+            &:focus-visible {
+              background-color: var(--primary-color-hover);
+              outline: solid var(--primary-color-light);
             }
           }
         }
