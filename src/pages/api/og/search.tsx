@@ -21,8 +21,8 @@ export default async function handler(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
 
-    const text =
-      searchParams.get('text')?.slice(0, 100) || "It's time to Farcast"
+    const hasText = searchParams.get('text')
+    const text = hasText ? searchParams.get('text') : 'Search for any term'
 
     return new ImageResponse(
       (
@@ -79,6 +79,7 @@ export default async function handler(req: NextRequest) {
             <span
               style={{
                 minWidth: '280px',
+                opacity: `${hasText ? 1 : 0.5}`,
               }}
             >
               {text}
