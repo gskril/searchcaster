@@ -51,7 +51,7 @@ function App({ Component, pageProps }) {
 
         <meta
           property="og:image"
-          content={`https://dev.searchcaster.xyz/api/og`}
+          content="https://dev.searchcaster.xyz/api/og/search"
         />
         <meta
           property="og:description"

@@ -22,7 +22,7 @@ export default function Search({ data, query }) {
         ) : (
           <meta
             property="og:image"
-            content={`https://dev.searchcaster.xyz/api/og?text=${query.text}`}
+            content={`https://dev.searchcaster.xyz/api/og/search?text=${query.text}`}
           />
         )}
       </Head>
