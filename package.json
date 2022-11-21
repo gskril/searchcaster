@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^1.35.6",
+    "@vercel/og": "^0.0.20",
     "ethers": "^5.7.0",
     "next": "12.2.4",
     "next-plausible": "^3.2.0",

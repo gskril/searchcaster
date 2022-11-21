@@ -14,10 +14,15 @@ export default function Search({ data, query }) {
   return (
     <>
       <Head>
-        {query.merkleRoot && (
+        {query.merkleRoot ? (
           <meta
             property="og:image"
             content={`https://og.farcase.xyz/cast/${query.merkleRoot}`}
+          />
+        ) : (
+          <meta
+            property="og:image"
+            content={`https://dev.searchcaster.xyz/api/og?text=${query.text}`}
           />
         )}
       </Head>

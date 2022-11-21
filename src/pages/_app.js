@@ -51,7 +51,7 @@ function App({ Component, pageProps }) {
 
         <meta
           property="og:image"
-          content="https://searchcaster.xyz/img/opengraph.png"
+          content={`https://dev.searchcaster.xyz/api/og`}
         />
         <meta
           property="og:description"
