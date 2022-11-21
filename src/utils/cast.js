@@ -123,6 +123,46 @@ export function formatCastText(text, searchQuery) {
     }
   }
 
+  // If text includes a Spotify link, append an iframe to the end of the text
+  const spotifyLink = text.match(
+    /https:\/\/open\.spotify\.com\/(track|album|playlist|show|episode)\/([a-zA-Z0-9_]+)/g
+  )
+
+  if (spotifyLink) {
+    spotifyLink.forEach((link) => {
+      const iframe = `<iframe style="border-radius: 12px; margin-top: 0.75rem" src="${link.replace(
+        'https://open.spotify.com/',
+        'https://open.spotify.com/embed/'
+      )}" width="100%" height="80" frameBorder="0" allowfullscreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
+
+      text = text + iframe
+
+      // Make sure the iframe isn't duplicated
+      text = text.replace(iframe + iframe, iframe)
+    })
+  }
+
+  // If text includes a YouTube link, append an iframe to the end of the text
+  const youtubeLink = text.match(
+    /https:\/\/www\.youtube\.com\/watch\?v=([a-zA-Z0-9_]+)/g
+  )
+
+  if (youtubeLink) {
+    youtubeLink.forEach((link) => {
+      const iframe = `<iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%" src="${link.replace(
+        'https://www.youtube.com/watch?v=',
+        'https://www.youtube-nocookie.com/embed/'
+      )}" width="100%" height="315" frameBorder="0" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" loading="lazy"></iframe>`
+
+      const iframeWrapper = `<div style="position: relative; padding-bottom: 56.25%; padding-top: 30px; height: 0; overflow: hidden; margin-top: 0.75rem; border-radius: 12px">${iframe}</div>`
+
+      text = text + iframeWrapper
+
+      // Make sure the iframe isn't duplicated
+      text = text.replace(iframeWrapper + iframeWrapper, iframeWrapper)
+    })
+  }
+
   return (
     <span
       dangerouslySetInnerHTML={{

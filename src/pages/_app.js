@@ -1,5 +1,6 @@
-import '../styles/globals.css'
-import '../styles/nprogress.css'
+import '../styles/fonts.scss'
+import '../styles/globals.scss'
+import '../styles/nprogress.scss'
 
 import Head from 'next/head'
 import NProgress from 'nprogress'
@@ -50,7 +51,7 @@ function App({ Component, pageProps }) {
 
         <meta
           property="og:image"
-          content="https://searchcaster.xyz/img/opengraph.png"
+          content="https://dev.searchcaster.xyz/api/og/search"
         />
         <meta
           property="og:description"
