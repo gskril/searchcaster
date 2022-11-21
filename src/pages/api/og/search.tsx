@@ -22,7 +22,9 @@ export default async function handler(req: NextRequest) {
     const { searchParams } = new URL(req.url)
 
     const hasText = searchParams.get('text')
-    const text = hasText ? searchParams.get('text') : 'Search for any term'
+    const text = hasText
+      ? searchParams.get('text')
+      : 'Search the Farcaster protocol'
 
     return new ImageResponse(
       (

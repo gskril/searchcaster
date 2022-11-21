@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import Link from 'next/link'
 
 import Container from '../components/Container'
@@ -7,6 +8,22 @@ import Logo from '../components/Logo'
 export default function Docs() {
   return (
     <>
+      <Head>
+        <meta
+          property="og:image"
+          content="https://searchcaster.xyz/api/og/search?text=API%20Docs"
+        />
+        <meta
+          property="og:description"
+          name="description"
+          content="Search API for the Farcaster protocol"
+        />
+        <meta
+          name="description"
+          content="Search API for the Farcaster protocol."
+        />
+      </Head>
+
       <Container>
         <div className="header">
           <Logo className="mb-3" />
