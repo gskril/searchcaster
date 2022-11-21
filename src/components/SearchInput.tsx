@@ -32,7 +32,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
     } else {
       const searchParams = router.query as unknown as SearchQuery
       setSessionQuery(searchParams)
-      setIsAdvanced(searchParams.username !== '')
+      setIsAdvanced(searchParams.username !== undefined)
     }
     setMounted(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
