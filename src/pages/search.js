@@ -14,6 +14,9 @@ export default function Search({ data, query }) {
   return (
     <>
       <Head>
+        <title>
+          {query.text ? `${query.text} - Searchcaster` : 'Searchcaster'}
+        </title>
         {query.merkleRoot ? (
           <meta
             property="og:image"

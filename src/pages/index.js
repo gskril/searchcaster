@@ -1,3 +1,4 @@
+import Head from 'next/head'
 import { useEffect } from 'react'
 import { useStorage } from '../hooks/useLocalStorage'
 
@@ -30,6 +31,23 @@ export default function Home() {
 
   return (
     <>
+      <Head>
+        <title>Searchcaster</title>
+        <meta
+          property="og:image"
+          content="https://searchcaster.xyz/api/og/search"
+        />
+        <meta
+          property="og:description"
+          name="description"
+          content="Search for any cast"
+        />
+        <meta
+          name="description"
+          content="Search for any cast on the Farcaster protocol."
+        />
+      </Head>
+
       <div className="home">
         <div />
         <Container size="sm">

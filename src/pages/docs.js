@@ -9,6 +9,7 @@ export default function Docs() {
   return (
     <>
       <Head>
+        <title>Farcaster Search API</title>
         <meta
           property="og:image"
           content="https://searchcaster.xyz/api/og/search?text=API%20Docs"
