@@ -129,6 +129,9 @@ export default function Docs() {
             <li>
               <code>bio</code> - substring of a user&apos;s bio
             </li>
+            <li>
+              <code>address</code> - a user&apos;s Farcaster address
+            </li>
           </ul>
         </div>
 

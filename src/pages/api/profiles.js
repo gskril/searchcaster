@@ -7,10 +7,15 @@ const provider = new ethers.providers.InfuraProvider(
 )
 
 export default async function search(req, res) {
-  let { bio, connected_address, username } = req.query
+  let { address, bio, connected_address, username } = req.query
   let profiles = []
 
-  if (bio) {
+  if (address) {
+    profiles = await supabase
+      .from('profiles')
+      .select()
+      .ilike('address', address)
+  } else if (bio) {
     profiles = await supabase.from('profiles').select().ilike('bio', `%${bio}%`)
   } else if (connected_address) {
     // If param isn't an ETH address, check if it's an ENS name
@@ -35,7 +40,7 @@ export default async function search(req, res) {
     profiles = await supabase.from('profiles').select('*').match({ username })
   } else {
     return res.status(400).json({
-      error: 'Missing bio, connected_address, or username',
+      error: 'Missing address, bio, connected_address, or username parameter',
     })
   }
 
