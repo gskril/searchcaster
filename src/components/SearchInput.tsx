@@ -20,6 +20,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
   const plausible = usePlausible()
   const { getItem, setItem } = useStorage()
   const [mounted, setMounted] = useState<boolean>(false)
+  const [basicText, setBasicText] = useState<string>('')
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false)
   const [sessionQuery, setSessionQuery] = useState<SearchQuery | undefined>()
 
@@ -90,6 +91,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
               name="text"
               placeholder={mounted ? 'Search for any term' : ''}
               defaultValue={sessionQuery?.text || ''}
+              onChange={(e) => setBasicText(e.target.value)}
             />
             <input type="hidden" name="username" />
             <button type="submit">{arrowIcon}</button>
@@ -130,7 +132,14 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         className={`advanced-toggle ${
           size !== 'lg' && 'advanced-toggle--inner'
         }`}
-        onClick={() => setIsAdvanced(!isAdvanced)}
+        onClick={() => {
+          setSessionQuery({
+            text: isAdvanced ? sessionQuery?.text || '' : basicText,
+            username: sessionQuery?.username || '',
+            advanced: !isAdvanced,
+          })
+          setIsAdvanced(!isAdvanced)
+        }}
       >
         <input
           type="checkbox"
