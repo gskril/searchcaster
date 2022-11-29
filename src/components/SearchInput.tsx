@@ -29,6 +29,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
     if (searchSession) {
       const _sessionQuery: SearchQuery = JSON.parse(searchSession)
       setIsAdvanced(_sessionQuery.advanced)
+      setBasicText(_sessionQuery.text)
       setSessionQuery(_sessionQuery)
     } else {
       const searchParams = router.query as unknown as SearchQuery
