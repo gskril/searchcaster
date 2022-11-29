@@ -53,7 +53,10 @@ export default function Cast({ cast, query }) {
               </Link>
             </div>
           </div>
-          <span className="cast__date dt-published">
+          <span
+            className="cast__date dt-published"
+            title={new Date(cast.body.publishedAt).toLocaleString()}
+          >
             {cast.body.publishedAt && getRelativeDate(cast.body.publishedAt)}
           </span>
         </div>
