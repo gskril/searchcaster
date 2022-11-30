@@ -13,6 +13,12 @@ export default function Search({ data, query }) {
     <>
       <Head>
         <title>Search profiles on Farcaster</title>
+        <meta
+          property="og:image"
+          content={`https://searchcaster.xyz/api/og/search?text=${
+            query?.q || 'Search for profiles on Farcaster'
+          }`}
+        />
       </Head>
 
       <Container>
