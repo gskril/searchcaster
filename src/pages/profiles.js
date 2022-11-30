@@ -1,7 +1,9 @@
 import Head from 'next/head'
 
+import { arrowIcon } from '../assets/icons'
 import { searchProfiles } from './api/profiles'
 import Container from '../components/Container'
+import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 
 export default function Search({ data, query }) {
@@ -18,60 +20,105 @@ export default function Search({ data, query }) {
           <Logo className="mb-3" />
 
           <form>
-            <input
-              type="text"
-              name="q"
-              id="q"
-              placeholder="Search by bio or username"
-              defaultValue={query.q}
-              style={{
-                marginBottom: '0.5rem',
-              }}
-            />
-            <button type="submit" style={{ background: 'initial' }}>
-              Search
-            </button>
-          </form>
-
-          {hasData && (
-            <div className="profiles">
-              {data.map((profile) => (
-                <div className="profile" key={profile.body.id}>
-                  <div className="profile__main">
-                    <a href={`farcaster://profiles/${profile.body.address}`}>
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={profile.body?.avatarUrl}
-                        alt=""
-                        width={48}
-                        height={48}
-                      />
-                    </a>
-                    <div className="name-meta">
-                      <a href={`farcaster://profiles/${profile.body.address}`}>
-                        {profile.body.displayName}
-                      </a>
-                      <a
-                        href={`farcaster://profiles/${profile.body.address}`}
-                        className="username"
-                      >
-                        @{profile.body?.username}
-                      </a>
-                    </div>
-                  </div>
-                  <p>{profile.body?.bio}</p>
-                </div>
-              ))}
+            <div className="input-wrapper">
+              <input
+                type="text"
+                name="q"
+                id="q"
+                placeholder="Search by bio or username"
+                defaultValue={query.q}
+              />
+              <button type="submit">{arrowIcon}</button>
             </div>
-          )}
+          </form>
         </div>
+
+        {hasData && (
+          <div className="profiles">
+            {data.map((profile) => (
+              <div className="profile" key={profile.body.id}>
+                <div className="profile__main">
+                  <a href={`farcaster://profiles/${profile.body.address}`}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={profile.body?.avatarUrl}
+                      alt=""
+                      width={48}
+                      height={48}
+                    />
+                  </a>
+                  <div className="name-meta">
+                    <a href={`farcaster://profiles/${profile.body.address}`}>
+                      {profile.body.displayName}
+                    </a>
+                    <a
+                      href={`farcaster://profiles/${profile.body.address}`}
+                      className="username"
+                    >
+                      @{profile.body?.username}
+                    </a>
+                  </div>
+                </div>
+                <p>{profile.body?.bio}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </Container>
+
+      {data.length > 10 && <Footer />}
 
       <style jsx>{`
         .header {
           display: flex;
           flex-direction: column;
           padding: 3rem 0 2rem;
+        }
+
+        .input-wrapper {
+          display: flex;
+          background-color: #4d4063;
+          border-radius: 2.5rem;
+          justify-content: space-between;
+          border: 1px solid #6f6581;
+          position: relative;
+          padding-right: 2.25rem;
+          overflow: hidden;
+
+          input {
+            background: transparent;
+            color: #eee4ff;
+            outline: none;
+            font-size: 1rem;
+            padding: 0.25rem 1rem;
+
+            &::placeholder {
+              color: #eee4ff;
+              opacity: 0.4;
+            }
+          }
+
+          button {
+            --size: 2.5rem;
+
+            position: absolute;
+            width: fit-content;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: var(--size);
+            height: var(--size);
+            padding: 0.5rem;
+            line-height: 0;
+            border-radius: 5rem;
+            opacity: 1;
+            transition: opacity 0.1s ease-in-out;
+
+            &:hover,
+            &:focus-visible {
+              opacity: 0.85;
+            }
+          }
         }
 
         .profiles {

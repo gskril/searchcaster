@@ -13,6 +13,9 @@ export default function Footer({ includeTime = true }) {
             <Link href="/docs">
               <a className="footer-link">API</a>
             </Link>
+            <Link href="/profiles">
+              <a className="footer-link">Profiles</a>
+            </Link>
             <Link href="https://www.raycast.com/gregskril/searchcaster">
               <a className="footer-link" target="_blank" rel="noreferrer">
                 Raycast
