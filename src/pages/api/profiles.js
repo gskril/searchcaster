@@ -6,8 +6,8 @@ const provider = new ethers.providers.InfuraProvider(
   process.env.INFURA_API_KEY
 )
 
-export default async function search(req, res) {
-  let { address, bio, connected_address, username } = req.query
+export async function searchProfiles(query) {
+  let { address, bio, connected_address, username, q } = query
   let profiles = []
 
   if (address) {
@@ -15,6 +15,11 @@ export default async function search(req, res) {
       .from('profiles')
       .select()
       .ilike('address', address)
+  } else if (q) {
+    profiles = await supabase
+      .from('profiles')
+      .select('*')
+      .or(`username.ilike.%${q}%, bio.ilike.%${q}%`)
   } else if (bio) {
     profiles = await supabase.from('profiles').select().ilike('bio', `%${bio}%`)
   } else if (connected_address) {
@@ -27,9 +32,9 @@ export default async function search(req, res) {
     }
 
     if (!connected_address) {
-      return res.status(400).json({
+      return {
         error: 'Invalid connected_address',
-      })
+      }
     }
 
     profiles = await supabase
@@ -39,9 +44,9 @@ export default async function search(req, res) {
   } else if (username) {
     profiles = await supabase.from('profiles').select('*').match({ username })
   } else {
-    return res.status(400).json({
+    return {
       error: 'Missing address, bio, connected_address, or username parameter',
-    })
+    }
   }
 
   const formattedProfiles = profiles.data.map((p) => {
@@ -58,11 +63,19 @@ export default async function search(req, res) {
         isVerifiedAvatar: p.avatar_verified,
         proofUrl: `https://api.farcaster.xyz/v1/verified_addresses/${p.address}`,
         registeredAt: new Date(p.registered_at).getTime(),
-        version: p.version,
       },
       connectedAddress: p.connected_address,
     }
   })
 
-  return res.json(formattedProfiles)
+  return formattedProfiles
+}
+
+export default async function handler(req, res) {
+  try {
+    res.json(await searchProfiles(req.query))
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: err.message })
+  }
 }
