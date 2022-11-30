@@ -20,6 +20,7 @@ export async function searchProfiles(query) {
       .from('profiles')
       .select('*')
       .or(`username.ilike.%${q}%, bio.ilike.%${q}%`)
+      .order('followers', { ascending: false })
   } else if (bio) {
     profiles = await supabase.from('profiles').select().ilike('bio', `%${bio}%`)
   } else if (connected_address) {

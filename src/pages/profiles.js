@@ -5,6 +5,8 @@ import Container from '../components/Container'
 import Logo from '../components/Logo'
 
 export default function Search({ data, query }) {
+  const hasData = data && data.length > 0
+
   return (
     <>
       <Head>
@@ -31,35 +33,37 @@ export default function Search({ data, query }) {
             </button>
           </form>
 
-          <div className="profiles">
-            {data.map((profile) => (
-              <div className="profile" key={profile.body.id}>
-                <div className="profile__main">
-                  <a href={`farcaster://profiles/${profile.body.address}`}>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={profile.body?.avatarUrl}
-                      alt=""
-                      width={48}
-                      height={48}
-                    />
-                  </a>
-                  <div className="name-meta">
+          {hasData && (
+            <div className="profiles">
+              {data.map((profile) => (
+                <div className="profile" key={profile.body.id}>
+                  <div className="profile__main">
                     <a href={`farcaster://profiles/${profile.body.address}`}>
-                      {profile.body.displayName}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={profile.body?.avatarUrl}
+                        alt=""
+                        width={48}
+                        height={48}
+                      />
                     </a>
-                    <a
-                      href={`farcaster://profiles/${profile.body.address}`}
-                      className="username"
-                    >
-                      {profile.body?.username}
-                    </a>
+                    <div className="name-meta">
+                      <a href={`farcaster://profiles/${profile.body.address}`}>
+                        {profile.body.displayName}
+                      </a>
+                      <a
+                        href={`farcaster://profiles/${profile.body.address}`}
+                        className="username"
+                      >
+                        @{profile.body?.username}
+                      </a>
+                    </div>
                   </div>
+                  <p>{profile.body?.bio}</p>
                 </div>
-                <p>{profile.body?.bio}</p>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </Container>
 
@@ -86,6 +90,7 @@ export default function Search({ data, query }) {
           border-bottom: 1px solid #6f588b;
 
           img {
+            object-fit: cover;
             border-radius: 0.25rem;
           }
 
