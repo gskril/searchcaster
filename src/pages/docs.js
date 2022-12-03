@@ -54,7 +54,7 @@ export default function Docs() {
           <ul>
             <li>
               <code>count</code> - the number of casts to be returned (max 200,
-              default 50)
+              default 25)
             </li>
             <li>
               <code>engagement</code> - changes the sorting of any search query

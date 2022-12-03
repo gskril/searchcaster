@@ -18,7 +18,7 @@ export async function searchCasts(query) {
   } = query
 
   let casts = []
-  count = Math.min(parseInt(count), 50) || 25
+  count = Math.min(parseInt(count), 200) || 25
   page = parseInt(page) || 1
   const offset = (page - 1) * count
   const upperRange = offset + count - 1
