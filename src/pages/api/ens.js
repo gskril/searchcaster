@@ -14,7 +14,7 @@ export default async function handler(req, res) {
     casts = await supabase
       .from('casts')
       .select('*')
-      .ilike('reply_parent_merkle_root', parent)
+      .ilike('thread_hash', parent)
       .like('text', '%.eth%')
   } else {
     return res.status(400).json({
@@ -46,9 +46,10 @@ export default async function handler(req, res) {
       ens_address: ensAddress,
       text: cast.text,
       username: cast.username,
-      displayName: cast.display_name || null,
-      merkleRoot: cast.merkle_root,
-      replyParentMerkleRoot: cast.reply_parent_merkle_root || null,
+      displayName: cast.author_display_name || null,
+      merkleRoot: cast.hash,
+      replyParentMerkleRoot: cast.parent_hash || null,
+      threadMerkleRoot: cast.thread_hash || null,
     })
   }
 
