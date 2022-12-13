@@ -19,7 +19,9 @@ export async function searchProfiles(query) {
     profiles = await supabase
       .from('profiles')
       .select('*')
-      .or(`username.ilike.%${q}%, bio.ilike.%${q}%, display_name.ilike.%${q}%`)
+      .or(
+        `username.ilike.%${q}%, bio.ilike.%${q}%, author_display_name.ilike.%${q}%`
+      )
       .order('followers', { ascending: false })
   } else if (bio) {
     profiles = await supabase.from('profiles').select().ilike('bio', `%${bio}%`)
@@ -39,15 +41,18 @@ export async function searchProfiles(query) {
     }
 
     profiles = await supabase
-      .from('profiles')
+      .rpc('get_profile_by_address', { connected_address })
       .select('*')
-      .ilike('connected_address', connected_address)
   } else if (username) {
     profiles = await supabase.from('profiles').select('*').match({ username })
   } else {
     return {
       error: 'Missing address, bio, connected_address, or username parameter',
     }
+  }
+
+  if (profiles.error) {
+    throw profiles.error
   }
 
   const formattedProfiles = profiles.data.map((p) => {
@@ -62,10 +67,9 @@ export async function searchProfiles(query) {
         following: p.following,
         avatarUrl: p.avatar_url,
         isVerifiedAvatar: p.avatar_verified,
-        proofUrl: `https://api.farcaster.xyz/v1/verified_addresses/${p.address}`,
         registeredAt: new Date(p.registered_at).getTime(),
       },
-      connectedAddress: p.connected_address,
+      connectedAddress: connected_address,
     }
   })
 
