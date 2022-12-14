@@ -14,7 +14,7 @@ export async function searchProfiles(query) {
     profiles = await supabase
       .from('profile_with_verification')
       .select()
-      .ilike('address', address)
+      .ilike('owner', address)
   } else if (q) {
     profiles = await supabase
       .from('profile_with_verification')
