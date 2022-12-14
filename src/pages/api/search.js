@@ -30,9 +30,7 @@ export async function searchCasts(query) {
     casts = await supabase
       .from('casts')
       .select()
-      .or(
-        `merkle_root.ilike.${merkleRoot},reply_parent_merkle_root.ilike.${merkleRoot}`
-      )
+      .or(`hash.ilike.${merkleRoot},parent_hash.ilike.${merkleRoot}`)
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
@@ -50,9 +48,13 @@ export async function searchCasts(query) {
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reactions'
+              ? 'reactions_count'
               : engagement === 'replies'
-              ? 'num_reply_children'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
               : engagement
             : 'published_at',
           { ascending: false }
@@ -71,9 +73,13 @@ export async function searchCasts(query) {
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reactions'
+              ? 'reactions_count'
               : engagement === 'replies'
-              ? 'num_reply_children'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
               : engagement
             : 'published_at',
           { ascending: false }
@@ -90,9 +96,13 @@ export async function searchCasts(query) {
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reactions'
+              ? 'reactions_count'
               : engagement === 'replies'
-              ? 'num_reply_children'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
               : engagement
             : 'published_at',
           { ascending: false }
@@ -110,9 +120,13 @@ export async function searchCasts(query) {
         .order(
           engagement
             ? engagement === 'reactions'
-              ? 'reactions'
+              ? 'reactions_count'
               : engagement === 'replies'
-              ? 'num_reply_children'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
               : engagement
             : 'published_at',
           { ascending: false }
@@ -125,9 +139,13 @@ export async function searchCasts(query) {
       .order(
         engagement
           ? engagement === 'reactions'
-            ? 'reactions'
+            ? 'reactions_count'
             : engagement === 'replies'
-            ? 'num_reply_children'
+            ? 'replies_count'
+            : engagement === 'recasts'
+            ? 'recasts_count'
+            : engagement === 'watches'
+            ? 'watches_count'
             : engagement
           : 'published_at',
         { ascending: false }
@@ -135,8 +153,8 @@ export async function searchCasts(query) {
   } else {
     casts = await supabase
       .from('casts')
-      .select()
-      .ilike('username', username ? username : '%')
+      .select('*')
+      .ilike('author_username', username ? username : '%')
       .ilike('text', textQuery ? `%${textQuery}%` : '%')
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
@@ -145,13 +163,21 @@ export async function searchCasts(query) {
       .order(
         engagement
           ? engagement === 'reactions'
-            ? 'reactions'
+            ? 'reactions_count'
             : engagement === 'replies'
-            ? 'num_reply_children'
+            ? 'replies_count'
+            : engagement === 'recasts'
+            ? 'recasts_count'
+            : engagement === 'watches'
+            ? 'watches_count'
             : engagement
           : 'published_at',
         { ascending: false }
       )
+  }
+
+  if (casts.error) {
+    throw new Error(casts.error.message)
   }
 
   // Restructure data

@@ -12,39 +12,39 @@ export function formatCasts(casts) {
     return {
       body: {
         publishedAt: new Date(cast.published_at).getTime(),
-        username: cast.username,
+        username: cast.author_username,
         data: {
           text: text,
           image: attachment,
-          replyParentMerkleRoot: cast.reply_parent_merkle_root,
-          threadMerkleRoot: cast.thread_merkle_root,
+          replyParentMerkleRoot: cast.parent_hash,
+          threadMerkleRoot: cast.thread_hash,
         },
       },
       meta: {
-        displayName: cast.display_name,
-        avatar: cast.avatar_url?.replace(
+        displayName: cast.author_display_name,
+        avatar: cast.author_pfp_url?.replace(
           'https://storage.opensea.io/',
           'https://openseauserdata.com/'
         ),
-        isVerifiedAvatar: cast.avatar_verified,
-        numReplyChildren: cast.num_reply_children || 0,
+        isVerifiedAvatar: cast.author_pfp_verified,
+        numReplyChildren: cast.replies_count || 0,
         reactions: {
-          count: cast.reactions || 0,
+          count: cast.reactions_count || 0,
           type: 'Like',
         },
         recasts: {
-          count: cast.recasts || 0,
+          count: cast.recasts_count || 0,
         },
         watches: {
-          count: cast.watches || 0,
+          count: cast.watches_count || 0,
         },
         replyParentUsername: {
-          username: cast.reply_parent_username,
+          username: cast.parent_hash?.slice(0, 7) || null,
         },
         mentions: cast.mentions,
       },
-      merkleRoot: cast.merkle_root,
-      uri: `farcaster://casts/${cast.merkle_root}/${cast.thread_merkle_root}`,
+      merkleRoot: cast.hash,
+      uri: `farcaster://casts/${cast.hash}/${cast.thread_hash}`,
     }
   })
 }
