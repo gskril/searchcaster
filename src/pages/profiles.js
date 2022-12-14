@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import Head from 'next/head'
 
 import { arrowIcon } from '../assets/icons'
@@ -8,6 +9,7 @@ import Logo from '../components/Logo'
 
 export default function Search({ data, query }) {
   const hasData = data && data.length > 0
+  const [isDevMode, setIsDevMode] = useState(false)
 
   return (
     <>
@@ -37,6 +39,17 @@ export default function Search({ data, query }) {
               <button type="submit">{arrowIcon}</button>
             </div>
           </form>
+
+          <div className="dev-mode">
+            <input
+              type="checkbox"
+              id="dev-mode"
+              className="checkbox"
+              checked={isDevMode}
+              onChange={() => setIsDevMode(!isDevMode)}
+            />
+            <label htmlFor="dev-mode">Developer mode</label>
+          </div>
         </div>
 
         {hasData && (
@@ -65,7 +78,35 @@ export default function Search({ data, query }) {
                     </a>
                   </div>
                 </div>
+
                 <p>{profile.body?.bio}</p>
+
+                {isDevMode && (
+                  <div className="profile__advanced">
+                    <div className="profile__advanced-group">
+                      <label>Farcaster ID:</label>
+                      <span>{profile.body.id}</span>
+                    </div>
+
+                    {profile.body.registeredAt ? (
+                      <div className="profile__advanced-group">
+                        <label>Registration date:</label>
+                        <span>
+                          {new Date(
+                            profile.body.registeredAt
+                          ).toLocaleDateString()}
+                        </span>
+                      </div>
+                    ) : null}
+
+                    {profile.connectedAddress && (
+                      <div className="profile__advanced-group">
+                        <label>Connected address:</label>
+                        <span>{profile.connectedAddress}</span>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -127,6 +168,22 @@ export default function Search({ data, query }) {
           }
         }
 
+        .dev-mode {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          margin-top: 0.5rem;
+          align-self: center;
+
+          &:hover {
+            cursor: pointer;
+          }
+
+          @media (max-width: 768px) {
+            display: none;
+          }
+        }
+
         .profiles {
           display: flex;
           flex-direction: column;
@@ -149,6 +206,7 @@ export default function Search({ data, query }) {
 
           p {
             color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 0.25rem;
           }
 
           a {
@@ -160,6 +218,33 @@ export default function Search({ data, query }) {
           display: flex;
           gap: 0.6rem;
           width: 100%;
+        }
+
+        .profile__advanced {
+          background-color: rgba(53, 41, 77, 0.5);
+          border: 1px solid rgba(53, 41, 77, 0.8);
+          padding: 0.75rem;
+          border-radius: 0.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.625rem;
+
+          &-group {
+            gap: 0.5rem;
+            line-height: 1.25;
+
+            & > * {
+              max-width: 100%;
+              display: inline-block;
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
+
+            label {
+              margin: 0 0.5rem 0 0;
+              opacity: 0.65;
+            }
+          }
         }
 
         .name-meta {

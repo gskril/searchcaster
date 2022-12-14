@@ -16,7 +16,6 @@ export async function searchProfiles(query) {
       .select()
       .ilike('address', address)
   } else if (q) {
-    console.log('here')
     profiles = await supabase
       .from('profile_with_verification')
       .select('*')

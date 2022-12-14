@@ -226,25 +226,6 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           }
         }
 
-        .checkbox {
-          width: 1rem;
-          height: 1rem;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          color: #fff;
-          font-size: 0.875rem;
-          border-radius: 0.25rem;
-          background-color: #5e5278;
-          overflow: hidden;
-
-          :checked::after {
-            content: '✓';
-            color: #fff;
-            transform: translate(0.03125rem, -0.0625rem);
-          }
-        }
-
         .advanced-search {
           display: flex;
           flex-direction: column;
