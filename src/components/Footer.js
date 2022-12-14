@@ -7,7 +7,7 @@ export default function Footer({ includeTime = true }) {
       <Container size="full">
         <div className="footer">
           <div className="footer-links footer__left">
-            <p>{includeTime ? 'Updates every 30 minutes' : 'Searchcaster'}</p>
+            <p>{includeTime ? 'Updates every minute' : 'Searchcaster'}</p>
           </div>
           <div className="footer-links footer__right">
             <Link href="/docs">
