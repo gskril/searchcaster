@@ -25,7 +25,7 @@ export default function Cast({ cast, query }) {
             href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
           >
             <a className="reply-indicator">
-              In reply to <span>{cast.meta.replyParentUsername.username}</span>
+              In reply to <span>@{cast.meta.replyParentUsername.username}</span>
             </a>
           </Link>
         )}

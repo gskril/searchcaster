@@ -39,7 +39,8 @@ export function formatCasts(casts) {
           count: cast.watches_count || 0,
         },
         replyParentUsername: {
-          username: cast.parent_hash?.slice(0, 7) || null,
+          fid: cast.parent_author_fid || null,
+          username: cast.parent_author_username || null,
         },
         mentions: cast.mentions,
       },
