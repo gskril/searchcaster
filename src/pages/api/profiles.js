@@ -73,9 +73,10 @@ export async function searchProfiles(query) {
         isVerifiedAvatar: p.avatar_verified,
         registeredAt: new Date(p.registered_at).getTime(),
       },
-      connectedAddress: p.verifications[0]
-        ? p.verifications[0].address
-        : connected_address || null,
+      connectedAddress:
+        p.verifications && p.verifications[0]
+          ? p.verifications[0].address
+          : connected_address || null,
     }
   })
 
