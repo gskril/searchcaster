@@ -40,16 +40,18 @@ export default function Search({ data, query }) {
             </div>
           </form>
 
-          <div className="dev-mode">
-            <input
-              type="checkbox"
-              id="dev-mode"
-              className="checkbox"
-              checked={isDevMode}
-              onChange={() => setIsDevMode(!isDevMode)}
-            />
-            <label htmlFor="dev-mode">Developer mode</label>
-          </div>
+          {hasData && (
+            <div className="dev-mode">
+              <input
+                type="checkbox"
+                id="dev-mode"
+                className="checkbox"
+                checked={isDevMode}
+                onChange={() => setIsDevMode(!isDevMode)}
+              />
+              <label htmlFor="dev-mode">Developer mode</label>
+            </div>
+          )}
         </div>
 
         {hasData && (
