@@ -11,16 +11,22 @@ export async function searchProfiles(query) {
   let profiles = []
 
   if (address) {
-    profiles = await supabase.from('profile').select().ilike('address', address)
+    profiles = await supabase
+      .from('profile_with_verification')
+      .select()
+      .ilike('address', address)
   } else if (q) {
     console.log('here')
     profiles = await supabase
-      .from('profile')
+      .from('profile_with_verification')
       .select('*')
       .or(`username.ilike.%${q}%, bio.ilike.%${q}%, display_name.ilike.%${q}%`)
       .order('followers', { ascending: false })
   } else if (bio) {
-    profiles = await supabase.from('profile').select().ilike('bio', `%${bio}%`)
+    profiles = await supabase
+      .from('profile_with_verification')
+      .select()
+      .ilike('bio', `%${bio}%`)
   } else if (connected_address) {
     // If param isn't an ETH address, check if it's an ENS name
     if (
@@ -40,7 +46,10 @@ export async function searchProfiles(query) {
       .rpc('get_profile_by_address', { connected_address })
       .select('*')
   } else if (username) {
-    profiles = await supabase.from('profile').select('*').match({ username })
+    profiles = await supabase
+      .from('profile_with_verification')
+      .select('*')
+      .match({ username })
   } else {
     return {
       error: 'Missing address, bio, connected_address, or username parameter',
@@ -65,7 +74,9 @@ export async function searchProfiles(query) {
         isVerifiedAvatar: p.avatar_verified,
         registeredAt: new Date(p.registered_at).getTime(),
       },
-      connectedAddress: connected_address || null,
+      connectedAddress: p.verifications[0]
+        ? p.verifications[0].address
+        : connected_address || null,
     }
   })
 
