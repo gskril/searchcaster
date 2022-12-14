@@ -101,6 +101,13 @@ export default function Search({ data, query }) {
                       </div>
                     ) : null}
 
+                    {profile.body.address && (
+                      <div className="profile__advanced-group">
+                        <label>Custody address:</label>
+                        <span>{profile.body.address}</span>
+                      </div>
+                    )}
+
                     {profile.connectedAddress && (
                       <div className="profile__advanced-group">
                         <label>Connected address:</label>
