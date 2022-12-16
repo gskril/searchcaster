@@ -5,7 +5,7 @@ import supabase from '../../../lib/db'
 import type { CombinedVerification, Verification } from '../../../types'
 
 const schema = z.object({
-  fids: z.array(z.number()).max(150),
+  fids: z.array(z.number()).max(1000),
 })
 
 type Response = {
