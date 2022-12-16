@@ -5,7 +5,7 @@ import supabase from '../../../lib/db'
 import type { CombinedVerification, Verification } from '../../../types'
 
 const schema = z.object({
-  fids: z.array(z.number()),
+  fids: z.array(z.number()).max(150),
 })
 
 type Response = {
@@ -25,11 +25,6 @@ export default async function handler(
   }
 
   const { fids } = schema.parse(req.body)
-
-  if (fids.length > 150) {
-    res.status(400).json({ error: 'Too many FIDs' })
-    return
-  }
 
   const { data, error } = await supabase
     .from('verification')
