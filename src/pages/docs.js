@@ -119,7 +119,7 @@ export default function Docs() {
           <p>Profiles endpoint parameters:</p>
           <ul>
             <li>
-              <code>connect_address</code> - the Ethereum address or ENS name
+              <code>connected_address</code> - the Ethereum address or ENS name
               the user has connected to their Farcaster profile
             </li>
             <li>
