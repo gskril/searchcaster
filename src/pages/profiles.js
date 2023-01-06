@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 import { arrowIcon } from '../assets/icons'
@@ -6,10 +7,28 @@ import { searchProfiles } from './api/profiles'
 import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
+import useDebounce from '../hooks/useDebounce'
 
 export default function Search({ data, query }) {
+  const router = useRouter()
   const hasData = data && data.length > 0
   const [isDevMode, setIsDevMode] = useState(false)
+  const [value, setValue] = useState('')
+  const debouncedValue = useDebounce(value, 500)
+
+  const handleChange = (event) => {
+    setValue(event.target.value)
+  }
+
+  useEffect(() => {
+    if (!debouncedValue) return
+
+    router.push({
+      pathname: '/profiles',
+      query: { q: debouncedValue },
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedValue])
 
   return (
     <>
@@ -27,14 +46,23 @@ export default function Search({ data, query }) {
         <div className="header">
           <Logo className="mb-3" />
 
-          <form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              router.push({
+                pathname: '/profiles',
+                query: { q: e.target.q.value },
+              })
+            }}
+          >
             <div className="input-wrapper">
               <input
                 type="text"
                 name="q"
                 id="q"
                 placeholder="Search by bio or username"
-                defaultValue={query.q}
+                value={value || query.q}
+                onChange={handleChange}
               />
               <button type="submit">{arrowIcon}</button>
             </div>
