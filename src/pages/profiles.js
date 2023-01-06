@@ -109,7 +109,7 @@ export default function Search({ data, query }) {
                   </div>
                 </div>
 
-                <p>{profile.body?.bio}</p>
+                {profile.body?.bio && <p>{profile.body.bio}</p>}
 
                 {isDevMode && (
                   <div className="profile__advanced">
