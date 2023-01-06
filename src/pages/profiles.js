@@ -21,7 +21,7 @@ export default function Search({ data, query }) {
   }
 
   useEffect(() => {
-    if (!debouncedValue) return
+    if (!debouncedValue && !query?.q) return
 
     router.push({
       pathname: '/profiles',
@@ -60,8 +60,8 @@ export default function Search({ data, query }) {
                 type="text"
                 name="q"
                 id="q"
-                placeholder="Search by bio or username"
-                value={value || query.q}
+                placeholder="Search by bio or name"
+                value={value}
                 onChange={handleChange}
               />
               <button type="submit">{arrowIcon}</button>
@@ -147,6 +147,16 @@ export default function Search({ data, query }) {
               </div>
             ))}
           </div>
+        )}
+
+        {!hasData && query?.q && (
+          <p
+            style={{
+              textAlign: 'center',
+            }}
+          >
+            No profiles found
+          </p>
         )}
       </Container>
 
