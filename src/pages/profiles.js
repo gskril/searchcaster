@@ -308,8 +308,13 @@ export default function Search({ data, query }) {
   )
 }
 
-export async function getServerSideProps({ query, res }) {
+export async function getServerSideProps({ query: _query, res }) {
   res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate')
+  const q = new URLSearchParams(_query).get('q') || ''
+  const query = {
+    q,
+    count: 100,
+  }
 
   const data = await searchProfiles(query)
 

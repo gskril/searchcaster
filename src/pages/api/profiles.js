@@ -7,8 +7,9 @@ const provider = new ethers.providers.InfuraProvider(
 )
 
 export async function searchProfiles(query) {
-  let { address, bio, connected_address, username, q } = query
+  let { address, bio, connected_address, count: _count, username, q } = query
   let profiles = []
+  const count = _count ? parseInt(_count) : 1000
 
   if (address) {
     profiles = await supabase
@@ -21,11 +22,14 @@ export async function searchProfiles(query) {
       .select('*')
       .or(`username.ilike.%${q}%, bio.ilike.%${q}%, display_name.ilike.%${q}%`)
       .order('followers', { ascending: false })
+      .limit(count)
   } else if (bio) {
     profiles = await supabase
       .from('profile_with_verification')
       .select()
       .ilike('bio', `%${bio}%`)
+      .order('followers', { ascending: false })
+      .limit(count)
   } else if (connected_address) {
     // If param isn't an ETH address, check if it's an ENS name
     if (
