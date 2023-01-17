@@ -47,7 +47,7 @@ export default function Docs() {
           </Link>
           <p>
             All casts on the protocol are indexed every minute, and accessible
-            via the the <Link href="/api/search">/api/search</Link> endpoint.
+            via the <Link href="/api/search">/api/search</Link> endpoint.
           </p>
           <p>Cast endpoint parameters:</p>
           <ul>
