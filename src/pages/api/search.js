@@ -11,12 +11,14 @@ export async function searchCasts(query) {
     engagement,
     media,
     merkleRoot,
+    order,
     page,
     text,
     username,
     regex,
   } = query
 
+  const orderAscending = order === 'asc' ? true : false
   let casts = []
   count = Math.min(parseInt(count), 200) || 25
   page = parseInt(page) || 1
@@ -34,7 +36,7 @@ export async function searchCasts(query) {
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
-      .order('published_at', { ascending: false })
+      .order('published_at', { ascending: orderAscending })
   } else if (media) {
     if (media === 'image') {
       casts = await supabase
@@ -57,7 +59,7 @@ export async function searchCasts(query) {
               ? 'watches_count'
               : engagement
             : 'published_at',
-          { ascending: false }
+          { ascending: orderAscending }
         )
     } else if (media === 'music') {
       casts = await supabase
@@ -82,7 +84,7 @@ export async function searchCasts(query) {
               ? 'watches_count'
               : engagement
             : 'published_at',
-          { ascending: false }
+          { ascending: orderAscending }
         )
     } else if (media === 'youtube') {
       casts = await supabase
@@ -105,7 +107,7 @@ export async function searchCasts(query) {
               ? 'watches_count'
               : engagement
             : 'published_at',
-          { ascending: false }
+          { ascending: orderAscending }
         )
     } else if (media === 'url') {
       casts = await supabase
@@ -129,7 +131,7 @@ export async function searchCasts(query) {
               ? 'watches_count'
               : engagement
             : 'published_at',
-          { ascending: false }
+          { ascending: orderAscending }
         )
     }
   } else if (regex) {
@@ -148,7 +150,7 @@ export async function searchCasts(query) {
             ? 'watches_count'
             : engagement
           : 'published_at',
-        { ascending: false }
+        { ascending: orderAscending }
       )
   } else {
     casts = await supabase
@@ -172,7 +174,7 @@ export async function searchCasts(query) {
             ? 'watches_count'
             : engagement
           : 'published_at',
-        { ascending: false }
+        { ascending: orderAscending }
       )
   }
 
