@@ -58,7 +58,7 @@ export default function Docs() {
             <li>
               <code>engagement</code> - changes the sorting of any search query
               to engagement metrics. Options are &quot;reactions&quot;,
-              &quot;recasts&quot;, &quot;watches&quot;
+              &quot;recasts&quot;, &quot;replies&quot;, &quot;watches&quot;
             </li>
             <li>
               <code>media</code> - the type of media to be returned. Options are
