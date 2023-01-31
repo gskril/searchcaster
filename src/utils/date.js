@@ -7,7 +7,7 @@ export const getRelativeDate = (unixMs) => {
   const dayDiff = Math.floor(diff / 86400000)
 
   if (minuteDiff < 60) {
-    return `${minuteDiff} ${minuteDiff > 1 ? 'minutes' : 'minute'} ago`
+    return `${minuteDiff} ${minuteDiff != 1 ? 'minutes' : 'minute'} ago`
   } else if (hourDiff < 24) {
     return `${hourDiff} ${hourDiff > 1 ? 'hours' : 'hour'} ago`
   } else if (dayDiff < 30) {
