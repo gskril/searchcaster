@@ -21,7 +21,7 @@ export default function Search({ data, query }) {
   }
 
   useEffect(() => {
-    if (!debouncedValue && !query?.q) return
+    if (!debouncedValue || !query?.q) return
 
     router.push({
       pathname: '/profiles',
