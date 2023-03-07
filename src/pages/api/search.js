@@ -32,7 +32,9 @@ export async function searchCasts(query) {
     casts = await supabase
       .from('casts')
       .select()
-      .or(`hash.ilike.${merkleRoot},parent_hash.ilike.${merkleRoot}`)
+      .or(
+        `hash.ilike.${merkleRoot},parent_hash.ilike.${merkleRoot},hash_v1.ilike.${merkleRoot},parent_hash_v1.ilike.${merkleRoot}`
+      )
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
