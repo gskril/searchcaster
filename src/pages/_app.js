@@ -24,7 +24,7 @@ function App({ Component, pageProps }) {
   return (
     <PlausibleProvider domain="searchcaster.xyz" trackOutboundLinks>
       <Head>
-        <link rel="apple-touch-icon" href="/img/search-logo.png" />
+        <link rel="apple-touch-icon" href="/img/logo.png" />
         <link rel="icon" href="/img/favicon-16.png" sizes="16x16" />
         <link rel="icon" href="/img/favicon-32.png" sizes="32x32" />
         <link rel="icon" href="/img/favicon-64.png" sizes="64x64" />
