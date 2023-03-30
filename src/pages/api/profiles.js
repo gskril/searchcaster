@@ -17,12 +17,22 @@ export async function searchProfiles(query) {
       .select()
       .ilike('owner', address)
   } else if (q) {
-    profiles = await supabase
-      .from('profile_with_verification')
-      .select('*')
-      .or(`username.ilike.%${q}%, bio.ilike.%${q}%, display_name.ilike.%${q}%`)
-      .order('followers', { ascending: false })
-      .limit(count)
+    // if q is a valid ETH address, search by address
+    if (q.startsWith('0x') && q.length === 42) {
+      profiles = await supabase
+        .rpc('get_profile_by_address', { connected_address: q })
+        .order('followers', { ascending: false })
+        .limit(count)
+    } else {
+      profiles = await supabase
+        .from('profile_with_verification')
+        .select('*')
+        .or(
+          `username.ilike.%${q}%, bio.ilike.%${q}%, display_name.ilike.%${q}%`
+        )
+        .order('followers', { ascending: false })
+        .limit(count)
+    }
   } else if (bio) {
     profiles = await supabase
       .from('profile_with_verification')
