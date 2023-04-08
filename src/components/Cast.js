@@ -46,7 +46,7 @@ export default function Cast({ cast, query }) {
               <span className="cast__display-name p-name p-nickname">
                 {cast.meta.displayName}
               </span>
-              <Link href={`/search?username=${cast.body.username}`}>
+              <Link href={`/u/${cast.body.username}`}>
                 <a className="cast__username u-url u-uid">
                   @{cast.body.username}
                 </a>
@@ -98,8 +98,15 @@ export default function Cast({ cast, query }) {
             </div>
           </div>
 
-          <a href={cast.uri} className="cast__link u-url u-uid">
-            Open in Farcaster
+          <a
+            href={`https://warpcast.com/${
+              cast.body.username
+            }/${cast.merkleRoot.slice(0, 8)}`}
+            className="cast__link u-url u-uid"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open in Warpcast
           </a>
         </div>
       </div>

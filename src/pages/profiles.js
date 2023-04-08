@@ -87,7 +87,7 @@ export default function Search({ data, query }) {
             {data.map((profile) => (
               <div className="profile" key={profile.body.id}>
                 <div className="profile__main">
-                  <a href={`farcaster://profiles/${profile.body.id}`}>
+                  <a href={`https://warpcast.com/${profile.body.username}`}>
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={profile.body?.avatarUrl}
@@ -97,11 +97,11 @@ export default function Search({ data, query }) {
                     />
                   </a>
                   <div className="name-meta">
-                    <a href={`farcaster://profiles/${profile.body.id}`}>
+                    <a href={`https://warpcast.com/${profile.body.username}`}>
                       {profile.body.displayName}
                     </a>
                     <a
-                      href={`farcaster://profiles/${profile.body.id}`}
+                      href={`https://warpcast.com/${profile.body.username}`}
                       className="username"
                     >
                       @{profile.body?.username}

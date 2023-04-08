@@ -105,7 +105,7 @@ export function formatCastText(text, searchQuery) {
       ) {
         text = text.replace(
           mention,
-          `<a href="/search?username=${mention.slice(1)}">${mention}</a>`
+          `<a href="/u/${mention.slice(1)}">${mention}</a>`
         )
       }
     })
