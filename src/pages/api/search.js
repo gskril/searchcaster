@@ -155,11 +155,16 @@ export async function searchCasts(query) {
         { ascending: orderAscending }
       )
   } else {
+    const searchTerms = textQuery
+      .trim()
+      .replace(/:/g, '\\:') // escape colons with backslash since they're special characters in full text search (':' -> '\:')
+      .split(/\s+/) // split query by any whitespace characters
+      .join(' & ')
     casts = await supabase
       .from('casts')
       .select('*')
       .ilike('author_username', username ? username : '%')
-      .ilike('text', textQuery ? `%${textQuery}%` : '%')
+      .textSearch('fts', searchTerms)
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
