@@ -7,11 +7,24 @@ const provider = new ethers.providers.InfuraProvider(
 )
 
 export async function searchProfiles(query) {
-  let { address, bio, connected_address, count: _count, username, q } = query
+  let {
+    fid,
+    address,
+    bio,
+    connected_address,
+    count: _count,
+    username,
+    q,
+  } = query
   let profiles = []
   const count = _count ? parseInt(_count) : 1000
 
-  if (address) {
+  if (fid) {
+    profiles = await supabase
+      .from('profile_with_verification')
+      .select()
+      .eq('id', fid)
+  } else if (address) {
     profiles = await supabase
       .from('profile_with_verification')
       .select()
@@ -65,7 +78,8 @@ export async function searchProfiles(query) {
       .match({ username })
   } else {
     return {
-      error: 'Missing address, bio, connected_address, or username parameter',
+      error:
+        'Missing fid, address, bio, connected_address, or username parameter',
     }
   }
 

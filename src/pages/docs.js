@@ -113,8 +113,8 @@ export default function Docs() {
             <h2 id="profiles">Search profiles</h2>
           </Link>
           <p>
-            Fetch Farcaster profiles by username, connected address or bio via{' '}
-            <Link href="/api/profiles">/api/profiles</Link>.
+            Fetch Farcaster profiles by fid, username, connected address or bio
+            via <Link href="/api/profiles">/api/profiles</Link>.
           </p>
           <p>Profiles endpoint parameters:</p>
           <ul>
