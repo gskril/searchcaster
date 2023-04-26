@@ -64,9 +64,9 @@ export async function searchProfiles(query) {
       .select('*')
       .match({ username })
   } else {
-    return {
-      error: 'Missing address, bio, connected_address, or username parameter',
-    }
+    profiles = await supabase
+      .from('profile_with_verification')
+      .select('username, display_name')
   }
 
   if (profiles.error) {

@@ -24,7 +24,7 @@ export async function searchCasts(query) {
   page = parseInt(page) || 1
   const offset = (page - 1) * count
   const upperRange = offset + count - 1
-  const textQuery = text ? text.toString() : ''
+  const textQuery = Array.isArray(text) ? text : (text ? [text] : []);
   after = Number(after) || 0
   before = Number(before) || new Date().getTime()
 
@@ -155,11 +155,18 @@ export async function searchCasts(query) {
         { ascending: orderAscending }
       )
   } else {
-    const searchTerms = textQuery
-      .trim()
-      .replace(/:/g, '\\:') // escape colons with backslash since they're special characters in full text search (':' -> '\:')
-      .split(/\s+/) // split query by any whitespace characters
-      .join(' & ')
+    // if the text query is ['new nft collection', 'mint now'],
+    // transform it to '(new & nft & collection) | (mint & now)'
+    // to match casts that contain either new, nft, collection OR mint, now
+    const phrases = textQuery.map((phrase) => {
+      return phrase
+        .trim()
+        .replace(/:/g, '\\:') // escape colons with backslash since they're special characters in full text search (':' -> '\:')
+        .split(/\s+/)  // split query by any whitespace characters
+        .join(' & ')
+    });
+    const searchTerms = phrases.map((p) => `(${p})`).join(" | ");
+      
     casts = await supabase
       .from('casts')
       .select('*')

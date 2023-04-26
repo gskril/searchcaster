@@ -20,7 +20,7 @@ export default function Home() {
     }
 
     const defaultSearchQuery = {
-      text: '',
+      text: [],
       username: '',
       advanced: isAdvanced,
     }

@@ -2,17 +2,46 @@ import { useEffect, useState } from 'react'
 import { usePlausible } from 'next-plausible'
 import { useRouter } from 'next/router'
 import { useStorage } from '../hooks/useLocalStorage'
+import CreatableSelect from 'react-select/creatable'
+import Select, { createFilter, MenuListProps, GroupBase } from 'react-select'
 
 import { arrowIcon } from '../assets/icons'
+import { FixedSizeList } from 'react-window'
 
 type SearchInputProps = {
   size: 'lg' | undefined
 }
 
 export type SearchQuery = {
-  text: string
+  text: string[]
   username: string
   advanced: boolean
+}
+
+interface Option {
+  label: string
+  value: string
+}
+
+function MenuList(props: MenuListProps<Option, boolean, GroupBase<Option>>) {
+  const { options, children, maxHeight, getValue } = props
+  if (!children || !Array.isArray(children)) return null
+  const [value] = getValue()
+  const height = 35
+  const initialOffset = options.indexOf(value) * height
+
+  return (
+    <FixedSizeList
+      height={maxHeight}
+      width={''} // 100% width
+      itemCount={children.length}
+      itemSize={height}
+      initialScrollOffset={initialOffset}
+      className="menu-list"
+    >
+      {({ index, style }) => <div style={style}>{children[index]}</div>}
+    </FixedSizeList>
+  )
 }
 
 export default function SearchInput({ size, ...props }: SearchInputProps) {
@@ -20,16 +49,22 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
   const plausible = usePlausible()
   const { getItem, setItem } = useStorage()
   const [mounted, setMounted] = useState<boolean>(false)
-  const [basicText, setBasicText] = useState<string>('')
   const [isAdvanced, setIsAdvanced] = useState<boolean>(false)
   const [sessionQuery, setSessionQuery] = useState<SearchQuery | undefined>()
+  const [keywords, setKeywords] = useState('')
+  const [groups, setGroups] = useState<readonly Option[]>([])
+  const [user, setUser] = useState<Option>()
+  const [allUsers, setAllUsers] = useState<readonly Option[]>([])
 
   useEffect(() => {
     const searchSession = getItem('search-query', 'session')
     if (searchSession) {
       const _sessionQuery: SearchQuery = JSON.parse(searchSession)
       setIsAdvanced(_sessionQuery.advanced)
-      setBasicText(_sessionQuery.text)
+      setGroups(_sessionQuery.text.map((t) => { 
+        return { label: t, value: t }
+      }))
+      setUser({ label: `@${_sessionQuery.username}`, value: _sessionQuery.username })
       setSessionQuery(_sessionQuery)
     } else {
       const searchParams = router.query as unknown as SearchQuery
@@ -38,35 +73,33 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
     }
     setMounted(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    fetch('/api/profiles')
+      .then((resp) => resp.json())
+      .then((profiles) => {
+        return profiles.map((p) => { 
+          const { username, displayName } = p.body;
+          return {
+            label: `@${username} (${displayName})`, 
+            value: username,
+          }
+        })
+      })
+      .then((options) => setAllUsers(options))
   }, [])
 
   function handleFormSubmit(e: any) {
     e.preventDefault()
     let query: SearchQuery = {
-      text: e.target!.text?.value,
-      username: e.target!.username?.value,
+      text: groups.map((g) => g.value),
+      username: user?.value ?? '',
       advanced: isAdvanced,
     }
 
-    // if a query is only `from:username` or `from: username` or `from: @username`, redirect to /search?username=username
-    // if a query includes a search query *and* `(from:username)` or `(from: username)` or `(from: @username)`, redirect to /search?username=username&text=text
-    const justFrom = query.text.match(/^from:\s?@?(\w+)$/i)
-    const fromAndText =
-      query.text.match(/^(.+)\s(from:\s?@?(\w+))$/i) ||
-      query.text.match(/^(.+)\s\((from:\s?@?(\w+))\)$/i)
-
-    if (justFrom) {
-      query.text = ''
-      query.username = justFrom[1]
-      query.advanced = true
-    } else if (fromAndText) {
-      query.text = fromAndText[1]
-      query.username = fromAndText[3]
-      query.advanced = true
-    }
-
     const searchParams = new URLSearchParams()
-    if (query.text) searchParams.set('text', query.text)
+    for (const text of query.text) {
+      searchParams.append('text', text)
+    }
     if (query.username) searchParams.set('username', query.username)
 
     // Save query to session storage
@@ -74,7 +107,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
 
     plausible('Search', {
       props: {
-        text: query.text === '' ? null : query.text,
+        text: query.text.length === 0 ? null : query.text,
         username: query.username === '' ? null : query.username,
       },
     })
@@ -86,13 +119,13 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
     <>
       <form onSubmit={(e) => handleFormSubmit(e)} {...props}>
         {!isAdvanced && (
-          <div className="input-wrapper">
+          <div className="simple-search">
             <input
               type="text"
               name="text"
               placeholder={mounted ? 'Search for any term' : ''}
-              defaultValue={sessionQuery?.text || ''}
-              onChange={(e) => setBasicText(e.target.value)}
+              defaultValue={groups.length ? groups[0].value : ''}
+              onChange={(e) => setGroups([{ label: e.target.value, value: e.target.value }])}
             />
             <input type="hidden" name="username" />
             <button type="submit">{arrowIcon}</button>
@@ -102,26 +135,51 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         {isAdvanced && (
           <div className="advanced-search">
             <div className="advanced-search__group">
-              <span className="advanced-search__label">Text:</span>
-              <input
-                type="text"
-                name="text"
-                className="advanced-search__group"
-                placeholder="Farcaster"
-                defaultValue={sessionQuery?.text || ''}
+              <div className="advanced-search__label">
+                <strong>Keywords</strong>
+              </div>
+              <CreatableSelect
+                isMulti
+                isClearable
+                menuIsOpen={false}
+                components={{ DropdownIndicator: null }}
+                inputValue={keywords}
+                value={groups}
+                onInputChange={(newValue) => setKeywords(newValue)}
+                onChange={(newValue) => setGroups(newValue)}
+                onKeyDown={(event) => {
+                  if (keywords && event.key === "Enter") {
+                    setGroups((prev) => [...prev, { label: keywords, value: keywords }]);
+                    setKeywords('');
+                    event.preventDefault();
+                  }
+                }}
+                placeholder='"new nft collection"'
               />
+              <small>
+                Press <i>Enter</i> to start a new group of keywords.
+                Results will match keywords in at least one group.
+              </small>
             </div>
             <div className="advanced-search__group">
-              <span className="advanced-search__label">From:</span>
-              <input
-                type="text"
-                name="username"
-                className="advanced-search__group"
-                placeholder="dwr"
-                defaultValue={sessionQuery?.username}
-              />
+              <div className="advanced-search__label">
+                <strong>User</strong>
+              </div>
+              <div className="advanced-search__select">
+                <Select
+                  isClearable
+                  options={allUsers}
+                  // override the `components` and `filterOption` fields to reduce lag for large lists
+                  // https://github.com/JedWatson/react-select/issues/3128#issuecomment-431397942
+                  components={{ MenuList }}
+                  filterOption={createFilter({ ignoreAccents: false })}
+                  value={user}
+                  onChange={(newValue) => setUser(newValue ?? undefined)}
+                  placeholder="Any"
+                />
+              </div>
+              <small>Filter casts by their author.</small>
             </div>
-
             <button className="advanced-search__submit" type="submit">
               Search
             </button>
@@ -135,7 +193,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
         }`}
         onClick={() => {
           setSessionQuery({
-            text: isAdvanced ? sessionQuery?.text || '' : basicText,
+            text: groups.map((g) => g.value),
             username: sessionQuery?.username || '',
             advanced: !isAdvanced,
           })
@@ -152,7 +210,7 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
       </div>
 
       <style jsx>{`
-        .input-wrapper {
+        .simple-search {
           display: flex;
           background-color: #4d4063;
           border-radius: 2.5rem;
@@ -240,33 +298,17 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
 
           &__group {
             width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 4fr;
-            gap: 1rem;
-            align-items: center;
-            justify-content: space-between;
-
+            
             @media (max-width: 768px) {
               display: flex;
               flex-direction: column;
               gap: 0.25rem;
               align-items: flex-start;
             }
+          }
 
-            input {
-              background-color: #fff;
-              border: 1px solid #6f6581;
-              box-shadow: 1px 1px 4px rgba(90, 70, 128, 0.5);
-              border-radius: 0.375rem;
-              padding: 0.375rem 0.5rem;
-              color: #0b0b0c;
-              width: 100%;
-              max-width: 100%;
-
-              &:focus-visible {
-                outline: solid var(--primary-color);
-              }
-            }
+          &__select {
+            color: #0b0b0c;
           }
 
           &__submit {
