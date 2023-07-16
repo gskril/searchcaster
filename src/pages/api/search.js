@@ -33,7 +33,7 @@ export async function searchCasts(query) {
       .from('casts')
       .select()
       .or(
-        `hash.ilike.${merkleRoot},parent_hash.ilike.${merkleRoot},hash_v1.ilike.${merkleRoot},parent_hash_v1.ilike.${merkleRoot}`
+        `hash.eq.${merkleRoot},parent_hash.eq.${merkleRoot},hash_v1.eq.${merkleRoot},parent_hash_v1.eq.${merkleRoot}`
       )
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
