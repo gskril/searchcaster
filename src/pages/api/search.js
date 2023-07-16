@@ -164,7 +164,10 @@ export async function searchCasts(query) {
       .from('casts')
       .select('*')
       .ilike('author_username', username ? username : '%')
-      .textSearch('fts', searchTerms)
+      .textSearch('fts', searchTerms, {
+        type: 'phrase',
+        config: 'english',
+      })
       .eq('deleted', false)
       .gt('published_at', new Date(after).toISOString())
       .lt('published_at', new Date(before).toISOString())
