@@ -160,32 +160,58 @@ export async function searchCasts(query) {
       .replace(/:/g, '\\:') // escape colons with backslash since they're special characters in full text search (':' -> '\:')
       .split(/\s+/) // split query by any whitespace characters
       .join(' & ')
-    casts = await supabase
-      .from('casts')
-      .select('*')
-      .ilike('author_username', username ? username : '%')
-      .textSearch('fts', searchTerms, {
-        type: 'phrase',
-        config: 'english',
-      })
-      .eq('deleted', false)
-      .gt('published_at', new Date(after).toISOString())
-      .lt('published_at', new Date(before).toISOString())
-      .range(offset, upperRange)
-      .order(
-        engagement
-          ? engagement === 'reactions'
-            ? 'reactions_count'
-            : engagement === 'replies'
-            ? 'replies_count'
-            : engagement === 'recasts'
-            ? 'recasts_count'
-            : engagement === 'watches'
-            ? 'watches_count'
-            : engagement
-          : 'published_at',
-        { ascending: orderAscending }
-      )
+
+    if (!searchTerms) {
+      casts = await supabase
+        .from('casts')
+        .select('*')
+        .ilike('author_username', username ? username : '%')
+        .eq('deleted', false)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
+        .range(offset, upperRange)
+        .order(
+          engagement
+            ? engagement === 'reactions'
+              ? 'reactions_count'
+              : engagement === 'replies'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
+              : engagement
+            : 'published_at',
+          { ascending: orderAscending }
+        )
+    } else {
+      casts = await supabase
+        .from('casts')
+        .select('*')
+        .ilike('author_username', username ? username : '%')
+        .textSearch('fts', searchTerms, {
+          type: 'phrase',
+          config: 'english',
+        })
+        .eq('deleted', false)
+        .gt('published_at', new Date(after).toISOString())
+        .lt('published_at', new Date(before).toISOString())
+        .range(offset, upperRange)
+        .order(
+          engagement
+            ? engagement === 'reactions'
+              ? 'reactions_count'
+              : engagement === 'replies'
+              ? 'replies_count'
+              : engagement === 'recasts'
+              ? 'recasts_count'
+              : engagement === 'watches'
+              ? 'watches_count'
+              : engagement
+            : 'published_at',
+          { ascending: orderAscending }
+        )
+    }
   }
 
   if (casts.error) {
