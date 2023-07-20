@@ -138,7 +138,7 @@ export async function searchCasts(query) {
     }
   } else if (regex) {
     casts = await supabase
-      .rpc('casts_regex', { regex })
+      .rpc('casts_regex_by_user', { regex, username: username || null })
       .range(offset, upperRange)
       .order(
         engagement
