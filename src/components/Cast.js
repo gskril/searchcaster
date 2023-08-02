@@ -98,16 +98,23 @@ export default function Cast({ cast, query }) {
             </div>
           </div>
 
-          <a
-            href={`https://warpcast.com/${
-              cast.body.username
-            }/${cast.merkleRoot.slice(0, 8)}`}
-            className="cast__link u-url u-uid"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Open in Warpcast
-          </a>
+          {/* check if cast.body.publishedAt is in the last year */}
+          {cast.body.publishedAt &&
+            new Date(cast.body.publishedAt) >
+              new Date(
+                new Date().setFullYear(new Date().getFullYear() - 1)
+              ) && (
+              <a
+                href={`https://warpcast.com/${
+                  cast.body.username
+                }/${cast.merkleRoot.slice(0, 8)}`}
+                className="cast__link u-url u-uid"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open in Warpcast
+              </a>
+            )}
         </div>
       </div>
 
