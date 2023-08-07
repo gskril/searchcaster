@@ -105,7 +105,10 @@ export async function searchProfiles(query) {
         p.verifications && p.verifications[0]
           ? p.verifications[0].address
           : connected_address || null,
-      connectedAddresses: p.verifications,
+      connectedAddresses:
+        p.verifications && p.verifications[0]
+          ? p.verifications.map((v) => v.address)
+          : [],
     }
   })
 
