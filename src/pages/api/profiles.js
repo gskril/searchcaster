@@ -117,6 +117,7 @@ export async function searchProfiles(query) {
 
 export default async function handler(req, res) {
   try {
+    res.setHeader('Cache-Control', 'max-age=0, s-maxage=300')
     res.json(await searchProfiles(req.query))
   } catch (err) {
     console.error(err)
