@@ -1,10 +1,10 @@
-import { ethers } from 'ethers'
+import { createPublicClient, http } from 'viem'
 import supabase from '../../lib/db'
 
-const provider = new ethers.providers.InfuraProvider(
-  'homestead',
-  process.env.INFURA_API_KEY
-)
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http(),
+})
 
 export default async function handler(req, res) {
   const { parent, resolve } = req.query
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
     if (!ens) continue
 
     if (shouldResolve) {
-      ensAddress = await provider.resolveName(ens)
+      ensAddress = await client.getEnsAddress({ name: ens })
     }
 
     replies.push({

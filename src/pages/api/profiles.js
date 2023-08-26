@@ -1,10 +1,11 @@
-import { ethers } from 'ethers'
+import { createPublicClient, http } from 'viem'
+import { mainnet } from 'viem/chains'
 import supabase from '../../lib/db'
 
-const provider = new ethers.providers.InfuraProvider(
-  'homestead',
-  process.env.INFURA_API_KEY
-)
+const client = createPublicClient({
+  chain: mainnet,
+  transport: http(),
+})
 
 export async function searchProfiles(query) {
   let {
@@ -59,7 +60,9 @@ export async function searchProfiles(query) {
       connected_address.length !== 42 ||
       connected_address.substring(0, 2) !== '0x'
     ) {
-      connected_address = await provider.resolveName(connected_address)
+      connected_address = await client.getEnsAddress({
+        name: connected_address,
+      })
     }
 
     if (!connected_address) {

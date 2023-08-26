@@ -11,24 +11,25 @@ export default function Footer({ includeTime = true }) {
           </div>
           <div className="footer-links footer__right">
             <Link href="/docs">
-              <a className="footer-link">API</a>
+              <span className="footer-link">API</span>
             </Link>
             <Link href="/profiles">
-              <a className="footer-link">Profiles</a>
+              <span className="footer-link">Profiles</span>
             </Link>
-            <Link href="https://www.raycast.com/gregskril/searchcaster">
-              <a className="footer-link" target="_blank" rel="noreferrer">
-                Raycast
-              </a>
+            <Link
+              href="https://www.raycast.com/gregskril/searchcaster"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span className="footer-link">Raycast</span>
             </Link>
-            <a
-              className="footer-link"
+            <Link
               href="https://github.com/gskril/searchcaster"
               target="_blank"
               rel="noreferrer"
             >
-              GitHub
-            </a>
+              <span className="footer-link">GitHub</span>
+            </Link>
           </div>
         </div>
       </Container>

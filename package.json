@@ -10,27 +10,27 @@
     "beautify": "prettier --write \"src/**\""
   },
   "dependencies": {
-    "@supabase/supabase-js": "^1.35.6",
-    "@vercel/og": "^0.0.20",
-    "ethers": "^5.7.0",
-    "next": "12.2.4",
-    "next-plausible": "^3.2.0",
+    "@supabase/supabase-js": "^2.33.1",
+    "@vercel/og": "^0.5.11",
+    "next": "^13.4.19",
+    "next-plausible": "^3.11.1",
     "nprogress": "^0.2.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "typescript": "^4.8.4",
-    "zod": "^3.20.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "viem": "^1.7.0",
+    "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "^12.2.3",
-    "@styled-jsx/plugin-sass": "^4.0.2",
-    "@types/node": "^18.11.9",
-    "@types/react": "^18.0.24",
-    "@types/react-dom": "^18.0.8",
-    "eslint": "8.20.0",
-    "eslint-config-next": "12.2.3",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-react": "^7.30.1",
-    "sass": "^1.55.0"
+    "@next/eslint-plugin-next": "^13.4.19",
+    "@styled-jsx/plugin-sass": "^4.1.0",
+    "@types/node": "^20.5.6",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
+    "eslint": "^8.48.0",
+    "eslint-config-next": "^13.4.19",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-react": "^7.33.2",
+    "sass": "^1.66.1",
+    "typescript": "^5.2.2"
   }
 }
