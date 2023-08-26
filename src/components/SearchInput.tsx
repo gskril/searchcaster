@@ -7,6 +7,7 @@ import { arrowIcon } from '../assets/icons'
 
 type SearchInputProps = {
   size: 'lg' | undefined
+  page?: number | undefined
 }
 
 export type SearchQuery = {
@@ -15,7 +16,11 @@ export type SearchQuery = {
   advanced: boolean
 }
 
-export default function SearchInput({ size, ...props }: SearchInputProps) {
+export default function SearchInput({
+  size,
+  page,
+  ...props
+}: SearchInputProps) {
   const router = useRouter()
   const plausible = usePlausible()
   const { getItem, setItem } = useStorage()
@@ -131,7 +136,11 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
 
       <div
         className={`advanced-toggle ${
-          size !== 'lg' && 'advanced-toggle--inner'
+          size === 'lg'
+            ? ''
+            : !page
+            ? 'advanced-toggle--inner'
+            : 'advanced-toggle--hidden'
         }`}
         onClick={() => {
           setSessionQuery({
@@ -206,6 +215,10 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           align-items: center;
           padding-top: 0.75rem;
           color: #9285ab;
+
+          &--hidden {
+            display: none;
+          }
 
           &--inner {
             padding-top: 0.5rem;

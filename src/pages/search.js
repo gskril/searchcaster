@@ -42,7 +42,7 @@ export default function Search({ data, query }) {
             )}
           </div>
 
-          <SearchInput />
+          <SearchInput page={query.page} />
         </div>
 
         {!query.merkleRoot && <SearchFilters query={query} />}
