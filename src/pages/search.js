@@ -1,6 +1,6 @@
 import Head from 'next/head'
 
-import { searchCasts } from './api/search'
+import { searchCasts } from '../handlers/search-casts'
 import CastFeed from '../components/CastFeed'
 import Container from '../components/Container'
 import Footer from '../components/Footer'

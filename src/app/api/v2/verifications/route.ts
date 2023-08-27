@@ -1,27 +1,18 @@
 import { z } from 'zod'
-import type { NextApiRequest, NextApiResponse } from 'next'
+import { NextResponse } from 'next/server'
 
-import supabase from '../../../lib/db'
-import type { CombinedVerification, Verification } from '../../../types'
+import supabase from '../../../../lib/db'
+import type { CombinedVerification, Verification } from '../../../../types'
 
 const schema = z.object({
   fids: z.array(z.number()).max(1000),
 })
 
-type Response = {
-  result?: CombinedVerification[]
-  error?: any
-}
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Response>
-) {
+export async function POST(req: Request) {
   const safeParse = schema.safeParse(req.body)
 
   if (!safeParse.success) {
-    res.status(400).json({ error: safeParse.error })
-    return
+    return NextResponse.json({ error: safeParse.error }, { status: 400 })
   }
 
   const { fids } = schema.parse(req.body)
@@ -32,8 +23,7 @@ export default async function handler(
     .in('fid', fids)
 
   if (error) {
-    res.status(500).json({ error })
-    return
+    return NextResponse.json({ error }, { status: 500 })
   }
 
   const verifications = data.map((v) => {
@@ -59,5 +49,5 @@ export default async function handler(
     [] as CombinedVerification[]
   )
 
-  return res.status(200).json({ result: groupedVerifications })
+  return NextResponse.json({ result: groupedVerifications })
 }

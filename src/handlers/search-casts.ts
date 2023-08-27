@@ -1,27 +1,32 @@
-import supabase from '../../lib/db'
-import { formatCasts } from '../../utils/cast'
+import supabase from '../lib/db'
+import { formatCasts } from '../utils/cast'
 
-export async function searchCasts(query) {
+export async function searchCasts(query: {
+  [key: string]: number | string | undefined | null
+}) {
   const startTime = Date.now()
 
   let {
     after,
     before,
     count,
-    engagement,
+    engagement: _engagement,
     media,
     merkleRoot,
     order,
     page,
     text,
-    username,
+    username: _username,
     regex,
   } = query
 
+  const engagement = _engagement as string | undefined | null
+  const username = _username as string | undefined | null
+
   const orderAscending = order === 'asc' ? true : false
-  let casts = []
-  count = Math.min(parseInt(count), 200) || 25
-  page = parseInt(page) || 1
+  let casts: any = []
+  count = Math.min(parseInt(count as string), 200) || 25
+  page = parseInt(page as string) || 1
   const offset = (page - 1) * count
   const upperRange = offset + count - 1
   const textQuery = text ? text.toString() : ''
@@ -230,14 +235,5 @@ export async function searchCasts(query) {
       count: formattedResponse.length,
       responseTime: elapsedTime,
     },
-  }
-}
-
-export default async function handler(req, res) {
-  try {
-    res.json(await searchCasts(req.query))
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: err.message })
   }
 }

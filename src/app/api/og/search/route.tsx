@@ -1,22 +1,17 @@
-import { ImageResponse } from '@vercel/og'
+import { ImageResponse, NextResponse } from 'next/server'
 import { NextRequest } from 'next/server'
-import { arrowIcon } from '../../../assets/icons'
+import { arrowIcon } from '../../../../assets/icons'
 
-export const config = {
-  runtime: 'experimental-edge',
-}
+export const runtime = 'edge'
 
-const fontMedium = fetch(
-  new URL('../../../assets/Satoshi-Medium.otf', import.meta.url)
-).then((res) => res.arrayBuffer())
+export async function GET(req: NextRequest) {
+  const fontMediumData = await fetch(
+    new URL('../../../../assets/Satoshi-Medium.otf', import.meta.url)
+  ).then((res) => res.arrayBuffer())
 
-const fontBold = fetch(
-  new URL('../../../assets/Satoshi-Black.otf', import.meta.url)
-).then((res) => res.arrayBuffer())
-
-export default async function handler(req: NextRequest) {
-  const fontMediumData = await fontMedium
-  const fontBoldData = await fontBold
+  const fontBoldData = await fetch(
+    new URL('../../../../assets/Satoshi-Black.otf', import.meta.url)
+  ).then((res) => res.arrayBuffer())
 
   try {
     const { searchParams } = new URL(req.url)
@@ -115,10 +110,13 @@ export default async function handler(req: NextRequest) {
       }
     )
   } catch (e: any) {
-    console.log(`${e.message}`)
-    return new Response(`Failed to generate the image`, {
-      status: 500,
-    })
+    console.error('Failed to generate the image')
+    return NextResponse.json(
+      { test: `Failed to generate the image` },
+      {
+        status: 500,
+      }
+    )
   }
 }
 

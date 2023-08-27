@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import Head from 'next/head'
 
 import { arrowIcon } from '../assets/icons'
-import { searchProfiles } from './api/profiles'
+import { searchProfiles } from '../handlers/search-profiles'
 import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'

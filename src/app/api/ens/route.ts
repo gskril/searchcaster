@@ -1,14 +1,18 @@
 import { createPublicClient, http } from 'viem'
-import supabase from '../../lib/db'
+import { mainnet } from 'viem/chains'
+import supabase from '../../../lib/db'
+import { NextResponse } from 'next/server'
 
 const client = createPublicClient({
   chain: mainnet,
   transport: http(),
 })
 
-export default async function handler(req, res) {
-  const { parent, resolve } = req.query
-  let casts = []
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url)
+  const { parent, resolve } = Object.fromEntries(searchParams.entries())
+
+  let casts: any = []
 
   if (parent) {
     casts = await supabase
@@ -17,9 +21,14 @@ export default async function handler(req, res) {
       .ilike('thread_hash', parent)
       .like('text', '%.eth%')
   } else {
-    return res.status(400).json({
-      error: 'Missing parent',
-    })
+    return NextResponse.json(
+      {
+        error: 'Missing parent',
+      },
+      {
+        status: 400,
+      }
+    )
   }
 
   const shouldResolve =
@@ -53,5 +62,5 @@ export default async function handler(req, res) {
     })
   }
 
-  return res.json(replies)
+  return NextResponse.json(replies)
 }

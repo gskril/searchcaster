@@ -1,13 +1,15 @@
 import { createPublicClient, http } from 'viem'
 import { mainnet } from 'viem/chains'
-import supabase from '../../lib/db'
+import supabase from '../lib/db'
 
 const client = createPublicClient({
   chain: mainnet,
   transport: http(),
 })
 
-export async function searchProfiles(query) {
+export async function searchProfiles(query: {
+  [key: string]: string | undefined | null
+}) {
   let {
     fid,
     address,
@@ -17,7 +19,7 @@ export async function searchProfiles(query) {
     username,
     q,
   } = query
-  let profiles = []
+  let profiles: any = []
   const count = _count ? parseInt(_count) : 1000
 
   if (fid) {
@@ -32,11 +34,20 @@ export async function searchProfiles(query) {
       .ilike('owner', address)
   } else if (q) {
     // if q is a valid ETH address, search by address
-    if (q.startsWith('0x') && q.length === 42) {
-      profiles = await supabase
-        .rpc('get_profile_by_address', { connected_address: q })
-        .order('followers', { ascending: false })
-        .limit(count)
+    if ((q.startsWith('0x') && q.length === 42) || q.endsWith('.eth')) {
+      if (q.endsWith('.eth')) {
+        const ensAddress = await client.getEnsAddress({ name: q })
+        console.log({ ensAddress })
+        profiles = await supabase
+          .rpc('get_profile_by_address', { connected_address: ensAddress })
+          .order('followers', { ascending: false })
+          .limit(count)
+      } else {
+        profiles = await supabase
+          .rpc('get_profile_by_address', { connected_address: q })
+          .order('followers', { ascending: false })
+          .limit(count)
+      }
     } else {
       profiles = await supabase
         .from('profile_with_verification')
@@ -90,7 +101,7 @@ export async function searchProfiles(query) {
     throw profiles.error
   }
 
-  const formattedProfiles = profiles.data.map((p) => {
+  const formattedProfiles = profiles.data.map((p: any) => {
     return {
       body: {
         id: p.id,
@@ -110,20 +121,10 @@ export async function searchProfiles(query) {
           : connected_address || null,
       connectedAddresses:
         p.verifications && p.verifications[0]
-          ? p.verifications.map((v) => v.address)
+          ? p.verifications.map((v: any) => v.address)
           : [],
     }
   })
 
   return formattedProfiles
-}
-
-export default async function handler(req, res) {
-  try {
-    res.setHeader('Cache-Control', 'max-age=0, s-maxage=300')
-    res.json(await searchProfiles(req.query))
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({ error: err.message })
-  }
 }
