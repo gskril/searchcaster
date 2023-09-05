@@ -119,19 +119,19 @@ export async function searchProfiles(query) {
   return formattedProfiles
 }
 
-// Create a new ratelimiter
-const ratelimit = new Ratelimit({
-  redis: Redis.fromEnv(),
-  limiter: Ratelimit.slidingWindow(1, '5 s'),
-  analytics: true,
-  prefix: 'api/profile',
-})
-
-const RATE_LIMITED_IP_ADDRESSES = process.env.RATE_LIMITED_IP_ADDRESSES || '[]'
-const rateLimitedIpAddresses = JSON.parse(RATE_LIMITED_IP_ADDRESSES)
-
 export default async function handler(req, res) {
   try {
+    // Create a new ratelimiter, or ignore if the env vars aren't set
+    const ratelimit = new Ratelimit({
+      redis: Redis.fromEnv(),
+      limiter: Ratelimit.slidingWindow(10, '5 s'),
+      analytics: true,
+      prefix: 'api/profile',
+    })
+
+    // prettier-ignore
+    const RATE_LIMITED_IP_ADDRESSES = process.env.RATE_LIMITED_IP_ADDRESSES || '[]'
+    const rateLimitedIpAddresses = JSON.parse(RATE_LIMITED_IP_ADDRESSES)
     const identifier = getClientIp(req)
 
     // Rate limit requests from IP addresses that have been flagged for abuse
@@ -145,7 +145,9 @@ export default async function handler(req, res) {
         })
       }
     }
+  } catch {}
 
+  try {
     res.setHeader('Cache-Control', 'max-age=0, s-maxage=300')
     res.json(await searchProfiles(req.query))
   } catch (err) {
