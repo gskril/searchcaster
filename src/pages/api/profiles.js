@@ -1,4 +1,8 @@
 import { ethers } from 'ethers'
+import { getClientIp } from 'request-ip'
+import { Ratelimit } from '@upstash/ratelimit'
+import { Redis } from '@upstash/redis'
+
 import supabase from '../../lib/db'
 
 const provider = new ethers.providers.InfuraProvider(
@@ -115,8 +119,33 @@ export async function searchProfiles(query) {
   return formattedProfiles
 }
 
+// Create a new ratelimiter
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(1, '5 s'),
+  analytics: true,
+  prefix: 'api/profile',
+})
+
+const RATE_LIMITED_IP_ADDRESSES = process.env.RATE_LIMITED_IP_ADDRESSES || '[]'
+const rateLimitedIpAddresses = JSON.parse(RATE_LIMITED_IP_ADDRESSES)
+
 export default async function handler(req, res) {
   try {
+    const identifier = getClientIp(req)
+
+    // Rate limit requests from IP addresses that have been flagged for abuse
+    if (rateLimitedIpAddresses.includes(identifier)) {
+      const limit = await ratelimit.limit(identifier)
+
+      if (!limit.success) {
+        return res.status(429).json({
+          error: 'Too many requests',
+          ...limit,
+        })
+      }
+    }
+
     res.setHeader('Cache-Control', 'max-age=0, s-maxage=300')
     res.json(await searchProfiles(req.query))
   } catch (err) {
