@@ -36,6 +36,13 @@ export async function searchProfiles(query) {
         .rpc('get_profile_by_address', { connected_address: q })
         .order('followers', { ascending: false })
         .limit(count)
+    } else if (q.startsWith('@')) {
+      profiles = await supabase
+        .from('profile_with_verification')
+        .select('*')
+        .or(`username.ilike.%${q.split('@')[1]}%, bio.ilike.%${q}%`)
+        .order('followers', { ascending: false })
+        .limit(count)
     } else {
       profiles = await supabase
         .from('profile_with_verification')
