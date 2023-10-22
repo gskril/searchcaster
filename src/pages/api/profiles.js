@@ -30,10 +30,26 @@ export async function searchProfiles(query) {
       .select()
       .ilike('owner', address)
   } else if (q) {
-    // if q is a valid ETH address, search by address
-    if (q.startsWith('0x') && q.length === 42) {
+    const isNumber = /^\d+$/.test(q)
+    const isPotentialEns = q.endsWith('.eth') && !q.includes(' ')
+    const isAddress = ethers.utils.isAddress(q)
+
+    if (isAddress || isPotentialEns) {
+      let address = q
+
+      if (isPotentialEns) {
+        address = await provider.resolveName(q)
+      }
+
       profiles = await supabase
-        .rpc('get_profile_by_address', { connected_address: q })
+        .rpc('get_profile_by_address', { connected_address: address })
+        .order('followers', { ascending: false })
+        .limit(count)
+    } else if (isNumber) {
+      profiles = await supabase
+        .from('profile_with_verification')
+        .select('*')
+        .or(`id.eq.${q}, username.eq.${q}, bio.ilike.%${q}%`)
         .order('followers', { ascending: false })
         .limit(count)
     } else if (q.startsWith('@')) {
