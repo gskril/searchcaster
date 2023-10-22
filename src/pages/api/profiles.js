@@ -45,6 +45,11 @@ export async function searchProfiles(query) {
         .rpc('get_profile_by_address', { connected_address: address })
         .order('followers', { ascending: false })
         .limit(count)
+    } else if (q.startsWith('fid:')) {
+      profiles = await supabase
+        .from('profile_with_verification')
+        .select()
+        .eq('id', q.split('fid:')[1])
     } else if (isNumber) {
       profiles = await supabase
         .from('profile_with_verification')
