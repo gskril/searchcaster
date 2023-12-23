@@ -63,7 +63,7 @@ export default function Home() {
           flex-direction: column;
           justify-content: space-between;
           gap: 1rem;
-          min-height: 100vh;
+          min-height: 100svh;
         }
       `}</style>
     </>

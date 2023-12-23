@@ -51,6 +51,7 @@ export default function Footer({ includeTime = true }) {
 
           &__left {
             opacity: 0.5;
+            display: none;
           }
 
           @media (min-width: 768px) {
@@ -62,6 +63,7 @@ export default function Footer({ includeTime = true }) {
 
             &__left {
               opacity: 1;
+              display: block;
             }
           }
 
