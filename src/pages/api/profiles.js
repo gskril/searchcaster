@@ -64,6 +64,15 @@ export async function searchProfiles(query) {
         .or(`username.ilike.%${q.split('@')[1]}%, bio.ilike.%${q}%`)
         .order('followers', { ascending: false })
         .limit(count)
+    } else if (q.startsWith('bio:') || q.startsWith('bio: ')) {
+      const _bio = q.split('bio:')[1].trim()
+
+      profiles = await supabase
+        .from('profile_with_verification')
+        .select('*')
+        .ilike('bio', `%${_bio}%`)
+        .order('followers', { ascending: false })
+        .limit(count)
     } else {
       profiles = await supabase
         .from('profile_with_verification')
