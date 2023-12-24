@@ -1,5 +1,6 @@
 export function formatCasts(casts) {
   return casts.map((cast) => {
+    // manually filtering the imgur link is the old version
     const imgurUrl = 'https://i.imgur.com/'
     let text = cast.text
     let attachment = null
@@ -9,6 +10,15 @@ export function formatCasts(casts) {
       text = text.split(imgurUrl)[0]
     }
 
+    // if there is no imgur link, check for an embed (the newer approach)
+    if (!attachment) {
+      const embeds = cast.embeds
+
+      if (embeds && embeds.images && embeds.images.length > 0) {
+        attachment = embeds.images[0].url
+      }
+    }
+
     return {
       body: {
         publishedAt: new Date(cast.published_at).getTime(),
@@ -16,6 +26,7 @@ export function formatCasts(casts) {
         data: {
           text: text,
           image: attachment,
+          embeds: cast.embeds,
           replyParentMerkleRoot: cast.parent_hash,
           threadMerkleRoot: cast.thread_hash,
         },
@@ -43,6 +54,7 @@ export function formatCasts(casts) {
           username: cast.parent_author_username || null,
         },
         mentions: cast.mentions,
+        tags: cast.tags,
       },
       merkleRoot: cast.hash,
       uri: `farcaster://casts/${cast.hash}/${cast.thread_hash}`,
