@@ -82,6 +82,21 @@ export default function Cast({ cast, query }) {
           </a>
         )}
 
+        {cast.meta.tags.length > 0 &&
+          cast.meta.tags.map((tag) => (
+            <div className="cast_channel" key={`${cast.merkleRoot}/${tag.id}`}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="cast_channel-icon"
+                src={tag.imageUrl}
+                width={17}
+                height={17}
+                alt={''}
+              />
+              <span className="cast_channel-name">{tag.name}</span>
+            </div>
+          ))}
+
         <div className="cast__bottom">
           <div className="cast__engagement">
             <div>
@@ -216,6 +231,23 @@ export default function Cast({ cast, query }) {
 
         .cast__attachment {
           width: 100%;
+        }
+
+        .cast_channel {
+          display: flex;
+          align-items: center;
+          gap: 0.25rem;
+          font-size: 0.875rem;
+          color: #8c7bab;
+          padding: 0.125rem 0.25rem 0.125rem 0.1875rem;
+          border: 1px solid rgba(90, 70, 128, 0.5);
+          width: fit-content;
+          border-radius: 0.25rem;
+          margin-bottom: -0.25rem;
+
+          &-icon {
+            border-radius: 0.125rem;
+          }
         }
 
         .cast__bottom {
