@@ -82,7 +82,8 @@ export default function Cast({ cast, query }) {
           </a>
         )}
 
-        {cast.meta.tags.length > 0 &&
+        {cast.meta.tags &&
+          cast.meta.tags.length > 0 &&
           cast.meta.tags.map((tag) => (
             <div className="cast_channel" key={`${cast.merkleRoot}/${tag.id}`}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
