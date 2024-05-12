@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import supabase from '../../lib/db'
+import supabase from '../../lib/supabase'
 import { formatCasts } from '../../utils/cast'
 
 // TODO: add pagination to this endpoint

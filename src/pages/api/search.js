@@ -1,4 +1,4 @@
-import supabase from '../../lib/db'
+import supabase from '../../lib/supabase'
 import { formatCasts } from '../../utils/cast'
 
 export async function searchCasts(query) {

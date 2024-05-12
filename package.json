@@ -21,6 +21,7 @@
     "pg-pool": "^3.6.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "viem": "^2.10.3",
     "zod": "^3.23.8"
   },
   "devDependencies": {

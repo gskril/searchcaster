@@ -1,5 +1,5 @@
 import { ethers } from 'ethers'
-import supabase from '../../lib/db'
+import supabase from '../../lib/supabase'
 
 const provider = new ethers.providers.InfuraProvider(
   'homestead',
