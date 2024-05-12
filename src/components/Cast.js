@@ -22,6 +22,7 @@ export default function Cast({ cast, query }) {
       >
         {cast.body.data.replyParentMerkleRoot && (
           <Link
+            legacyBehavior
             href={`/search?merkleRoot=${cast.body.data.replyParentMerkleRoot}`}
           >
             <a className="reply-indicator">
@@ -46,7 +47,7 @@ export default function Cast({ cast, query }) {
               <span className="cast__display-name p-name p-nickname">
                 {cast.meta.displayName}
               </span>
-              <Link href={`/u/${cast.body.username}`}>
+              <Link legacyBehavior href={`/u/${cast.body.username}`}>
                 <a className="cast__username u-url u-uid">
                   @{cast.body.username}
                 </a>

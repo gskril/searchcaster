@@ -10,13 +10,16 @@ export default function Footer({ includeTime = true }) {
             <p>{includeTime ? 'Updates every minute' : 'Searchcaster'}</p>
           </div>
           <div className="footer-links footer__right">
-            <Link href="/docs">
+            <Link legacyBehavior href="/docs">
               <a className="footer-link">API</a>
             </Link>
-            <Link href="/profiles">
+            <Link legacyBehavior href="/profiles">
               <a className="footer-link">Profiles</a>
             </Link>
-            <Link href="https://www.raycast.com/gregskril/searchcaster">
+            <Link
+              legacyBehavior
+              href="https://www.raycast.com/gregskril/searchcaster"
+            >
               <a className="footer-link" target="_blank" rel="noreferrer">
                 Raycast
               </a>

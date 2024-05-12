@@ -42,12 +42,16 @@ export default function Docs() {
         </div>
 
         <div className="endpoint">
-          <Link href="#casts">
+          <Link legacyBehavior href="#casts">
             <h2 id="casts">Search casts</h2>
           </Link>
           <p>
             All casts on the protocol are indexed every minute, and accessible
-            via the <Link href="/api/search">/api/search</Link> endpoint.
+            via the{' '}
+            <Link legacyBehavior href="/api/search">
+              /api/search
+            </Link>{' '}
+            endpoint.
           </p>
           <p>Cast endpoint parameters:</p>
           <ul>
@@ -94,13 +98,13 @@ export default function Docs() {
           <p>For example:</p>
           <ul>
             <li>
-              <Link href="/search?text=test">
+              <Link legacyBehavior href="/search?text=test">
                 searchcaster.xyz/search?text=test
               </Link>{' '}
               returns a web page
             </li>
             <li>
-              <Link href="/api/search?text=test">
+              <Link legacyBehavior href="/api/search?text=test">
                 searchcaster.xyz/api/search?text=test
               </Link>{' '}
               returns JSON
@@ -109,12 +113,16 @@ export default function Docs() {
         </div>
 
         <div className="endpoint">
-          <Link href="#profiles">
+          <Link legacyBehavior href="#profiles">
             <h2 id="profiles">Search profiles</h2>
           </Link>
           <p>
             Fetch Farcaster profiles by fid, username, connected address or bio
-            via <Link href="/api/profiles">/api/profiles</Link>.
+            via{' '}
+            <Link legacyBehavior href="/api/profiles">
+              /api/profiles
+            </Link>
+            .
           </p>
           <p>Profiles endpoint parameters:</p>
           <ul>
@@ -135,19 +143,25 @@ export default function Docs() {
         </div>
 
         <div className="endpoint">
-          <Link href="#ens">
+          <Link legacyBehavior href="#ens">
             <h2 id="ens">&quot;Drop your ENS&quot;</h2>
           </Link>
           <p>
             Easily scrape the replies of a cast for .eth names using the{' '}
-            <Link href="/api/ens">/api/ens</Link> endpoint.
+            <Link legacyBehavior href="/api/ens">
+              /api/ens
+            </Link>{' '}
+            endpoint.
           </p>
           <p>ENS endpoint parameters:</p>
           <ul>
             <li>
               <code>parent</code> - the merkle root of the cast to scrape the
               replies of (
-              <Link href="/api/ens?parent=0xdc3f314ea1a49f2f0a2fe06fa4c4c4538776e7cd54b4ef5b7b36edeb4017c116">
+              <Link
+                legacyBehavior
+                href="/api/ens?parent=0xdc3f314ea1a49f2f0a2fe06fa4c4c4538776e7cd54b4ef5b7b36edeb4017c116"
+              >
                 example
               </Link>
               )

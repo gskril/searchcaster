@@ -56,7 +56,7 @@ export default function Logo({ align, size, ...props }) {
     return <MainLogo />
   } else {
     return (
-      <Link href="/">
+      <Link legacyBehavior href="/">
         <a>
           <MainLogo />
         </a>

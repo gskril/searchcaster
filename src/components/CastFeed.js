@@ -36,13 +36,13 @@ export default function CastFeed({ casts, query }) {
         {casts.length === itemsPerPage && (
           <div className="pagination">
             {query.page > 1 && (
-              <Link href={urlToPrevPage}>
+              <Link legacyBehavior href={urlToPrevPage}>
                 <a className="pagination__btn" rel="prev">
                   ← Previous page
                 </a>
               </Link>
             )}
-            <Link href={urlToNextPage}>
+            <Link legacyBehavior href={urlToNextPage}>
               <a className="pagination__btn" rel="next">
                 Next page →
               </a>
