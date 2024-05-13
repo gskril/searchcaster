@@ -39,7 +39,7 @@ export async function GET(req: NextRequest): Promise<V2ApiResponse<any>> {
   if (text) {
     query = db
       .selectFrom('casts')
-      .where('fts', '@@', sql<string>`to_tsquery(${text})`) // to_tsquery
+      .where('fts', '@@', sql<string>`to_tsquery(${text})`)
   } else if (parentUrl) {
     query = db.selectFrom('casts').where('parentUrl', '=', parentUrl)
   } else if (parentHash) {
