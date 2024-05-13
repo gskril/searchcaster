@@ -1,6 +1,8 @@
 // https://github.com/gskril/farcaster-indexer/blob/hubs/src/db/db.types.ts
+// With modifications for unused tables and views
 
 import { ColumnType, Generated, GeneratedAlways } from 'kysely'
+import { isDataView } from 'util/types'
 
 type ReactionType = number
 type UserDataType = number
@@ -36,6 +38,24 @@ type CastRow = {
   embeds: ColumnType<CastEmbedJson[], string, string>
   mentions: ColumnType<Fid[], string, string>
   mentionsPositions: ColumnType<number[], string, string>
+}
+
+type CastEnhancedRow = {
+  fid: ColumnType<Fid, never, never>
+  hash: ColumnType<Uint8Array, never, never>
+  parentFid: ColumnType<Fid | null, never, never>
+  parentUrl: ColumnType<string | null, never, never>
+  parentHash: ColumnType<Uint8Array | null, never, never>
+  rootParentUrl: ColumnType<string | null, never, never>
+  rootParentHash: ColumnType<Uint8Array | null, never, never>
+  timestamp: ColumnType<Date, never, never>
+  text: ColumnType<string, never, never>
+  embeds: ColumnType<CastEmbedJson[], never, never>
+  mentions: ColumnType<Fid[], never, never>
+  mentionsPositions: ColumnType<number[], never, never>
+  authorPfp: ColumnType<string | null, never, never>
+  authorDisplay: ColumnType<string | null, never, never>
+  authorUsername: ColumnType<string | null, never, never>
 }
 
 // REACTIONS ---------------------------------------------------------------------------------------
@@ -121,6 +141,7 @@ type FidRow = {
 // ALL TABLES --------------------------------------------------------------------------------------
 export interface Tables {
   casts: CastRow
+  castsEnhanced: CastEnhancedRow
   reactions: ReactionRow
   links: LinkRow
   verifications: VerificationRow

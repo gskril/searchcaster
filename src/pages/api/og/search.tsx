@@ -2,9 +2,7 @@ import { ImageResponse } from '@vercel/og'
 import { NextRequest } from 'next/server'
 import { arrowIcon } from '../../../assets/icons'
 
-export const config = {
-  runtime: 'experimental-edge',
-}
+export const runtime = 'edge'
 
 const fontMedium = fetch(
   new URL('../../../assets/Satoshi-Medium.otf', import.meta.url)
