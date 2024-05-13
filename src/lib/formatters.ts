@@ -18,7 +18,7 @@ export function formatCastV2(cast: Selectable<Tables['castsEnhanced']>) {
     mentions: cast.mentions,
     mentionsPositions: cast.mentionsPositions,
     author: {
-      fid: cast.fid,
+      fid: Number(cast.fid),
       username: cast.authorUsername,
       display: cast.authorDisplay,
       pfp: cast.authorPfp,

@@ -35,6 +35,7 @@ type CastRow = {
   rootParentUrl: string | null
   parentUrl: string | null
   text: string
+  fts: GeneratedAlways<string>
   embeds: ColumnType<CastEmbedJson[], string, string>
   mentions: ColumnType<Fid[], string, string>
   mentionsPositions: ColumnType<number[], string, string>
