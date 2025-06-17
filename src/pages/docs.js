@@ -4,6 +4,7 @@ import Link from 'next/link'
 import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
+import { Banner } from '../components/Banner'
 
 export default function Docs() {
   return (
@@ -24,6 +25,8 @@ export default function Docs() {
           content="Search API for the Farcaster protocol."
         />
       </Head>
+
+      <Banner />
 
       <Container>
         <div className="header">
@@ -160,7 +163,7 @@ export default function Docs() {
 
       <style jsx>{`
         .header {
-          padding-top: 3rem;
+          padding-top: 2rem;
         }
 
         .endpoint {

@@ -8,6 +8,7 @@ import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 import useDebounce from '../hooks/useDebounce'
+import { Banner } from '../components/Banner'
 
 export default function Search({ data, query }) {
   const router = useRouter()
@@ -41,6 +42,8 @@ export default function Search({ data, query }) {
           }`}
         />
       </Head>
+
+      <Banner />
 
       <Container>
         <div className="header">
@@ -166,7 +169,7 @@ export default function Search({ data, query }) {
         .header {
           display: flex;
           flex-direction: column;
-          padding: 3rem 0 2rem;
+          padding: 2rem 0;
         }
 
         .input-wrapper {

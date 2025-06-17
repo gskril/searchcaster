@@ -7,7 +7,9 @@ export default function Footer({ includeTime = true }) {
       <Container size="full">
         <div className="footer">
           <div className="footer-links footer__left">
-            <p>{includeTime ? 'Updates every minute' : 'Searchcaster'}</p>
+            <p>
+              Built by <a href="https://farcaster.xyz/greg">@greg</a>
+            </p>
           </div>
           <div className="footer-links footer__right">
             <Link href="/docs">
@@ -15,11 +17,6 @@ export default function Footer({ includeTime = true }) {
             </Link>
             <Link href="/profiles">
               <a className="footer-link">Profiles</a>
-            </Link>
-            <Link href="https://www.raycast.com/gregskril/searchcaster">
-              <a className="footer-link" target="_blank" rel="noreferrer">
-                Raycast
-              </a>
             </Link>
             <a
               className="footer-link"

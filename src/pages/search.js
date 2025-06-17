@@ -7,6 +7,7 @@ import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 import SearchFilters from '../components/SearchFilters'
 import SearchInput from '../components/SearchInput'
+import { Banner } from '../components/Banner'
 
 export default function Search({ data, query }) {
   const casts = data.casts
@@ -32,6 +33,8 @@ export default function Search({ data, query }) {
         )}
       </Head>
 
+      <Banner />
+
       <Container>
         <div className="header">
           <div className="header__row mb-3">
@@ -55,7 +58,7 @@ export default function Search({ data, query }) {
         .header {
           display: flex;
           flex-direction: column;
-          padding: 3rem 0 2rem;
+          padding: 2rem 0;
 
           &__row {
             display: flex;

@@ -6,6 +6,7 @@ import Container from '../components/Container'
 import Footer from '../components/Footer'
 import Logo from '../components/Logo'
 import SearchInput from '../components/SearchInput'
+import { Banner } from '../components/Banner'
 
 export default function Home() {
   const { getItem, setItem } = useStorage()
@@ -49,7 +50,7 @@ export default function Home() {
       </Head>
 
       <div className="home">
-        <div />
+        <Banner />
         <Container size="sm">
           <Logo size="lg" align="center" className="mb-5" />
           <SearchInput size="lg" />

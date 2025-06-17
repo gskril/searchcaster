@@ -208,11 +208,10 @@ export default function SearchInput({ size, ...props }: SearchInputProps) {
           color: #9285ab;
 
           &--inner {
-            padding-top: 0.5rem;
             width: fit-content;
             justify-content: flex-end;
             position: absolute;
-            top: 2.75rem;
+            top: 1.75rem;
             right: 1.5rem;
 
             @media (max-width: 400px) {
