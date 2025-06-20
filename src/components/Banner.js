@@ -2,7 +2,7 @@ export function Banner() {
   return (
     <div className="banner">
       <p>
-        Searchcaster is not actively maintained. Use{' '}
+        Searchcaster has been deprecated. Try{' '}
         <a href="https://buoy.club">Buoy</a> instead.
       </p>
 

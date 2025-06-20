@@ -6,7 +6,22 @@ module.exports = withPlausibleProxy()({
     return [
       {
         source: '/api',
-        destination: '/docs',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/search',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/profiles',
+        destination: '/',
+        permanent: false,
+      },
+      {
+        source: '/docs',
+        destination: '/',
         permanent: false,
       },
     ]
@@ -14,27 +29,8 @@ module.exports = withPlausibleProxy()({
   async rewrites() {
     return [
       {
-        source: '/u/:path*',
-        destination: '/search?username=:path*',
-      },
-    ]
-  },
-  async headers() {
-    return [
-      {
         source: '/api/:path*',
-        headers: [
-          { key: 'origins', value: '*' },
-          { key: 'Access-Control-Allow-Origin', value: '*' },
-          {
-            key: 'Access-Control-Request-Methods',
-            value: 'GET',
-          },
-          {
-            key: 'Access-Control-Allow-Headers',
-            value: 'Authorization, Content-Type',
-          },
-        ],
+        destination: '/api/deprecated',
       },
     ]
   },
